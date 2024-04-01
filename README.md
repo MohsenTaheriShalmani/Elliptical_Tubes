@@ -10,6 +10,7 @@ The repository is linked to the publication mentioned below.
 [ETRep_arxiv.pdf](https://github.com/MohsenTaheriShalmani/Elliptical_Tubes/files/14823254/ETRep_arxiv.pdf)
 
 
+## Data and R scripts
 The "e_Tubes_simulated.RDATA" file contains data of 15 simulated ETReps.\
 The "main.R" script loads the simulated data and computes the intrinsic mean shape of the ETReps using the function "mean_tube_basedOnIntrinsicSweptCoordinate()" available in "functionsMeanSweptSkeletal_2.R" script.\
 For visualization of both the simulated data and the mean shape, the function "plot_Elliptical_Tube()" is provided in "functionsMeanSweptSkeletal_1.R" script.\
