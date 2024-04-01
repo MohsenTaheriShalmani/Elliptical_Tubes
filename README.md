@@ -26,8 +26,7 @@ All necessary functions and codes, including intrinsic and semi-intrinsic transf
 <img src="https://github.com/MohsenTaheriShalmani/Elliptical_Tubes/assets/19237855/d5122c87-bead-4ebe-9c75-58d03f72b1de" width="700">
 
 ### Visualization of a valid transformation without any self-intersections
-![Fig5](https://github.com/MohsenTaheriShalmani/Elliptical_Tubes/assets/19237855/47402b55-f4de-4b5c-8094-014577782675)
-
+![Fig5](https://github.com/MohsenTaheriShalmani/Elliptical_Tubes/assets/19237855/5fd1b731-ea15-4cf3-9884-635b6989e735)
 
 
 
