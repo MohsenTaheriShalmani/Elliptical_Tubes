@@ -9,6 +9,18 @@ The repository is linked to the publication mentioned below.
 ## The Paper
 [ETRep_arxiv.pdf](https://github.com/MohsenTaheriShalmani/Elliptical_Tubes/files/14823254/ETRep_arxiv.pdf)
 
+## Cite
+```
+@misc{taheri2024mean,
+      title={The Mean Shape under the Relative Curvature Condition}, 
+      author={Mohsen Taheri and Stephen M. Pizer and Jörn Schulz},
+      year={2024},
+      eprint={2404.01043},
+      archivePrefix={arXiv},
+      primaryClass={stat.ME}
+}
+```
+
 
 ## Data and R scripts
 The "e_Tubes_simulated.RDATA" file contains data of 15 simulated ETReps.\
