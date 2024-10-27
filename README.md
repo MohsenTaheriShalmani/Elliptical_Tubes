@@ -26,6 +26,11 @@ The repository is linked to the publication mentioned below.
 ## Data and R scripts
 ---
 
+Please read the **Code_Description.pdf**
+![Code Description](Code_Description.pdf)
+
+---
+
 The primary script file is `main.R`, supported by two additional scripts in the `Functions` folder: `ETRep_Functions.R`, which contains functions specific to ETRep analysis, and `ETRep_MathFunctions.R`, which includes general mathematical functions. An ETRep captures the characteristics of *elliptical tubes* (e-tubes), including the size and orientation of its elliptical cross-sections, positioned according to the material frames along the spine.
 
 ---
@@ -35,10 +40,6 @@ The `main.R` script is divided into two main sections: **1. Transformation** and
 - **Transformation**: This section provides examples for calculating both intrinsic and non-intrinsic means, using intrinsic and non-intrinsic transformations between two e-tubes represented by their corresponding *elliptical tube representations* (ETReps), as discussed in the main manuscript.
 
 - **Simulation**: This section provides an example of ETRep simulation, as discussed in the article's Supplementary Materials. 
-
----
-
-Please read the **Code_Description.pdf**
 
 ---
 
