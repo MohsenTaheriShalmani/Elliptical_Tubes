@@ -6,6 +6,8 @@ The repository is linked to the publication mentioned below.
 
 ## The manuscript provides shape statistics for elliptical tubes, utilizing a relative curvature condition to ensure avoidance of self-intersections.
 
+---
+
 ## The Paper
 [ETRep_arxiv.pdf](ETRep_arxiv.pdf)
 
@@ -26,6 +28,7 @@ The repository is linked to the publication mentioned below.
 
 [Code_Description.pdf](Code_Description.pdf)
 
+---
 ## Data and R scripts
 ---
 
