@@ -81,6 +81,33 @@ permutation1D <- function(A,B,nPerm=10000) {
   return(pVal)
 }
 
+
+geodesicPathOnUnitSphere <- function(point1, point2, numberOfneededPoints=100) {
+  
+  u1<-convertVec2unitVec(point1)
+  u2<-convertVec2unitVec(point2)
+  theta<-geodesicDistance(u1,u2)
+  
+  if(identical(u1, u2)){
+    
+    geodesicPoints<-matrix(rep(u1,numberOfneededPoints),ncol = length(u1),byrow = TRUE)
+    
+  }else{
+    tau<-seq(from=0,to=1,length.out=numberOfneededPoints)
+    
+    geodesicPoints<-array(NA,dim = c(numberOfneededPoints,length(u1)))
+    for (i in 1:numberOfneededPoints) {
+      geodesicPoints[i,]<-1/sin(theta)*(sin(theta*(1-tau[i]))*u1+sin(theta*tau[i])*u2) 
+    }
+  }
+  
+  return(geodesicPoints)
+}
+# geodesicPointsTest<-geodesicPathOnUnitSphere(c(1,0,0),c(0,1,0))
+# spheres3d(c(0,0,0),radius = 1,alpha=0.1)
+# plot3d(geodesicPointsTest,type="l",lwd = 1,col = "black",expand = 10,box=FALSE,add = TRUE)
+
+
 permutationMultivariate <- function(A,B,nPerm=10000) {
   if(dim(A)[2]!=dim(B)[2] | is.null(dim(A)) | is.null(dim(B))){
     stop("Dimension of A & B must be equal and greater than 1!")
@@ -616,20 +643,89 @@ sumOfSquaredDistances <- function(point,allPoints) {
 }
 
 
+rotateFrameToMainAxes_standard <- function(myFrame, vectors2rotate) {
+  
+  if(!is.SO3(myFrame)){
+    stop('The frame does not belong to SO(3)!')
+  }
+  
+  # R1<-rotMat(myFrame[1,],c(1,0,0))
+  # rotatedFrame1<-myFrame%*%t(R1)
+  # R2<-rotMat(rotatedFrame1[2,],c(0,1,0))
+  # rotatedVectors<-vectors2rotate%*%t(R1)%*%t(R2) #first rotate R1 then by R2.
+  #                                                 #NB!! t(R1)%*%t(R2)=t(R2%*%R1)
+  
+  rotatedVectors<-vectors2rotate%*%t(myFrame)
+  return(rotatedVectors)
+}
+
+
+rotateFrameToMainAxesAndRotateBack_standard <- function(myFrame, vectors_In_I_Axes) {
+  
+  if(!is.SO3(myFrame)){
+    stop('The frame does not belong to SO(3)!')
+  }
+  
+  # R1<-rotMat(myFrame[1,],c(1,0,0))
+  # rotatedFrame1<-myFrame%*%t(R1)
+  # R2<-rotMat(rotatedFrame1[2,],c(0,1,0))
+  # # R_back<-solve(t(R1)%*%t(R2)) #NB! first rotate by R1 then by R2 then inverse but
+  # R_back<-R2%*%R1 # because solve(t(R1)%*%t(R2))=solve(t(R2%*%R1))=t(t(R2%*%R1))=R2%*%R1
+  # rotatedVectors<-vectors_In_I_Axes%*%R_back #NB! myFrame%*%t(R1)%*%t(R2)%*%R2%*%R1=myFrame
+  
+  rotatedVectors<-vectors_In_I_Axes%*%myFrame
+  
+  return(rotatedVectors)
+}
+
+
+#convert 3D Cartesian coordinate to spherical coordinate
+cartesian_to_spherical <- function(v) {
+  if(length(v)!=3){stop("v is not a 3-dimensional vector!")}
+  
+  x<-v[1]
+  y<-v[2]
+  z<-v[3]
+  
+  r <- sqrt(x^2 + y^2 + z^2)
+  phi <- atan2(y, x)
+  theta <- -atan2(z, sqrt(x^2 + y^2))
+  
+  #phi is the yaw angle and theta is the pitch angle
+  return(list(r = r, phi = phi, theta = theta))
+}
+
+#convert 3D spherical coordinate to Cartesian coordinate
+spherical_to_cartesian <- function(r, phi, theta) {
+  #theta is the pitch phi is the yaw
+  x <- r * cos(theta) * cos(phi)
+  y <- r * cos(theta) * sin(phi)
+  z <- r * sin(theta)
+  return(c(x , y , z ))
+}
+
 #interpolate points between two points
 generatePointsBetween2Points <- function(point1, point2, numberOfPoints) {
   
-  dimension<-length(point1)
-  
-  totalDis<-norm(point1-point2,type = "2")
-  smallDis<-seq(0, totalDis, length.out = numberOfPoints)
-  
-  direction<-convertVec2unitVec(point2-point1)
-  
-  middlePoints<-array(NA, dim = c(numberOfPoints,dimension))
-  for (i in 1:length(smallDis)) {
-    tempPoint<-point1+smallDis[i]*direction
-    middlePoints[i,]<-tempPoint
+  if(identical(point1, point2)){
+    
+    middlePoints<-matrix(rep(point1,numberOfPoints),ncol = length(point1),byrow = TRUE)
+    
+  }else{
+    
+    dimension<-length(point1)
+    
+    totalDis<-norm(point1-point2,type = "2")
+    smallDis<-seq(0, totalDis, length.out = numberOfPoints)
+    
+    direction<-convertVec2unitVec(point2-point1)
+    
+    middlePoints<-array(NA, dim = c(numberOfPoints,dimension))
+    for (i in 1:length(smallDis)) {
+      tempPoint<-point1+smallDis[i]*direction
+      middlePoints[i,]<-tempPoint
+    }
+    
   }
   
   return(middlePoints)
