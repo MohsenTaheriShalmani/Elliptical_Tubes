@@ -17,6 +17,7 @@ The repository is linked to the publication mentioned below.
       year={2024},
       eprint={2404.01043},
       archivePrefix={arXiv},
+      url={https://doi.org/10.48550/arXiv.2404.01043},
       primaryClass={stat.ME}
 }
 ```
@@ -34,6 +35,10 @@ The `main.R` script is divided into two main sections: **1. Transformation** and
 - **Transformation**: This section provides examples for calculating both intrinsic and non-intrinsic means, using intrinsic and non-intrinsic transformations between two e-tubes represented by their corresponding *elliptical tube representations* (ETReps), as discussed in the main manuscript.
 
 - **Simulation**: This section provides an example of ETRep simulation, as discussed in the article's Supplementary Materials. 
+
+---
+
+Please read the **Code_Description.pdf**
 
 ---
 
