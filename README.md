@@ -22,13 +22,11 @@ The repository is linked to the publication mentioned below.
 }
 ```
 
+## Code_Description
+
+[Code_Description.pdf](Code_Description.pdf)
 
 ## Data and R scripts
----
-
-Please read the **Code_Description.pdf**
-[Code Description](Code_Description.pdf)
-
 ---
 
 The primary script file is `main.R`, supported by two additional scripts in the `Functions` folder: `ETRep_Functions.R`, which contains functions specific to ETRep analysis, and `ETRep_MathFunctions.R`, which includes general mathematical functions. An ETRep captures the characteristics of *elliptical tubes* (e-tubes), including the size and orientation of its elliptical cross-sections, positioned according to the material frames along the spine.
