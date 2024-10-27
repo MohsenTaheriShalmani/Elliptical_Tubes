@@ -23,10 +23,19 @@ The repository is linked to the publication mentioned below.
 
 
 ## Data and R scripts
-The "e_Tubes_simulated.RDATA" file contains data of 15 simulated ETReps.\
-The "main.R" script loads the simulated data and computes the intrinsic mean shape of the ETReps using the function "mean_tube_basedOnIntrinsicSweptCoordinate()" available in "functionsMeanSweptSkeletal_2.R" script.\
-For visualization of both the simulated data and the mean shape, the function "plot_Elliptical_Tube()" is provided in "functionsMeanSweptSkeletal_1.R" script.\
-All necessary functions and codes, including intrinsic and semi-intrinsic transformations discussed in the manuscript, are contained in the "subFunctions" folder.
+---
+
+The primary script file is `main.R`, supported by two additional scripts in the `Functions` folder: `ETRep_Functions.R`, which contains functions specific to ETRep analysis, and `ETRep_MathFunctions.R`, which includes general mathematical functions. An ETRep captures the characteristics of *elliptical tubes* (e-tubes), including the size and orientation of its elliptical cross-sections, positioned according to the material frames along the spine.
+
+---
+
+The `main.R` script is divided into two main sections: **1. Transformation** and **2. Simulation**.
+
+- **Transformation**: This section provides examples for calculating both intrinsic and non-intrinsic means, using intrinsic and non-intrinsic transformations between two e-tubes represented by their corresponding *elliptical tube representations* (ETReps), as discussed in the main manuscript.
+
+- **Simulation**: This section provides an example of ETRep simulation, as discussed in the article's Supplementary Materials. 
+
+---
 
 
 ## Images from the article
