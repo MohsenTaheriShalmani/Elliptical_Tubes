@@ -23,10 +23,13 @@ The repository is linked to the publication mentioned below.
 
 
 ## Data and R scripts
-The "e_Tubes_simulated.RDATA" file contains data of 15 simulated ETReps.\
-The "main.R" script loads the simulated data and computes the intrinsic mean shape of the ETReps using the function "mean_tube_basedOnIntrinsicSweptCoordinate()" available in "functionsMeanSweptSkeletal_2.R" script.\
-For visualization of both the simulated data and the mean shape, the function "plot_Elliptical_Tube()" is provided in "functionsMeanSweptSkeletal_1.R" script.\
-All necessary functions and codes, including intrinsic and semi-intrinsic transformations discussed in the manuscript, are contained in the "subFunctions" folder.
+The primary script file is \texttt{main.R}, which is supported by two additional scripts in the \texttt{Functions} folder: \texttt{ETRep\_Functions.R}, containing functions specific to ETRep analysis, and \texttt{ETRep\_MathFunctions.R}, which includes general mathematical functions. An ETRep encapsulates the characteristics of an \textit{elliptical tubes} (e-tubes), including the size and orientation of its elliptical cross-sections, positioned according to the material frames along the spine.\par
+
+...
+
+
+The \texttt{main.R} script is divided into two main sections: 1. Transformation and 2. Simulation. The Transformation section provides examples for calculating both intrinsic and non-intrinsic means using intrinsic and non-intrinsic transformations between two e-tubes, represented by their corresponding \textit{elliptical tube representations} (ETReps), as discussed in the main manuscript. The simulation section provides an example of ETRep simulation, as discussed in the article's Supplementary Materials. \par
+The required libraries for running the \texttt{main.R} script are: \texttt{shapes}, \texttt{rgl}, \texttt{Morpho}, \texttt{matlib}, \texttt{RiemBase}, \texttt{doBy}, \texttt{plotrix}, \texttt{Directional}, \texttt{RSpincalc}, \texttt{rotations}, \texttt{SphericalCubature}, \texttt{Rvcg}, \texttt{fields}, \texttt{Matrix}, \texttt{pracma}, \texttt{truncnorm}, \texttt{ggplot2}, \texttt{reshape2}, and \texttt{dplyr}.\par
 
 
 ## Images from the article
