@@ -51,7 +51,7 @@ The `main.R` script is divided into two main sections: **1. Transformation** and
 
 
 ### A depiction of the simulated ETReps and their mean shape.
-<img src="https://github.com/MohsenTaheriShalmani/Elliptical_Tubes/assets/19237855/d5122c87-bead-4ebe-9c75-58d03f72b1de" width="700">
+<img src="Fig4.jpg" width="700">
 
 ### Visualization of a valid transformation without any self-intersections
 ![Fig5](Fig5.jpg)
