@@ -44,6 +44,18 @@ The `main.R` script is divided into two main sections: **1. Transformation** and
 
 ---
 
+## Install ETRep R Package 
+
+```r
+# Install devtools if necessary
+if (!requireNamespace("devtools", quietly = TRUE)) {
+    install.packages("devtools")
+}
+
+# Install the ETRep package from GitHub
+devtools::install_github("MohsenTaheriShalmani/ETRep", build = TRUE)
+```
+
 ## Images from the article
 ![Fig1](Fig1.jpg)
 ![Fig2](Fig2.jpg)
