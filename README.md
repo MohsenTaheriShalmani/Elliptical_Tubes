@@ -54,7 +54,7 @@ if (!requireNamespace("devtools", quietly = TRUE)) {
 
 # Install the ETRep package from GitHub
 devtools::install_github("MohsenTaheriShalmani/ETRep", build = TRUE)
-
+```
 
 ## Images from the article
 ![Fig1](Fig1.jpg)
