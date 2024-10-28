@@ -26,6 +26,10 @@ create_Elliptical_Tube(
 
 \item{materialFramesBasedOnParents}{Array (3 x 3 x numberOfFrames) with pre-defined material frames.}
 
+\item{initialFrame}{Matrix 3 x 3 as the initial frame}
+
+\item{initialPoint}{Real vector with three elemets as the initial point}
+
 \item{EulerAngles_Matrix}{Matrix of dimensions numberOfFrames x 3 with Euler angles to define material frames.}
 
 \item{ellipseResolution}{Integer, resolution of elliptical cross-sections (default is 10).}
@@ -37,6 +41,8 @@ create_Elliptical_Tube(
 \item{connectionsLengths}{Numeric vector for lengths of spinal connection vectors.}
 
 \item{plotting}{Logical, enables plotting of the ETRep (default is TRUE).}
+
+\item{add}{Logical, enables overlay plotting}
 }
 \value{
 List containing tube details (orientation, radii, connection lengths, boundary points, etc.).
@@ -61,7 +67,7 @@ tube <- create_Elliptical_Tube(numberOfFrames = numberOfFrames,
                                connectionsLengths = rep(4, numberOfFrames),
                                plotting = FALSE)
  # Plotting
- plot_Elliptical_Tube(e_tube = tube,plot_frames = FALSE,
+ plot_Elliptical_Tube(tube = tube,plot_frames = FALSE,
                       plot_skeletal_sheet = TRUE,
                       plot_r_project = FALSE,
                       plot_r_max = FALSE,add = FALSE)

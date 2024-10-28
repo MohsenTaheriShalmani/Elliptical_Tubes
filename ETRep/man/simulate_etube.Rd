@@ -21,7 +21,15 @@ simulate_etube(
 
 \item{numberOfSimulation}{Integer, number of random samples.}
 
-\item{sd_v, }{sd_psi, sd_x, sd_a, sd_b Standard deviations for various parameters.}
+\item{sd_v}{Standard deviations for various parameters.}
+
+\item{sd_psi}{Standard deviations for various parameters.}
+
+\item{sd_x}{Standard deviations for various parameters.}
+
+\item{sd_a}{Standard deviations for various parameters.}
+
+\item{sd_b}{Standard deviations for various parameters.}
 
 \item{rangeSdScale}{Numeric range for random scaling.}
 
@@ -53,7 +61,7 @@ random_Tubes<-
 # Plotting
 rgl::open3d()
 for (i in 1:numberOfSimulation) {
-  plot_Elliptical_Tube(e_tube = random_Tubes[[i]],
+  plot_Elliptical_Tube(tube = random_Tubes[[i]],
                        plot_frames = FALSE,
                        plot_skeletal_sheet = FALSE,
                        plot_r_project = FALSE,

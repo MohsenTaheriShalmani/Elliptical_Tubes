@@ -91,7 +91,10 @@ calculate_theta <- function(materialFrameBasedOnParent,
 #' @param ellipseRadii_a Numeric vector for the primary radii of cross-sections.
 #' @param ellipseRadii_b Numeric vector for the secondary radii of cross-sections.
 #' @param connectionsLengths Numeric vector for lengths of spinal connection vectors.
+#' @param initialFrame Matrix 3 x 3 as the initial frame
+#' @param initialPoint Real vector with three elemets as the initial point
 #' @param plotting Logical, enables plotting of the ETRep (default is TRUE).
+#' @param add Logical, enables overlay plotting
 #' @return List containing tube details (orientation, radii, connection lengths, boundary points, etc.).
 #' @examples
 #' numberOfFrames<-15
@@ -110,7 +113,7 @@ calculate_theta <- function(materialFrameBasedOnParent,
 #'                                connectionsLengths = rep(4, numberOfFrames),
 #'                                plotting = FALSE)
 #'  # Plotting
-#'  plot_Elliptical_Tube(e_tube = tube,plot_frames = FALSE,
+#'  plot_Elliptical_Tube(tube = tube,plot_frames = FALSE,
 #'                       plot_skeletal_sheet = TRUE,
 #'                       plot_r_project = FALSE,
 #'                       plot_r_max = FALSE,add = FALSE)
@@ -143,8 +146,8 @@ create_Elliptical_Tube <- function(numberOfFrames,
     materialFramesBasedOnParents<-array(NA,dim = c(3,3,numberOfFrames))
     materialFramesBasedOnParents[,,1]<-initialFrame
     for (i in 2:numberOfFrames) {
-      materialFramesBasedOnParents[,,i]<-EA2DCM(EA = c(EulerAngles_alpha[i],EulerAngles_beta[i],EulerAngles_gamma[i]),
-                                                EulerOrder = 'zyx')
+      materialFramesBasedOnParents[,,i]<-RSpincalc::EA2DCM(EA = c(EulerAngles_alpha[i],EulerAngles_beta[i],EulerAngles_gamma[i]),
+                                                           EulerOrder = 'zyx')
     }
   }else if(method=="basedOnMaterialFrames" &
            !any(is.na(materialFramesBasedOnParents &
@@ -235,8 +238,8 @@ create_Elliptical_Tube <- function(numberOfFrames,
 
   psi_angles_roll<-rep(NA,numberOfFrames)
   for (i in 1:numberOfFrames) {
-    psi_angles_roll[i]<-DCM2EA(materialFramesBasedOnParents[,,i],
-                               EulerOrder = 'zyx')[3]
+    psi_angles_roll[i]<-RSpincalc::DCM2EA(materialFramesBasedOnParents[,,i],
+                                          EulerOrder = 'zyx')[3]
   }
 
   #r_project is the projection of the CS on the normal
@@ -292,7 +295,7 @@ create_Elliptical_Tube <- function(numberOfFrames,
     slicingEllipsoids[,,i]<-elipseIn3D
   }
 
-  boundaryPoints<-matrix(aperm(slicingEllipsoids, c(1, 3, 2)), ncol = 3)
+  boundaryPoints<-matrix(base::aperm(slicingEllipsoids, c(1, 3, 2)), ncol = 3)
 
 
   #plot
@@ -307,7 +310,7 @@ create_Elliptical_Tube <- function(numberOfFrames,
   #plot
   if(plotting==TRUE){
     if(add==FALSE){
-      open3d()
+      rgl::open3d()
     }
     for (i in 1:dim(slicingEllipsoids)[3]) {
       plot3d(rbind(slicingEllipsoids[,,i],slicingEllipsoids[1,,i]),type = 'l',col='black',expand = 10,box=FALSE,add = TRUE)
@@ -332,13 +335,13 @@ create_Elliptical_Tube <- function(numberOfFrames,
       # plot3d(rbind(spinalPoints3D[i,],tip_r_MaxVectors[i,]),type = 'l',lwd=2,col='orange',expand = 10,box=FALSE,add = TRUE)
     }
     #frames
-    vectors3d(spinalPoints3D+t(materialFramesGlobalCoordinate[1,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="blue", lwd=2)
-    vectors3d(spinalPoints3D+t(materialFramesGlobalCoordinate[2,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="red", lwd=2)
-    vectors3d(spinalPoints3D+t(materialFramesGlobalCoordinate[3,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="green", lwd=2)
+    matlib::vectors3d(spinalPoints3D+t(materialFramesGlobalCoordinate[1,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="blue", lwd=2)
+    matlib::vectors3d(spinalPoints3D+t(materialFramesGlobalCoordinate[2,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="red", lwd=2)
+    matlib::vectors3d(spinalPoints3D+t(materialFramesGlobalCoordinate[3,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="green", lwd=2)
 
-    #vectors3d(spinalPoints3D+t(frenetFramesGlobalCoordinate[1,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="black", lwd=2)
-    vectors3d(spinalPoints3D+t(frenetFramesGlobalCoordinate[2,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="black", lwd=2)
-    #vectors3d(spinalPoints3D+t(frenetFramesGlobalCoordinate[3,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="black", lwd=2)
+    #matlib::vectors3d(spinalPoints3D+t(frenetFramesGlobalCoordinate[1,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="black", lwd=2)
+    matlib::vectors3d(spinalPoints3D+t(frenetFramesGlobalCoordinate[2,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="black", lwd=2)
+    #matlib::vectors3d(spinalPoints3D+t(frenetFramesGlobalCoordinate[3,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="black", lwd=2)
 
     decorate3d()
   }
@@ -372,19 +375,26 @@ create_Elliptical_Tube <- function(numberOfFrames,
 #'
 #' @param tube List containing ETRep details.
 #' @param plot_boundary Logical, enables plotting of the boundary (default is TRUE).
-#' @param plot_frames Logical, enables plotting of the material frames (default is TRUE).
-#' @param frameScaling Numeric, scale factor for frames.
-#' @param plot_r_project Logical, enables plotting of projection along normals (default is TRUE).
 #' @param plot_r_max Logical, enables plotting of max projection size (default is FALSE).
+#' @param plot_r_project Logical, enables plotting of projection along normals (default is TRUE).
+#' @param plot_frames Logical, enables plotting of the material frames (default is TRUE).
+#' @param plot_spine Logical, enables plotting of the spine.
+#' @param plot_normal_vec Logical, enables plotting of the normals.
+#' @param plot_skeletal_sheet Logical, enables plotting of the surface skeleton.
+#' @param decorate Logical, enables decorate the plot
+#' @param add Logical, enables overlay plotting
+#' @param frameScaling Numeric, scale factor for frames.
+#' @param colSkeletalSheet String, defining the color of the surface skeleton
+#' @param colorBoundary String, defining the color of the e-tube
 #' @return Graphical output.
 #' @examples
 #' # Load tube
 #' data("colon3D")
-#' plot_Elliptical_Tube(e_tube = colon3D,
+#' plot_Elliptical_Tube(tube = colon3D,
 #'                      plot_frames = FALSE,
 #'                      add=FALSE)
 #' @export
-plot_Elliptical_Tube <- function(e_tube,
+plot_Elliptical_Tube <- function(tube,
                                  plot_boundary=TRUE,
                                  plot_r_max=FALSE,
                                  plot_r_project=TRUE,
@@ -396,32 +406,23 @@ plot_Elliptical_Tube <- function(e_tube,
                                  decorate=TRUE,
                                  colSkeletalSheet="blue",
                                  colorBoundary="blue",
-                                 userMatrix4plotOrientation=NA,
-                                 plotSignificantFeatures=FALSE,
-                                 p_values_v=NULL,
-                                 p_values_psi=NULL,
-                                 p_values_x=NULL,
-                                 p_values_a=NULL,
-                                 p_values_b=NULL,
-                                 lwdSignificant=4,
-                                 add=FALSE,
-                                 mainTitle="") {
+                                 add=FALSE) {
 
-  numberOfFrames<-nrow(e_tube$spinalPoints3D)
+  numberOfFrames<-nrow(tube$spinalPoints3D)
 
-  spinalPoints3D<-e_tube$spinalPoints3D
-  materialFramesBasedOnParents<-e_tube$materialFramesBasedOnParents
-  materialFramesGlobalCoordinate<-e_tube$materialFramesGlobalCoordinate
-  frenetFramesBasedOnParents<-e_tube$frenetFramesBasedOnParents
-  frenetFramesGlobalCoordinate<-e_tube$frenetFramesGlobalCoordinate
-  ellipseRadii_a<-e_tube$ellipseRadii_a
-  ellipseRadii_b<-e_tube$ellipseRadii_b
-  slicingEllipsoids<-e_tube$slicingEllipsoids
-  skeletalSheetPoints<-e_tube$skeletalSheetPoints
-  r_project_lengths<-e_tube$r_project_lengths
-  tip_r_MaxVectors<-e_tube$tip_r_MaxVectors
-  tip_r_ProjectVectors<-e_tube$tip_r_ProjectVectors
-  connectionsLengths<-e_tube$connectionsLengths
+  spinalPoints3D<-tube$spinalPoints3D
+  materialFramesBasedOnParents<-tube$materialFramesBasedOnParents
+  materialFramesGlobalCoordinate<-tube$materialFramesGlobalCoordinate
+  frenetFramesBasedOnParents<-tube$frenetFramesBasedOnParents
+  frenetFramesGlobalCoordinate<-tube$frenetFramesGlobalCoordinate
+  ellipseRadii_a<-tube$ellipseRadii_a
+  ellipseRadii_b<-tube$ellipseRadii_b
+  slicingEllipsoids<-tube$slicingEllipsoids
+  skeletalSheetPoints<-tube$skeletalSheetPoints
+  r_project_lengths<-tube$r_project_lengths
+  tip_r_MaxVectors<-tube$tip_r_MaxVectors
+  tip_r_ProjectVectors<-tube$tip_r_ProjectVectors
+  connectionsLengths<-tube$connectionsLengths
 
 
   if(length(connectionsLengths)==(numberOfFrames-1)){
@@ -435,7 +436,7 @@ plot_Elliptical_Tube <- function(e_tube,
 
   #plot
   if(add==FALSE){
-    open3d()
+    rgl::open3d()
   }
   #spine
   if(plot_spine==TRUE){
@@ -481,67 +482,17 @@ plot_Elliptical_Tube <- function(e_tube,
   if(plot_frames==TRUE){
     plot3d(spinalPoints3D,type = 'l',lwd=4,col='darkblue',expand = 10,box=FALSE,add = TRUE)
     #frames
-    vectors3d(spinalPoints3D+frameScaling*t(materialFramesGlobalCoordinate[1,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="blue", lwd=frameScaling)
-    vectors3d(spinalPoints3D+frameScaling*t(materialFramesGlobalCoordinate[2,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="red", lwd=frameScaling)
-    vectors3d(spinalPoints3D+frameScaling*t(materialFramesGlobalCoordinate[3,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="green", lwd=frameScaling)
+    matlib::vectors3d(spinalPoints3D+frameScaling*t(materialFramesGlobalCoordinate[1,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="blue", lwd=frameScaling)
+    matlib::vectors3d(spinalPoints3D+frameScaling*t(materialFramesGlobalCoordinate[2,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="red", lwd=frameScaling)
+    matlib::vectors3d(spinalPoints3D+frameScaling*t(materialFramesGlobalCoordinate[3,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="green", lwd=frameScaling)
   }
 
   if(plot_normal_vec==TRUE){
-    #vectors3d(spinalPoints3D+frameScaling*t(frenetFramesGlobalCoordinate[1,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="black", lwd=frameScaling)
-    vectors3d(spinalPoints3D+frameScaling*t(frenetFramesGlobalCoordinate[2,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="black", lwd=frameScaling)
-    #vectors3d(spinalPoints3D+frameScaling*t(frenetFramesGlobalCoordinate[3,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="black", lwd=frameScaling)
+    #matlib::vectors3d(spinalPoints3D+frameScaling*t(frenetFramesGlobalCoordinate[1,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="black", lwd=frameScaling)
+    matlib::vectors3d(spinalPoints3D+frameScaling*t(frenetFramesGlobalCoordinate[2,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="black", lwd=frameScaling)
+    #matlib::vectors3d(spinalPoints3D+frameScaling*t(frenetFramesGlobalCoordinate[3,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="black", lwd=frameScaling)
   }
 
-  if(decorate==TRUE){
-    decorate3d(main = mainTitle)
-  }
-
-  if(plotSignificantFeatures==TRUE){
-
-    if(!is.null(p_values_a)){
-      colors<-pvalue_to_color(p_values_a)
-      for (i in 1:numberOfFrames) {
-        plot3d(rbind(slicingEllipsoids[,,i],slicingEllipsoids[1,,i]),type = 'l',
-               lwd=lwdSignificant,col=colors[i],expand = 10,box=FALSE,add = TRUE)
-      }
-    }
-    if(!is.null(p_values_b)){
-      colors<-pvalue_to_color(p_values_b)
-      for (i in 1:numberOfFrames) {
-        plot3d(rbind(slicingEllipsoids[,,i],slicingEllipsoids[1,,i]),type = 'l',
-               lwd=lwdSignificant,col=colors[i],expand = 10,box=FALSE,add = TRUE)
-      }
-    }
-    if(!is.null(p_values_x)){
-      colors<-pvalue_to_color(p_values_x)
-      for (i in 2:numberOfFrames) {
-        plot3d(rbind(spinalPoints3D[i-1,],
-                     spinalPoints3D[i,]),type = 'l',
-               lwd=lwdSignificant,col=colors[i],expand = 10,box=FALSE,add = TRUE)
-      }
-    }
-
-    if(!is.null(p_values_psi)){
-      colors<-pvalue_to_color(p_values_psi)
-      for (i in 1:numberOfFrames) {
-        plot3d(rbind(slicingEllipsoids[,,i],slicingEllipsoids[1,,i]),type = 'l',
-               lwd=lwdSignificant,col=colors[i],expand = 10,box=FALSE,add = TRUE)
-      }
-    }
-
-    if(!is.null(p_values_v)){
-      colors<-pvalue_to_color(p_values_v)
-      for (i in 1:numberOfFrames) {
-        plot3d(rbind(slicingEllipsoids[,,i],slicingEllipsoids[1,,i]),type = 'l',
-               lwd=lwdSignificant,col=colors[i],expand = 10,box=FALSE,add = TRUE)
-      }
-    }
-    decorate3d(main = mainTitle)
-  }
-
-  if(!anyNA(userMatrix4plotOrientation)){
-    par3d(userMatrix=userMatrix4plotOrientation)
-  }
 }
 
 # Converting a tube to a vector in the high-dimensional space with hyperbolic boundary
@@ -596,8 +547,8 @@ map6DhyperbolaTo6Dcylinder <- function(v_gamma_x_a_b) {
   c2s<-cartesian_to_spherical(v = t_vec)
   alpha<-c2s$phi
   beta<-c2s$theta
-  materialFrame<-EA2DCM(EA = c(alpha, beta, gamma),
-                        EulerOrder = 'zyx')
+  materialFrame<-RSpincalc::EA2DCM(EA = c(alpha, beta, gamma),
+                                   EulerOrder = 'zyx')
 
   #calculate theta
   theta<-calculate_theta(materialFrameBasedOnParent=materialFrame)
@@ -649,8 +600,8 @@ map6DcylinderTo6Dhyperbola <-function(v_gamma_x_a_b_In6DCylinder) {
   c2s<-cartesian_to_spherical(v = t_vec)
   alpha<-c2s$phi
   beta<-c2s$theta
-  materialFrame<-EA2DCM(EA = c(alpha, beta, gamma),
-                        EulerOrder = 'zyx')
+  materialFrame<-RSpincalc::EA2DCM(EA = c(alpha, beta, gamma),
+                                   EulerOrder = 'zyx')
 
   #calculate theta
   theta<-calculate_theta(materialFrameBasedOnParent=materialFrame)
@@ -697,8 +648,8 @@ convertMatrixIn6DHyperbola2Tube <- function(matrixIn6DHyperbola) {
     alphaTemp<-c2s$phi
     betaTemp<-c2s$theta
     gammaTemp<-gammas[i]
-    materialFramesBasedOnParents[,,i]<-EA2DCM(EA = c(alphaTemp, betaTemp, gammaTemp),
-                                              EulerOrder = 'zyx')
+    materialFramesBasedOnParents[,,i]<-RSpincalc::EA2DCM(EA = c(alphaTemp, betaTemp, gammaTemp),
+                                                         EulerOrder = 'zyx')
   }
 
   #connections' lengths steps
@@ -720,6 +671,27 @@ convertMatrixIn6DHyperbola2Tube <- function(matrixIn6DHyperbola) {
 
 }
 
+# convert p-values to color based on spectrum=rev(c("white","lightcyan","cyan","lightblue","darkblue"))
+pvalue_to_color <- function(p_value,
+                            range=100,
+                            spectrum=rev(c("white","lightcyan","cyan","lightblue","darkblue")),
+                            plotSpectrum=FALSE) {
+
+  colfunc <- colorRampPalette(spectrum)
+  colors <- colfunc(range)
+
+  if(plotSpectrum==TRUE){
+    image.plot(legend.only = TRUE,
+               zlim = c(0, 1),
+               col = colors,
+               legend.lab = "p-value",
+               horizontal = FALSE)
+  }
+  color_index <- round(p_value * (range-1)) + 1  # Scale p-value to range
+
+  return(colors[color_index])
+}
+
 # Calculating the intrinsic mean ETRep
 #' Calculate Intrinsic Mean of ETReps
 #'
@@ -738,7 +710,7 @@ convertMatrixIn6DHyperbola2Tube <- function(matrixIn6DHyperbola) {
 #'   intrinsic_mean_tube(tubes = list(tube_A,tube_B),
 #'                       plotting = FALSE)
 #' # Plotting
-#' plot_Elliptical_Tube(e_tube = intrinsic_mean,
+#' plot_Elliptical_Tube(tube = intrinsic_mean,
 #'                      plot_frames = FALSE,
 #'                      plot_skeletal_sheet = FALSE,
 #'                      plot_r_project = FALSE,
@@ -751,7 +723,7 @@ convertMatrixIn6DHyperbola2Tube <- function(matrixIn6DHyperbola) {
 #'   intrinsic_mean_tube(tubes = simulatedColons,
 #'                       plotting = FALSE)
 #' # Plotting
-#' plot_Elliptical_Tube(e_tube = intrinsic_mean,
+#' plot_Elliptical_Tube(tube = intrinsic_mean,
 #'                      plot_frames = FALSE,
 #'                      plot_skeletal_sheet = FALSE,
 #'                      plot_r_project = FALSE,
@@ -901,6 +873,8 @@ discretePathBetween2PointsIn_6D_Hyperbola <- function(point1,
 #' @param tube2 List containing details of the second ETRep.
 #' @param numberOfSteps Integer, number of transformation steps.
 #' @param plotting Logical, enables visualization during transformation (default is TRUE).
+#' @param colorBoundary String defining the color of the e-tube
+#' @param type  String defining the type of analysis as sizeAndShapeAnalysis or shapeAnalysis
 #' @return List containing intermediate ETReps.
 #' @examples
 #' # Load tubes
@@ -914,7 +888,7 @@ discretePathBetween2PointsIn_6D_Hyperbola <- function(point1,
 #'     plotting = FALSE)
 #' # Plotting
 #' for (i in 1:length(transformation_Tubes)) {
-#'   plot_Elliptical_Tube(e_tube = transformation_Tubes[[i]],
+#'   plot_Elliptical_Tube(tube = transformation_Tubes[[i]],
 #'   plot_frames = FALSE,plot_skeletal_sheet = FALSE
 #'   ,plot_r_project = FALSE,
 #'   plot_r_max = FALSE,
@@ -973,8 +947,8 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
         c2s<-cartesian_to_spherical(v = t_vec_temp)
         alphaTemp<-c2s$phi
         betaTemp<-c2s$theta
-        materialFramesBasedOnParents_Steps[,,i,k]<-EA2DCM(EA = c(alphaTemp, betaTemp, gammaTemp),
-                                                          EulerOrder = 'zyx')
+        materialFramesBasedOnParents_Steps[,,i,k]<-RSpincalc::EA2DCM(EA = c(alphaTemp, betaTemp, gammaTemp),
+                                                                     EulerOrder = 'zyx')
       }
     }
     materialFramesBasedOnParents_Steps[,,numberOfFrames,]<-
@@ -1079,8 +1053,13 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 #' Non-intrinsic Transformation Between Two ETReps
 #'
 #' Performs the non-intrinsic transformation from one ETRep to another.
-#'
-#' @inheritParams Intrinsic_Transformation_Elliptical_Tubes
+#' @param tube1 List containing details of the first ETRep.
+#' @param tube2 List containing details of the second ETRep.
+#' @param numberOfSteps Integer, number of transformation steps.
+#' @param plotting Logical, enables visualization during transformation (default is TRUE).
+#' @param colorBoundary String defining the color of the e-tube
+#' @param type  String defining the type of analysis as sizeAndShapeAnalysis or shapeAnalysis
+#' @param add Logical, enables overlay plotting
 #' @return List containing intermediate ETReps.
 #' @examples
 #' # Load tubes
@@ -1093,7 +1072,7 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 #'     numberOfSteps = numberOfSteps , plotting = FALSE)
 #' # Plotting
 #' for (i in 1:length(transformation_Tubes)) {
-#'   plot_Elliptical_Tube(e_tube = transformation_Tubes[[i]],
+#'   plot_Elliptical_Tube(tube = transformation_Tubes[[i]],
 #'                        plot_frames = FALSE,
 #'                        plot_skeletal_sheet = FALSE,
 #'                        plot_r_project = FALSE,
@@ -1117,19 +1096,19 @@ nonIntrinsic_Transformation_Elliptical_Tubes <- function(tube1,
   materialFramesBasedOnParents_Steps<-array(NA,dim=c(dim(tube1$materialFramesBasedOnParents),numberOfSteps))
   for (i in 1:numberOfFrames) {
 
-    q1_twist<-as.Q4(as.SO3(tube1$materialFramesBasedOnParents[,,i]))
-    q2_twist<-as.Q4(as.SO3(tube2$materialFramesBasedOnParents[,,i]))
+    q1_twist<-rotations::as.Q4(rotations::as.SO3(tube1$materialFramesBasedOnParents[,,i]))
+    q2_twist<-rotations::as.Q4(rotations::as.SO3(tube2$materialFramesBasedOnParents[,,i]))
 
     if(norm(as.vector(q1_twist)-as.vector(q2_twist),type = '2')<10^-6){
       for (j in 1:numberOfSteps) {
-        materialFramesBasedOnParents_Steps[,,i,j]<-as.SO3(q2_twist)
+        materialFramesBasedOnParents_Steps[,,i,j]<-rotations::as.SO3(q2_twist)
       }
     }else{
       q4pointsOnAGeodesic_twist<-geodesicPathOnUnitSphere(as.vector(q1_twist),
                                                           as.vector(q2_twist),
                                                           numberOfneededPoints = numberOfSteps)
       for (j in 1:numberOfSteps) {
-        materialFramesBasedOnParents_Steps[,,i,j]<-as.SO3(as.Q4(q4pointsOnAGeodesic_twist[j,]))
+        materialFramesBasedOnParents_Steps[,,i,j]<-rotations::as.SO3(as.Q4(q4pointsOnAGeodesic_twist[j,]))
       }
     }
   }
@@ -1188,7 +1167,7 @@ nonIntrinsic_Transformation_Elliptical_Tubes <- function(tube1,
   #plot tubes
   if(plotting==TRUE){
     for (j in 1:numberOfSteps) {
-      plot_Elliptical_Tube(e_tube = tubes[[j]],
+      plot_Elliptical_Tube(tube = tubes[[j]],
                            plot_r_project = FALSE,
                            plot_r_max = FALSE,
                            colorBoundary=colorBoundary,
@@ -1220,7 +1199,7 @@ nonIntrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 #'   nonIntrinsic_mean_tube(tubes = list(tube_A,tube_B),
 #'                          plotting = FALSE)
 #' # Plotting
-#' plot_Elliptical_Tube(e_tube = nonIntrinsic_mean,
+#' plot_Elliptical_Tube(tube = nonIntrinsic_mean,
 #'                      plot_frames = FALSE,
 #'                      plot_skeletal_sheet = FALSE,
 #'                      plot_r_project = FALSE,
@@ -1233,7 +1212,7 @@ nonIntrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 #'   nonIntrinsic_mean_tube(tubes = simulatedColons,
 #'                          plotting = FALSE)
 #' # Plotting
-#' plot_Elliptical_Tube(e_tube = nonIntrinsic_mean,
+#' plot_Elliptical_Tube(tube = nonIntrinsic_mean,
 #'                      plot_frames = FALSE,
 #'                      plot_skeletal_sheet = FALSE,
 #'                      plot_r_project = FALSE,
@@ -1273,7 +1252,7 @@ nonIntrinsic_mean_tube <- function(tubes,
 
   meanMaterialFramesBasedOnParents<-array(NA, dim = c(3,3,numberOfFrames))
   for (i in 1:numberOfFrames) {
-    tempVec<-mean(as.SO3(t(vectorizedMaterialFramesBasedOnParents[i,,])),type = 'projected')
+    tempVec<-mean(rotations::as.SO3(t(vectorizedMaterialFramesBasedOnParents[i,,])),type = 'projected')
     # tempVec<-mean(as.SO3(t(vectorizedMaterialFramesBasedOnParents[i,,])),type = 'geometric')
     meanMaterialFramesBasedOnParents[,,i]<-matrix(tempVec,nrow = 3,byrow = TRUE)
   }
@@ -1315,7 +1294,11 @@ nonIntrinsic_mean_tube <- function(tubes,
 #'
 #' @param referenceTube List containing ETRep information as the reference.
 #' @param numberOfSimulation Integer, number of random samples.
-#' @param sd_v, sd_psi, sd_x, sd_a, sd_b Standard deviations for various parameters.
+#' @param sd_v Standard deviations for various parameters.
+#' @param sd_psi Standard deviations for various parameters.
+#' @param sd_x Standard deviations for various parameters.
+#' @param sd_a Standard deviations for various parameters.
+#' @param sd_b Standard deviations for various parameters.
 #' @param rangeSdScale Numeric range for random scaling.
 #' @param plotting Logical, enables visualization of samples (default is FALSE).
 #' @return List of random ETReps.
@@ -1339,7 +1322,7 @@ nonIntrinsic_mean_tube <- function(tubes,
 #' # Plotting
 #' rgl::open3d()
 #' for (i in 1:numberOfSimulation) {
-#'   plot_Elliptical_Tube(e_tube = random_Tubes[[i]],
+#'   plot_Elliptical_Tube(tube = random_Tubes[[i]],
 #'                        plot_frames = FALSE,
 #'                        plot_skeletal_sheet = FALSE,
 #'                        plot_r_project = FALSE,
@@ -1403,7 +1386,7 @@ simulate_etube <- function(referenceTube,
   if(plotting==TRUE){
     color_spectrum <- colorRampPalette(c("lightblue","darkblue"))
     colors <- color_spectrum(numberOfSimulation)
-    open3d()
+    rgl::open3d()
     for (j in 1:numberOfSimulation) {
       plot_Elliptical_Tube(simulatedTubes[[j]],
                            colorBoundary = colors[j],
@@ -1440,7 +1423,7 @@ plotProcTube <- function(boundaryPoints,
     ellipses[[i]]<-boundaryPoints[c(list_of_rows[[i]],list_of_rows[[i]][1]),]
   }
 
-  #open3d()
+  #rgl::open3d()
   for (i in 1:length(list_of_rows)) {
     plot3d(ellipses[[i]],type = 'l',col=colorBoundary,expand = 10,box=FALSE,add = TRUE)
   }
@@ -1512,7 +1495,7 @@ nonIntrinsic_Transformation_Elliptical_Tubes_Without_SelfIntersection <- functio
                                        connectionsLengths = tubeTemp$connectionsLengths,
                                        plotting = FALSE)
     }
-    #plot_Elliptical_Tube(e_tube = tubeTemp)
+    #plot_Elliptical_Tube(tube = tubeTemp)
 
     if(removeNonLocalSingularity==TRUE){
       #remove non-local intersections
@@ -1532,7 +1515,7 @@ nonIntrinsic_Transformation_Elliptical_Tubes_Without_SelfIntersection <- functio
         indicesOfCriticalNonLocalIntersections<-tubeCrossSetionsIndicesWith_NonLocal_SelfIntersections(tube = tubeTemp)$criticalElipses_index
       }
     }
-    plot_Elliptical_Tube(e_tube = tubeTemp,
+    plot_Elliptical_Tube(tube = tubeTemp,
                          plot_boundary = TRUE,plot_r_max = FALSE,plot_r_project = FALSE,
                          plot_frames = TRUE,
                          plot_normal_vec = FALSE,plot_skeletal_sheet = FALSE,
@@ -1546,7 +1529,7 @@ nonIntrinsic_Transformation_Elliptical_Tubes_Without_SelfIntersection <- functio
   #plot tubes
   if(plotting==TRUE){
     for (i in 1:length(tubes)) {
-      plot_Elliptical_Tube(e_tube = tubes[[i]],
+      plot_Elliptical_Tube(tube = tubes[[i]],
                            plot_boundary = TRUE,plot_r_max = FALSE,plot_r_project = FALSE,
                            plot_frames = TRUE,
                            plot_normal_vec = FALSE,plot_skeletal_sheet = FALSE,
@@ -1597,19 +1580,19 @@ fitRadialVectorsModelBasedOnParallelSlicing <- function(PDM,
                                                         plotting=TRUE,
                                                         colorRadialVectors="blue") {
 
-  verts <- rbind(t(as.matrix(PDM)),1)
-  trgls <- as.matrix(t(polyMatrix))
-  tmesh <- tmesh3d(verts, trgls)
-  tmesh <- vcgUpdateNormals(tmesh)
+  verts <- rbind(t(base::as.matrix(PDM)),1)
+  trgls <- base::as.matrix(t(polyMatrix))
+  tmesh <- rgl::tmesh3d(verts, trgls)
+  tmesh <- Rvcg::vcgUpdateNormals(tmesh)
   # shade3d(tmesh, col="white",alpha=0.2)  #surface mesh
 
   #remeshing to increase the number of triangles by reducing the voxelSize
-  remeshedMesh<-vcgUniformRemesh(tmesh,voxelSize = 0.5)
+  remeshedMesh<-Rvcg::vcgUniformRemesh(tmesh,voxelSize = 0.5)
   # print(dim(tmesh$vb))
   # print(dim(remeshedMesh$vb))
-  tmeshSmooth<-vcgUpdateNormals(remeshedMesh)
+  tmeshSmooth<-Rvcg::vcgUpdateNormals(remeshedMesh)
 
-  pointsTest<-vert2points(tmeshSmooth)
+  pointsTest<-Morpho::vert2points(tmeshSmooth)
   slicesAlongXaxis<-seq(min(pointsTest[,2]),max(pointsTest[,2]),length.out=nunmberOfSlices)
 
   # we use asymmetric circles to avoid antipodal vectors
@@ -1628,7 +1611,7 @@ fitRadialVectorsModelBasedOnParallelSlicing <- function(PDM,
 
     circleIn3D<-tempRadialSpokesTails + cbind(tempCircle[,1],rep(0,nrow(tempCircle)),tempCircle[,2])
 
-    circleMesh3D<-as.mesh3d(circleIn3D)
+    circleMesh3D<-rgl::as.mesh3d(circleIn3D)
 
     normalsTemp<-circleIn3D-tempRadialSpokesTails
 
@@ -1636,8 +1619,8 @@ fitRadialVectorsModelBasedOnParallelSlicing <- function(PDM,
                                 rep(1,nrow(circleIn3D)))
 
 
-    intersections<-vcgRaySearch(circleMesh3D,mesh = tmesh)
-    tempRadialSpokesTips<-vert2points(intersections)
+    intersections<-Rvcg::vcgRaySearch(circleMesh3D,mesh = tmesh)
+    tempRadialSpokesTips<-Morpho::vert2points(intersections)
 
     radialSpokesTails<-rbind(radialSpokesTails,tempRadialSpokesTails)
     radialSpokesTips<-rbind(radialSpokesTips,tempRadialSpokesTips)
@@ -1645,7 +1628,7 @@ fitRadialVectorsModelBasedOnParallelSlicing <- function(PDM,
   }
 
   if(plotting==TRUE){
-    open3d()
+    rgl::open3d()
     shade3d(tmesh,col="white",alpha=0.2)
     plot3d(slicesCentroids,type="s",radius = 0.2,col = colorRadialVectors,expand = 10,box=FALSE,add = TRUE)
     plot3d(slicesCentroids,type="l",lwd=4,col = colorRadialVectors,expand = 10,box=FALSE,add = TRUE)
@@ -1658,7 +1641,7 @@ fitRadialVectorsModelBasedOnParallelSlicing <- function(PDM,
       plot3d(rbind(slicingPlaneTemp,slicingPlaneTemp[1,]),type="l",lwd=2,col = "grey",expand = 10,box=FALSE,add = TRUE)
     }
 
-    vectors3d(radialSpokesTips,
+    matlib::vectors3d(radialSpokesTips,
               origin = radialSpokesTails,headlength = 0.1,radius = 1/10, col=colorRadialVectors, lwd=2)
 
     decorate3d()

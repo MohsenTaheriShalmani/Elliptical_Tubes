@@ -1,6 +1,3 @@
-library(RiemBase)
-library(pracma)
-
 # Math functions
 
 # function to calculate Mahalanobis distance (Hotelling Metric)
@@ -68,10 +65,10 @@ permutation1D <- function(A,B,nPerm=10000) {
     permNumbers<-sample(1:(nSamplesG1+nSamplesG2))
     groupA_elementNumbers<-permNumbers[c(1:nSamplesG1)]
     groupB_elementNumbers<-permNumbers[c((nSamplesG1+1):(nSamplesG1+nSamplesG2))]
-    
+
     tempX<-pooledGroup[groupA_elementNumbers]
     tempY<-pooledGroup[groupB_elementNumbers]
-    
+
     testStatistics[j]<-MahalanobisDistance_1D(tempX,tempY)
   }
   pVal<-sum(testStatistics>=T0)/nPerm
@@ -83,24 +80,24 @@ permutation1D <- function(A,B,nPerm=10000) {
 
 
 geodesicPathOnUnitSphere <- function(point1, point2, numberOfneededPoints=100) {
-  
+
   u1<-convertVec2unitVec(point1)
   u2<-convertVec2unitVec(point2)
   theta<-geodesicDistance(u1,u2)
-  
+
   if(identical(u1, u2)){
-    
+
     geodesicPoints<-matrix(rep(u1,numberOfneededPoints),ncol = length(u1),byrow = TRUE)
-    
+
   }else{
     tau<-seq(from=0,to=1,length.out=numberOfneededPoints)
-    
+
     geodesicPoints<-array(NA,dim = c(numberOfneededPoints,length(u1)))
     for (i in 1:numberOfneededPoints) {
-      geodesicPoints[i,]<-1/sin(theta)*(sin(theta*(1-tau[i]))*u1+sin(theta*tau[i])*u2) 
+      geodesicPoints[i,]<-1/sin(theta)*(sin(theta*(1-tau[i]))*u1+sin(theta*tau[i])*u2)
     }
   }
-  
+
   return(geodesicPoints)
 }
 # geodesicPointsTest<-geodesicPathOnUnitSphere(c(1,0,0),c(0,1,0))
@@ -121,10 +118,10 @@ permutationMultivariate <- function(A,B,nPerm=10000) {
     permNumbers<-sample(1:(nSamplesG1+nSamplesG2))
     groupA_elementNumbers<-permNumbers[c(1:nSamplesG1)]
     groupB_elementNumbers<-permNumbers[c((nSamplesG1+1):(nSamplesG1+nSamplesG2))]
-    
+
     tempX<-pooledGroup[groupA_elementNumbers,]
     tempY<-pooledGroup[groupB_elementNumbers,]
-    
+
     testStatistics[j]<-MahalanobisDistance(tempX,tempY)
   }
 
@@ -144,7 +141,7 @@ meanDifferenceTest1D <- function(A,B,type="Parametric",nPerm=10000) {
     pVal<-t.test(A,B)$p.value
     return(pVal)
   }else if(type=="Permutation"){
-    
+
     T0<-MahalanobisDistance_1D(A,B) #observed test statistics
     nSamplesG1<-length(A)
     nSamplesG2<-length(B)
@@ -155,10 +152,10 @@ meanDifferenceTest1D <- function(A,B,type="Parametric",nPerm=10000) {
       permNumbers<-sample(1:(nSamplesG1+nSamplesG2))
       groupA_elementNumbers<-permNumbers[c(1:nSamplesG1)]
       groupB_elementNumbers<-permNumbers[c((nSamplesG1+1):(nSamplesG1+nSamplesG2))]
-      
+
       tempX<-pooledGroup[groupA_elementNumbers]
       tempY<-pooledGroup[groupB_elementNumbers]
-      
+
       testStatistics[j]<-MahalanobisDistance_1D(tempX,tempY)
     }
     pVal<-(0.5+sum(testStatistics>=T0))/(nPerm+1)
@@ -176,21 +173,21 @@ meanDifferenceTestMultivariate <- function(A,B,type="Parametric",nPerm=10000) {
     pVal<-HotellingT2(A,B)
     return(pVal)
   }else if(type=="Permutation"){
-    
+
     T0<-MahalanobisDistance(A,B) #observed test statistics
     nSamplesG1<-dim(A)[1]
     nSamplesG2<-dim(B)[1]
     testStatistics<-rep(NA,nPerm)
     pooledGroup<-rbind(A,B)
     for (j in 1:nPerm) {
-      
+
       permNumbers<-sample(1:(nSamplesG1+nSamplesG2))
       groupA_elementNumbers<-permNumbers[c(1:nSamplesG1)]
       groupB_elementNumbers<-permNumbers[c((nSamplesG1+1):(nSamplesG1+nSamplesG2))]
-      
+
       tempX<-pooledGroup[groupA_elementNumbers,]
       tempY<-pooledGroup[groupB_elementNumbers,]
-      
+
       testStatistics[j]<-MahalanobisDistance(tempX,tempY)
     }
     pVal<-(0.5+sum(testStatistics>=T0))/(nPerm+1)
@@ -238,7 +235,7 @@ myCrossProduct <- function(v,u) {
 # frechet mean
 
 frechetMean <- function(directions) {
-  
+
   allDirTemp<-t(directions)
   data1 <- list()
   for (j in 1:dim(allDirTemp)[1]){
@@ -248,52 +245,52 @@ frechetMean <- function(directions) {
   ### Compute Fre'chet Mean
   out1<- rbase.mean(data2)
   meanFrechet<-as.vector(out1$x)
-  
+
   return(meanFrechet)
-  
+
 }
 
 
 clockwiseAngle <- function(v1,v2) {
   u1<-convertVec2unitVec(v1)
   u2<-convertVec2unitVec(v2)
-  
+
   x1<-u1[1]
   y1<-u1[2]
   x2<-u2[1]
   y2<-u2[2]
-  
+
   dot <- x1*x2 + y1*y2      # dot product between [x1, y1] and [x2, y2]
   det <- x1*y2 - y1*x2      # determinant
   angle <- atan2(det, dot)  # atan2(y, x) or atan2(sin, cos)
-  
+
   return(angle)
-  
+
 }
 
 
 linesegmentsIntersection <- function(P0,P1,P2,P3) {
-  
+
   #line segment1 P0,P1
   #line segment1 P2,P3
-  
+
   p0_x<-P0[1]
   p0_y<-P0[2]
   p1_x<-P1[1]
-  p1_y<-P1[2] 
+  p1_y<-P1[2]
   p2_x<-P2[1]
   p2_y<-P2[2]
   p3_x<-P3[1]
   p3_y<-P3[2]
-  
+
   s1_x = p1_x - p0_x
   s1_y = p1_y - p0_y
   s2_x = p3_x - p2_x
   s2_y = p3_y - p2_y
-  
+
   s = (-s1_y * (p0_x - p2_x) + s1_x * (p0_y - p2_y)) / (-s2_x * s1_y + s1_x * s2_y)
   t = ( s2_x * (p0_y - p2_y) - s2_y * (p0_x - p2_x)) / (-s2_x * s1_y + s1_x * s2_y)
-  
+
   if (s >= 0 && s <= 1 && t >= 0 && t <= 1){
     x = p0_x + (t * s1_x)
     y = p0_y + (t * s1_y)
@@ -301,19 +298,19 @@ linesegmentsIntersection <- function(P0,P1,P2,P3) {
   }else{
     return(c(NA,NA))
   }
-  
+
 }
 
 # calculate unit normal vector of triangle mesh
 unitNormalOfTriangle <- function(point1,point2,point3) {
   a<-point2-point1
   b<-point3-point1
-  
+
   normalVec<-c((a[2]*b[3]-a[3]*b[2]),-(a[1]*b[3]-a[3]*b[1]),(a[1]*b[2]-a[2]*b[1]))
   unitNormal<-normalVec/sqrt(sum(normalVec^2))
-  
+
   return(unitNormal)
-  
+
 }
 
 
@@ -322,9 +319,9 @@ rotationAboutXYZaxis <- function(vector,angle,axis=1) {
   if(axis==1){
     rotationMatrixTemp<-matrix(c(1,0,0,0,cos(angle),-sin(angle),0,sin(angle),cos(angle)),nrow = 3,byrow =T)
   }else if(axis==2){
-    rotationMatrixTemp<-matrix(c(cos(angle),0,sin(angle),0,1,0,-sin(angle),0,cos(angle)),nrow = 3,byrow =T)  
+    rotationMatrixTemp<-matrix(c(cos(angle),0,sin(angle),0,1,0,-sin(angle),0,cos(angle)),nrow = 3,byrow =T)
   }else if(axis==3){
-    rotationMatrixTemp<-matrix(c(cos(angle),-sin(angle),0,sin(angle),cos(angle),0,0,0,1),nrow = 3,byrow =T)  
+    rotationMatrixTemp<-matrix(c(cos(angle),-sin(angle),0,sin(angle),cos(angle),0,0,0,1),nrow = 3,byrow =T)
   }else{
     stop("Axis is not acceptable! It must be 1 for X 2 for Y and 3 for Z")
   }
@@ -342,7 +339,7 @@ randVonMises <- function(n, mean, kappa) {
   tau<-1+sqrt(1+4*kappa^2)
   rho<-(tau-sqrt(2*tau))/(2*kappa)
   r<-(1+rho^2)/(2*rho)
-  
+
   u1<-runif(n)
   z<-cos(pi*u1)
   f<-(1+r*z)/(r+z)
@@ -352,7 +349,7 @@ randVonMises <- function(n, mean, kappa) {
   u3<-runif(sum(acceptanceid))
   theta<-sign(u3-0.5)*acos(f[acceptanceid])
   nnow<-length(theta)
-  
+
   while (n>nnow) {
     n_more<-ceiling(n/nnow*(n-nnow))
     u1<-runif(n_more)
@@ -363,13 +360,13 @@ randVonMises <- function(n, mean, kappa) {
     acceptanceid<-(c*(2-c)-u2>0) | (log(c/u2)+1-c>=0)
     u3<-runif(sum(acceptanceid))
     thetamore<-sign(u3-0.5)*acos(f[acceptanceid])
-    
+
     theta<-c(theta, thetamore)
     nnow<-length(theta)
   }
-  
+
   theta<-theta[1:n] + mean
-  
+
   return(theta)
 }
 # randVonMisesSamples<-randVonMises(mean = pi/4,kappa = 10,n = 2000)
@@ -402,16 +399,16 @@ rotationAbout_uAxis_byThetaAngle <- function(u,theta) {
 
 
 # converted code of Sungkyu Jung MATLAB randS2.m
-# generate random sample of small sphere on S2 of the second kind 
+# generate random sample of small sphere on S2 of the second kind
 # mu0, mu1 are directions and kappa0>1, kappa1>1
 randS2 <- function(mu0,mu1,kappa0,kappa1,n) {
-  
+
   mu0<-mu0/norm(mu0,type = "2")
   mu1<-mu1/norm(mu1,type = "2")
   nu<-sum(mu0*mu1)
-  
+
   #generate Bingham-Mardia random vectors by the north pole
-  
+
   x<-rnorm(n = n,mean = nu,sd = 1/sqrt(2*kappa0))
   x<-x[x<1 & x>-1]
   nnow<-length(x)
@@ -423,18 +420,18 @@ randS2 <- function(mu0,mu1,kappa0,kappa1,n) {
     nnow<-length(x)
   }
   z<-x[1:n]
-  
+
   #generate von Mises for longitude that c=mu0-nu*mu1 is parallel to x-axis
   theta<-randVonMises(mean = 0, kappa = kappa1, n = n)
   X_axis_northpole<-cbind(sqrt(1-z^2)*cos(theta),sqrt(1-z^2)*sin(theta), z)
-  
+
   cx<-(mu1-nu*mu0)/sqrt(1-nu^2)
   cy<-cross(mu0,cx)
   cz<-mu0
-  
+
   #rotate
   X<-X_axis_northpole%*%rbind(cx,cy,cz)
-  
+
   return(X)
 }
 
@@ -558,17 +555,73 @@ triangleArea <- function(p1,p2,p3) {
 }
 
 
+# return the intersection of a ray with a triangle if the intersection exist
+rayTriangleIntersection <- function(rayOrigin,rayDirection,triangleVertex1,triangleVertex2,triangleVertex3) {
+
+  O<-rayOrigin #origin of the ray
+  D<-rayDirection #direction of the ray
+  A<-triangleVertex1 #triangle vertices
+  B<-triangleVertex2
+  C<-triangleVertex3
+
+  E1<-B-A
+  E2<-C-A
+  N<-myCrossProduct(E1,E2)
+
+  det<-(-sum(D*N))
+  invdet <- 1/det
+  AO<-O-A
+  DAO<-myCrossProduct(AO,D)
+  u<-sum(E2*DAO)*invdet
+  v<-(-sum(E1*DAO)*invdet)
+  t<-sum(AO*N)*invdet
+  if (abs(det) >= 1e-6 & t >= 0 & u >= 0 & v >= 0 & (u+v) <= 1){
+    intersection<-O + t * D
+  }else{
+    intersection<-c(NA,NA,NA)
+  }
+  return(intersection)
+}
+
+
+rayTriangleIntersection2D <- function(rayOrigin,
+                                      rayDirection,
+                                      point1,
+                                      point2) {
+  v1 = rayOrigin - point1
+  v2 = point2 - point1
+  v3 = c(-rayDirection[2], rayDirection[1])
+
+
+  dotProduct = sum(v2 * v3)
+  if (abs(dotProduct) < 1e-6){
+    return(c(NA,NA))
+  }else{
+    t1 = (v1[2]*v2[1]-v1[1]*v2[2]) / dotProduct
+
+    t2 = (v1 * v3) / sum(v2*v3)
+
+    if (t1 >= 0.0 && (t2 >= 0.0 && t2 <= 1.0)){
+      return(rayOrigin+t1*rayDirection)
+    }else{
+      return(c(NA,NA))
+    }
+  }
+}
+
+
+
 intersectionPointsBetween2Ellipses_In3D <- function(ellipse1,ellipse2,plotting=TRUE) {
-  
+
   centroidEllipse1<-colMeans(ellipse1)
   centroidEllipse2<-colMeans(ellipse2)
-  
+
   ellipse_withCentroid_1<-rbind(centroidEllipse1,ellipse1)
   ellipse_withCentroid_2<-rbind(centroidEllipse2,ellipse2)
-  
+
   verts_1<-rbind(t(as.matrix(ellipse_withCentroid_1)),1)
   verts_2<-rbind(t(as.matrix(ellipse_withCentroid_2)),1)
-  
+
   polyMatrix_1<-c()
   for (i in 1:(nrow(ellipse_withCentroid_1)-2)) {
     polyMatrix_1<-rbind(polyMatrix_1,c(1,i+1,i+2))
@@ -579,33 +632,33 @@ intersectionPointsBetween2Ellipses_In3D <- function(ellipse1,ellipse2,plotting=T
     polyMatrix_2<-rbind(polyMatrix_2,c(1,i+1,i+2))
   }
   polyMatrix_2<-rbind(polyMatrix_2,c(1,nrow(ellipse_withCentroid_2),2))
-  
+
   if(plotting==TRUE){
     v1_e1<-centroidEllipse1-ellipse1[1,]
     v2_e1<-centroidEllipse1-ellipse1[2,]
     normal_ellipse_1<-convertVec2unitVec2(myCrossProduct(v1_e1,v2_e1))
     normals_ellipse_1<-matrix(rep(normal_ellipse_1,nrow(ellipse_withCentroid_1)),ncol = 3,byrow = TRUE)
-    
+
     v1_e2<-centroidEllipse2-ellipse2[1,]
     v2_e2<-centroidEllipse2-ellipse2[2,]
     normal_ellipse_2<-convertVec2unitVec2(myCrossProduct(v1_e2,v2_e2))
     normals_ellipse_2<-matrix(rep(normal_ellipse_2,nrow(ellipse_withCentroid_2)),ncol = 3,byrow = TRUE)
-    
+
     trgls_1 <- as.matrix(t(polyMatrix_1))
     normals_1 <- as.matrix(t(normals_ellipse_1))
     tmesh_1<-mesh3d(vertices = verts_1, triangles = trgls_1,normals = normals_1)
     tmesh_1 <- vcgUpdateNormals(tmesh_1)
-    
+
     trgls_2 <- as.matrix(t(polyMatrix_2))
     normals_2 <- as.matrix(t(normals_ellipse_2))
     tmesh_2<-mesh3d(vertices = verts_2, triangles = trgls_2,normals = normals_2)
     tmesh_2 <- vcgUpdateNormals(tmesh_2)
-    
+
     # wire3d(tmesh_1, col="blue")  #wire mesh
     shade3d(tmesh_1, col="blue")
     shade3d(tmesh_2, col="red")
   }
-  
+
   intersectionPoints<-c()
   for (k in 1:nrow(ellipse1)) {
     # ellipse 1 intersect with ellipse 2
@@ -616,7 +669,7 @@ intersectionPointsBetween2Ellipses_In3D <- function(ellipse1,ellipse2,plotting=T
                                                 triangleVertex1 = ellipse_withCentroid_2[polyMatrix_2[i,1],],
                                                 triangleVertex2 = ellipse_withCentroid_2[polyMatrix_2[i,2],],
                                                 triangleVertex3 = ellipse_withCentroid_2[polyMatrix_2[i,3],])
-      
+
       if(!anyNA(intersectionTemp)){
         d1<-norm(ellipse1[k,]-centroidEllipse1,type = "2")
         d2<-norm(intersectionTemp-centroidEllipse1,type = "2")
@@ -626,11 +679,11 @@ intersectionPointsBetween2Ellipses_In3D <- function(ellipse1,ellipse2,plotting=T
       }
     }
   }
-  
+
   if(plotting==TRUE){
-    plot3d(rbind(intersectionPoints,intersectionPoints),type = 'p',col='blue',expand = 10,box=FALSE,add = TRUE) 
+    plot3d(rbind(intersectionPoints,intersectionPoints),type = 'p',col='blue',expand = 10,box=FALSE,add = TRUE)
   }
-  
+
   return(intersectionPoints)
 }
 
@@ -644,37 +697,37 @@ sumOfSquaredDistances <- function(point,allPoints) {
 
 
 rotateFrameToMainAxes_standard <- function(myFrame, vectors2rotate) {
-  
+
   if(!is.SO3(myFrame)){
     stop('The frame does not belong to SO(3)!')
   }
-  
+
   # R1<-rotMat(myFrame[1,],c(1,0,0))
   # rotatedFrame1<-myFrame%*%t(R1)
   # R2<-rotMat(rotatedFrame1[2,],c(0,1,0))
   # rotatedVectors<-vectors2rotate%*%t(R1)%*%t(R2) #first rotate R1 then by R2.
   #                                                 #NB!! t(R1)%*%t(R2)=t(R2%*%R1)
-  
+
   rotatedVectors<-vectors2rotate%*%t(myFrame)
   return(rotatedVectors)
 }
 
 
 rotateFrameToMainAxesAndRotateBack_standard <- function(myFrame, vectors_In_I_Axes) {
-  
+
   if(!is.SO3(myFrame)){
     stop('The frame does not belong to SO(3)!')
   }
-  
+
   # R1<-rotMat(myFrame[1,],c(1,0,0))
   # rotatedFrame1<-myFrame%*%t(R1)
   # R2<-rotMat(rotatedFrame1[2,],c(0,1,0))
   # # R_back<-solve(t(R1)%*%t(R2)) #NB! first rotate by R1 then by R2 then inverse but
   # R_back<-R2%*%R1 # because solve(t(R1)%*%t(R2))=solve(t(R2%*%R1))=t(t(R2%*%R1))=R2%*%R1
   # rotatedVectors<-vectors_In_I_Axes%*%R_back #NB! myFrame%*%t(R1)%*%t(R2)%*%R2%*%R1=myFrame
-  
+
   rotatedVectors<-vectors_In_I_Axes%*%myFrame
-  
+
   return(rotatedVectors)
 }
 
@@ -682,15 +735,15 @@ rotateFrameToMainAxesAndRotateBack_standard <- function(myFrame, vectors_In_I_Ax
 #convert 3D Cartesian coordinate to spherical coordinate
 cartesian_to_spherical <- function(v) {
   if(length(v)!=3){stop("v is not a 3-dimensional vector!")}
-  
+
   x<-v[1]
   y<-v[2]
   z<-v[3]
-  
+
   r <- sqrt(x^2 + y^2 + z^2)
   phi <- atan2(y, x)
   theta <- -atan2(z, sqrt(x^2 + y^2))
-  
+
   #phi is the yaw angle and theta is the pitch angle
   return(list(r = r, phi = phi, theta = theta))
 }
@@ -706,28 +759,28 @@ spherical_to_cartesian <- function(r, phi, theta) {
 
 #interpolate points between two points
 generatePointsBetween2Points <- function(point1, point2, numberOfPoints) {
-  
+
   if(identical(point1, point2)){
-    
+
     middlePoints<-matrix(rep(point1,numberOfPoints),ncol = length(point1),byrow = TRUE)
-    
+
   }else{
-    
+
     dimension<-length(point1)
-    
+
     totalDis<-norm(point1-point2,type = "2")
     smallDis<-seq(0, totalDis, length.out = numberOfPoints)
-    
+
     direction<-convertVec2unitVec(point2-point1)
-    
+
     middlePoints<-array(NA, dim = c(numberOfPoints,dimension))
     for (i in 1:length(smallDis)) {
       tempPoint<-point1+smallDis[i]*direction
       middlePoints[i,]<-tempPoint
     }
-    
+
   }
-  
+
   return(middlePoints)
 }
 # testPoints<-generatePointsBetween2Points(point1 = c(1,1),point2 = c(5,2),numberOfPoints = 5)
@@ -741,18 +794,18 @@ generateSpheresBetween2Points_2D <- function(center1,
                                              radius2,
                                              numberOfSpheres=10,
                                              resolution=20) {
-  
+
   s1<-sphereGenerator_2D(center = center1,r = radius1,n = resolution,asymmetric = FALSE)
   s2<-sphereGenerator_2D(center = center2,r = radius2,n = resolution,asymmetric = FALSE)
-  
+
   centers<-generatePointsBetween2Points(point1 = center1, point2 = center2,
                                         numberOfPoints = numberOfSpheres)
-  
+
   radii<-seq(from=radius1,to=radius2,length.out = numberOfSpheres)
-  
+
   numberOfBoundaryPoints<-nrow(s1)
   spheres<-array(NA,dim = c(numberOfSpheres*numberOfBoundaryPoints,2))
-  
+
   for (i in 1:numberOfSpheres) {
     tempSphere<-sphereGenerator_2D(center = centers[i,],r = radii[i],n = resolution,asymmetric = FALSE)
     spheres[((i-1)*numberOfBoundaryPoints+1):(i*numberOfBoundaryPoints),]<-tempSphere
@@ -762,35 +815,35 @@ generateSpheresBetween2Points_2D <- function(center1,
 
 #points whithout tips ans tails
 generatePointsBetween2Points2 <- function(point1, point2, numberOfPoints) {
-  
+
   dimension<-length(point1)
-  
+
   totalDis<-norm(point1-point2,type = "2")
   smallDis<-seq(0, totalDis, length.out = numberOfPoints)
-  
+
   direction<-convertVec2unitVec(point2-point1)
-  
+
   middlePoints<-c()
   for (i in 2:(length(smallDis)-1)) {
     tempPoint<-point1+smallDis[i]*direction
     middlePoints<-rbind(middlePoints,tempPoint)
   }
-  
+
   return(middlePoints)
 }
 
 
 #smooth the meshPDM
 generatePointsBetween3Points <- function(point1,point2,point3,numberOf2DspokePoints) {
-  
+
   centroid<-colMeans(rbind(point1,point2,point3))
-  
+
   points<-c()
-  
+
   points<-rbind(points,generatePointsBetween2Points2(centroid,point1,numberOfPoints = numberOf2DspokePoints))
   points<-rbind(points,generatePointsBetween2Points2(centroid,point2,numberOfPoints = numberOf2DspokePoints))
   points<-rbind(points,generatePointsBetween2Points2(centroid,point3,numberOfPoints = numberOf2DspokePoints))
-  
+
   return(points)
 }
 
@@ -819,7 +872,7 @@ makeSphereMesh <- function(center,radius,subdivision = 3) {
   tempSphere$vb[1:3,]<-tempSphere$vb[1:3,]+
     t(matrix(rep(center,dim(t(tempSphere$vb)[,1:3])[1]),ncol = 3,byrow = TRUE))
   return(tempSphere)
-  
+
 }
 
 
@@ -834,20 +887,20 @@ randomPointOnTriangle <- function(n,point1,point2,point3) {
   v1<-point2-point1
   v2<-point3-point1
   triangleArea<-norm(myCrossProduct(v1,v2),type = "2")/2
-  
+
   randPoints<-array(NA,dim=c(n,length(point1)))
   k<-1
   while (k<=n) {
     randPointTemp<-point1+runif(1)*v1+runif(1)*v2
-    
+
     areaTriangle1<-norm(myCrossProduct((randPointTemp-point1),(randPointTemp-point2)),type = "2")/(2*triangleArea)
     areaTriangle2<-norm(myCrossProduct((randPointTemp-point1),(randPointTemp-point3)),type = "2")/(2*triangleArea)
     areaTriangle3<-norm(myCrossProduct((randPointTemp-point2),(randPointTemp-point3)),type = "2")/(2*triangleArea)
-    
+
     if(areaTriangle1+areaTriangle2+areaTriangle3-1<1e-10){
       randPoints[k,]<-randPointTemp
       k<-k+1
-    } 
+    }
   }
   return(randPoints)
 }
@@ -865,20 +918,20 @@ geodesic2D_of2Vertices <- function(mesh2D,
     vertexIndex1<-vertexIndex2
     vertexIndex2<-temp
   }
-  
+
   geodesicDis1<-sum(edgeLengths[vertexIndex1:(vertexIndex2-1)])
-  
+
   # geodesicDis1<-0
   # for (i in vertexIndex1:(vertexIndex2-1)) {
   #   geodesicDis1<-geodesicDis1+norm(mesh2D[i,]-mesh2D[i+1,],type = '2')
   # }
-  
+
   geodesicDis2<-total_Perimeter-geodesicDis1
-  
+
   geodesicDis<-min(geodesicDis1,geodesicDis2)
-  
+
   return(geodesicDis)
-  
+
 }
 
 curvatureOf3Points <- function(point1, point2, point3, mesh2D) {
@@ -894,54 +947,54 @@ curvatureOf3Points <- function(point1, point2, point3, mesh2D) {
     K<-0
   }else{
     K = tempVal1/tempVal2
-    
-    #The curvature is positive if the triangle centroid is inside the object 
+
+    #The curvature is positive if the triangle centroid is inside the object
     #otherwise it is negative
     triangleCentroid<-colMeans(rbind(point1,point2,point3))
     if(pip2d(mesh2D,rbind(triangleCentroid,triangleCentroid))[1]==-1){
       K<-(-K)
     }
   }
-  
+
   return(K)
 }
 
 
 
 normalOfaVertex <- function(point1,vertex,point2) {
-  
+
   vecTemp<-convertVec2unitVec2(point2-point1)
-  
+
   R1<-rotMat(c(1,0),c(0,1))
-  
+
   vertexUnitNormal<-vecTemp%*%t(R1)
-  
+
   return(vertexUnitNormal)
-  
+
 }
 
 normalOfaVertex2 <- function(point1,vertex,point2) {
-  
+
   dx_line1 = vertex[1] - point1[1]
   dy_line1 = vertex[2] - point1[2]
-  
+
   unitNormal_line1<-c(-dy_line1, dx_line1)/sqrt(sum(c(-dy_line1, dx_line1)^2))
-  
+
   dx_line2 = point2[1] - vertex[1]
   dy_line2 = point2[2] - vertex[2]
-  
+
   unitNormal_line2<-c(-dy_line2, dx_line2)/sqrt(sum(c(-dy_line2, dx_line2)^2))
-  
+
   sumVec<-unitNormal_line1+unitNormal_line2
   vertexUnitNormal<-sumVec/norm(sumVec,type = '2')
-  
+
   return(vertexUnitNormal)
-  
+
 }
 
 
 verticesNormals_mesh2D <- function(mesh2D) {
-  
+
   vetricesNormals<-array(NA,dim = c(nrow(mesh2D),2))
   tempMesh<-rbind(mesh2D[nrow(mesh2D),],mesh2D,mesh2D[1,])
   k<-1
@@ -949,25 +1002,25 @@ verticesNormals_mesh2D <- function(mesh2D) {
     vetricesNormals[k,]<-normalOfaVertex(tempMesh[i-1,],tempMesh[i,],tempMesh[i+1,])
     k<-k+1
   }
-  
+
   if(1 %in% pip2d(mesh2D,mesh2D+vetricesNormals*0.1)){
     vetricesNormals<-(-vetricesNormals)
   }
-  
+
 }
 
 allAdjacentVertices2D <- function(mesh2D,k_Ring2D) {
-  
+
   allAdjacentVertices<-list()
   refVec<-c(c(1:nrow(mesh2D)),c(1:nrow(mesh2D)),c(1:nrow(mesh2D)))
   for (i in 1:nrow(mesh2D)) {
     forwardIndices<-refVec[(nrow(mesh2D)+i+1):(nrow(mesh2D)+i+k_Ring2D)]
     backwardIndices<-refVec[(nrow(mesh2D)+i-1):(nrow(mesh2D)+i-k_Ring2D)]
-    
-    
+
+
     allAdjacentVertices[[i]]<-c(backwardIndices,forwardIndices)
   }
-  
+
   return(allAdjacentVertices)
 }
 
@@ -984,7 +1037,7 @@ sortIndices <- function(indices) {
   if(length(group2)==1){
     newIndices<-group1
   }else if(group1[length(group1)]<group2[1] & length(group2)>0){
-    newIndices<-c(group2,group1) 
+    newIndices<-c(group2,group1)
   }else{
     newIndices<-indices
   }
@@ -994,19 +1047,19 @@ sortIndices <- function(indices) {
 
 #cutted urchin
 urchinInterpolation_2D <- function(numberOfMiddleSpokes,degree,coneVector, includeStartEnd=FALSE){
-  
+
   if(degree<0 | degree>pi){
     stop("degree must be between 0 and pi")
   }
-  
-  phi<-seq(-degree/2, degree/2, length.out = numberOfMiddleSpokes+2) 
-  
+
+  phi<-seq(-degree/2, degree/2, length.out = numberOfMiddleSpokes+2)
+
   if(includeStartEnd==FALSE){
     rangeTemp<-phi[2:(length(phi)-1)]
   }else{
     rangeTemp<-phi[1:length(phi)]
   }
-  
+
   points<-c()
   for (i in rangeTemp) {
     x<-cos(i)
@@ -1014,7 +1067,7 @@ urchinInterpolation_2D <- function(numberOfMiddleSpokes,degree,coneVector, inclu
     points<-rbind(points,c(x,y))
   }
   eyePupil<-convertVec2unitVec(coneVector)
-  
+
   R<-rotMat(c(1,0),eyePupil)
   eyeVectors<-points%*%t(R)
   return(eyeVectors)
@@ -1027,17 +1080,17 @@ urchinInterpolation_2D <- function(numberOfMiddleSpokes,degree,coneVector, inclu
 
 
 distanceOfaPoint2aLine_2D <- function(point,linePoint1,linePoint2) {
-  
+
   x0<-point[1]
   y0<-point[2]
   x1<-linePoint1[1]
   y1<-linePoint1[2]
   x2<-linePoint2[1]
   y2<-linePoint2[2]
-  
+
   result<-abs((x2-x1)*(y1-y0)-(x1-x0)*(y2-y1))/norm(linePoint1-linePoint2,type = '2')
   return(result)
-  
+
 }
 # distanceOfaPoint2aLine_2D(point = c(1,0),linePoint1 = c(1,1),linePoint2 = c(2,1))
 
@@ -1047,25 +1100,25 @@ splineFitWithEquidistancePoints <- function(samplePoints,polyDegree2D,
   # x y z
   x<-samplePoints[,1]
   y<-samplePoints[,2]
-  
+
   fit4_2D <- lm(y ~ poly(x, degree = polyDegree2D,raw = TRUE),
                 data=as.data.frame(cbind(x,y))) #NB!!! raw=F calculate orthogonal polynomial
-  
+
   xData1<-data.frame(x=x)
   curvePoints1<-predict(fit4_2D, newdata = xData1)
-  
+
   smoothedPoints<-cbind(x,curvePoints1)
-  
-  # plot(smoothedPoints,pch=20,col="blue",xlim = plotlim,ylim = plotlim,xlab = "",ylab = "") 
-  
+
+  # plot(smoothedPoints,pch=20,col="blue",xlim = plotlim,ylim = plotlim,xlab = "",ylab = "")
+
   startPointX<-min(smoothedPoints[,1])
   endPointX<-max(smoothedPoints[,1])
-  
+
   # tail to head
   allCloseX<-seq(startPointX,endPointX,length.out = lengthOut)
-  
+
   #function of the polynomial
-  f_fit <- function(x) { 
+  f_fit <- function(x) {
     result<-0
     for (i in polyDegree2D:0) {
       result<-result+fit4_2D$coefficients[i+1]*x^i
@@ -1073,7 +1126,7 @@ splineFitWithEquidistancePoints <- function(samplePoints,polyDegree2D,
     return(result)
   }
   #distance function to calculate the distance between two points on the polynomial
-  distanceFuncfit <- function(x) { 
+  distanceFuncfit <- function(x) {
     temp<-0
     for (i in polyDegree2D:1) {
       temp<-temp+i*fit4_2D$coefficients[i+1]*x^(i-1)
@@ -1084,42 +1137,42 @@ splineFitWithEquidistancePoints <- function(samplePoints,polyDegree2D,
   distanceBetween2PointsOnCurve <- function(xStartAndxEnd) {
     return(integrate(f = distanceFuncfit,lower = xStartAndxEnd[1],upper = xStartAndxEnd[2])$value)
   }
-  
+
   totalLength<-integrate(f = distanceFuncfit,lower = startPointX,upper = endPointX)$value
-  
+
   tempMatrixLimit<-cbind(rep(startPointX,length(allCloseX)),allCloseX)
   allDistances2StartingPoint<-apply(tempMatrixLimit, MARGIN = 1,FUN = distanceBetween2PointsOnCurve)
-  
-  
+
+
   equalLengths<-seq(0,totalLength,length.out = numberOfEquidistancePoints)
-  
+
   selectedX<-rep(NA,numberOfEquidistancePoints)
   for (i in 1:numberOfEquidistancePoints) {
     tempIndex<-which.min((allDistances2StartingPoint-equalLengths[i])^2)
     selectedX[i]<-allCloseX[tempIndex]
   }
-  
+
   xData2<-data.frame(x=selectedX)
   curvePoints2<-predict(fit4_2D, newdata = xData2)
-  
+
   result<-cbind(selectedX,curvePoints2)
-  
+
   return(result)
-  
+
 }
 
 
 # generate Frenet frame of a curve
 frenetFrame3Dcurve <- function(curvePoints) {
-  
+
   tangentVectors<-array(NA,dim = dim(curvePoints))
   normalVectors<-array(NA,dim = dim(curvePoints))
   b_Perb_vectors<-array(NA,dim = dim(curvePoints))
-  
+
   for (i in 2:(nrow(curvePoints)-1)) {
     v1<-curvePoints[i,]-curvePoints[i-1,]
     v2<-curvePoints[i+1,]-curvePoints[i,]
-    
+
     #NB! normal is the radius of the osculating circle in 3D
     u1<-convertVec2unitVec(v1)
     u2<-convertVec2unitVec(v2)
@@ -1127,29 +1180,29 @@ frenetFrame3Dcurve <- function(curvePoints) {
   }
   tangentVectors[1,]<-convertVec2unitVec(curvePoints[2,]-curvePoints[1,])
   tangentVectors[nrow(curvePoints),]<-convertVec2unitVec(curvePoints[nrow(curvePoints),]-curvePoints[nrow(curvePoints)-1,])
-  
-  
+
+
   for (i in 2:(nrow(curvePoints)-1)) {
     v1<-curvePoints[i,]-curvePoints[i-1,]
     v2<-curvePoints[i+1,]-curvePoints[i,]
-    
+
     #NB! normal is the radius of the osculating circle in 3D
     u1<-(-convertVec2unitVec(v1))
     u2<-convertVec2unitVec(v2)
     normalVectors[i,]<-(-convertVec2unitVec(u1+u2))
   }
-  
+
   R_first<-rotMat(tangentVectors[2,],tangentVectors[1,])
   R_last<-rotMat(tangentVectors[nrow(curvePoints)-1,],tangentVectors[nrow(curvePoints),])
-  
+
   normalVectors[1,]<-normalVectors[2,]%*%t(R_first)
   normalVectors[nrow(curvePoints),]<-normalVectors[nrow(curvePoints)-1,]%*%t(R_last)
-  
-  
+
+
   for (i in 1:nrow(normalVectors)) {
     b_Perb_vectors[i,]<-(-myCrossProduct(tangentVectors[i,],normalVectors[i,]))
   }
-  
+
   # we assume all b_perb vectors point toward the north i.e., c(0,0,1)
   for (i in 1:nrow(curvePoints)) {
     if(geodesicDistance(b_Perb_vectors[i,],c(0,0,1))>pi/2){
@@ -1157,14 +1210,14 @@ frenetFrame3Dcurve <- function(curvePoints) {
       normalVectors[i,]<-(-normalVectors[i,])
     }
   }
-  
+
   frenetFrames<-array(NA,dim = c(3,3,nrow(curvePoints)))
   for (i in 1:nrow(curvePoints)) {
     frenetFrames[,,i]<-as.SO3(rbind(normalVectors[i,],tangentVectors[i,],b_Perb_vectors[i,]))
   }
-  
+
   return(frenetFrames)
-  
+
 }
 
 
@@ -1211,7 +1264,7 @@ drawCircleOnUnitSphere <- function(normalVec, radius, drawsphere=TRUE) {
   py <- cy + r * (v1y * cos(theta) + v2y * sin(theta))
   pz <- cz + r * (v1z * cos(theta) + v2z * sin(theta))
   lines3d(px,py,pz)
-  
+
   return(cbind(px,py,pz))
 }
 
@@ -1221,17 +1274,17 @@ intersectionOfALineWithAPlane <- function(linePoint1,
                                           planePoint1,
                                           planePoint2,
                                           planePoint3) {
-  
+
   O<-linePoint1 #origin of the ray
-  D<-linePoint2-linePoint1 #direction of the ray 
+  D<-linePoint2-linePoint1 #direction of the ray
   A<-planePoint1 #triangle vertices
   B<-planePoint2
   C<-planePoint3
-  
+
   E1<-B-A
   E2<-C-A
   N<-myCrossProduct(E1,E2)
-  
+
   det<-(-sum(D*N))
   invdet <- 1/det
   AO<-O-A
@@ -1239,13 +1292,13 @@ intersectionOfALineWithAPlane <- function(linePoint1,
   u<-sum(E2*DAO)*invdet
   v<-(-sum(E1*DAO)*invdet)
   t<-sum(AO*N)*invdet
-  
+
   intersection<-O + t * D
-  
+
   if(sum(is.infinite(intersection))>=1){
     intersection<-c(NA,NA,NA)
   }
-  
+
   return(intersection)
-  
+
 }

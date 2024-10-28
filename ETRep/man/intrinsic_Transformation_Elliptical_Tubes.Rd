@@ -18,9 +18,13 @@ intrinsic_Transformation_Elliptical_Tubes(
 
 \item{tube2}{List containing details of the second ETRep.}
 
+\item{type}{String defining the type of analysis as sizeAndShapeAnalysis or shapeAnalysis}
+
 \item{numberOfSteps}{Integer, number of transformation steps.}
 
 \item{plotting}{Logical, enables visualization during transformation (default is TRUE).}
+
+\item{colorBoundary}{String defining the color of the e-tube}
 }
 \value{
 List containing intermediate ETReps.
@@ -40,7 +44,7 @@ transformation_Tubes<-
     plotting = FALSE)
 # Plotting
 for (i in 1:length(transformation_Tubes)) {
-  plot_Elliptical_Tube(e_tube = transformation_Tubes[[i]],
+  plot_Elliptical_Tube(tube = transformation_Tubes[[i]],
   plot_frames = FALSE,plot_skeletal_sheet = FALSE
   ,plot_r_project = FALSE,
   plot_r_max = FALSE,

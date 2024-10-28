@@ -28,7 +28,7 @@ intrinsic_mean<-
   intrinsic_mean_tube(tubes = list(tube_A,tube_B),
                       plotting = FALSE)
 # Plotting
-plot_Elliptical_Tube(e_tube = intrinsic_mean,
+plot_Elliptical_Tube(tube = intrinsic_mean,
                      plot_frames = FALSE,
                      plot_skeletal_sheet = FALSE,
                      plot_r_project = FALSE,
@@ -41,7 +41,7 @@ intrinsic_mean<-
   intrinsic_mean_tube(tubes = simulatedColons,
                       plotting = FALSE)
 # Plotting
-plot_Elliptical_Tube(e_tube = intrinsic_mean,
+plot_Elliptical_Tube(tube = intrinsic_mean,
                      plot_frames = FALSE,
                      plot_skeletal_sheet = FALSE,
                      plot_r_project = FALSE,

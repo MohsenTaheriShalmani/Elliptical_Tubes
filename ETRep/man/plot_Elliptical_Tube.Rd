@@ -5,7 +5,7 @@
 \title{Plot an Elliptical Tube (ETRep)}
 \usage{
 plot_Elliptical_Tube(
-  e_tube,
+  tube,
   plot_boundary = TRUE,
   plot_r_max = FALSE,
   plot_r_project = TRUE,
@@ -17,19 +17,12 @@ plot_Elliptical_Tube(
   decorate = TRUE,
   colSkeletalSheet = "blue",
   colorBoundary = "blue",
-  userMatrix4plotOrientation = NA,
-  plotSignificantFeatures = FALSE,
-  p_values_v = NULL,
-  p_values_psi = NULL,
-  p_values_x = NULL,
-  p_values_a = NULL,
-  p_values_b = NULL,
-  lwdSignificant = 4,
-  add = FALSE,
-  mainTitle = ""
+  add = FALSE
 )
 }
 \arguments{
+\item{tube}{List containing ETRep details.}
+
 \item{plot_boundary}{Logical, enables plotting of the boundary (default is TRUE).}
 
 \item{plot_r_max}{Logical, enables plotting of max projection size (default is FALSE).}
@@ -40,7 +33,19 @@ plot_Elliptical_Tube(
 
 \item{frameScaling}{Numeric, scale factor for frames.}
 
-\item{tube}{List containing ETRep details.}
+\item{plot_spine}{Logical, enables plotting of the spine.}
+
+\item{plot_normal_vec}{Logical, enables plotting of the normals.}
+
+\item{plot_skeletal_sheet}{Logical, enables plotting of the surface skeleton.}
+
+\item{decorate}{Logical, enables decorate the plot}
+
+\item{colSkeletalSheet}{String, defining the color of the surface skeleton}
+
+\item{colorBoundary}{String, defining the color of the e-tube}
+
+\item{add}{Logical, enables overlay plotting}
 }
 \value{
 Graphical output.
@@ -51,7 +56,7 @@ Plots a given ETRep with options for boundary, material frames, and projection v
 \examples{
 # Load tube
 data("colon3D")
-plot_Elliptical_Tube(e_tube = colon3D,
+plot_Elliptical_Tube(tube = colon3D,
                      plot_frames = FALSE,
                      add=FALSE)
 }
