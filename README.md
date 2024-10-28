@@ -6,8 +6,10 @@ The repository is linked to the publication mentioned below.
 
 ## The manuscript provides shape statistics for elliptical tubes, utilizing a relative curvature condition to ensure avoidance of self-intersections.
 
+---
+
 ## The Paper
-[ETRep_arxiv.pdf](https://github.com/MohsenTaheriShalmani/Elliptical_Tubes/files/14823254/ETRep_arxiv.pdf)
+[ETRep_arxiv.pdf](ETRep_arxiv.pdf)
 
 ## Cite
 ```
@@ -17,11 +19,16 @@ The repository is linked to the publication mentioned below.
       year={2024},
       eprint={2404.01043},
       archivePrefix={arXiv},
+      url={https://doi.org/10.48550/arXiv.2404.01043},
       primaryClass={stat.ME}
 }
 ```
 
+## Code_Description
 
+[Code_Description.pdf](Code_Description.pdf)
+
+---
 ## Data and R scripts
 ---
 
@@ -37,17 +44,17 @@ The `main.R` script is divided into two main sections: **1. Transformation** and
 
 ---
 
-
 ## Images from the article
-![Fig1](https://github.com/MohsenTaheriShalmani/Elliptical_Tubes/assets/19237855/8afe4bf2-bd44-4a25-97f2-8ff6d6a18066)
-![Fig2](https://github.com/MohsenTaheriShalmani/Elliptical_Tubes/assets/19237855/c59f7a7a-64d2-478a-ac87-7d2b349ab0cc)
-![Fig3](https://github.com/MohsenTaheriShalmani/Elliptical_Tubes/assets/19237855/9baf836d-ebd9-4480-9ab1-20704e77054a)
+![Fig1](Fig1.jpg)
+![Fig2](Fig2.jpg)
+![Fig3](Fig3.jpg)
+
 
 ### A depiction of the simulated ETReps and their mean shape.
-<img src="https://github.com/MohsenTaheriShalmani/Elliptical_Tubes/assets/19237855/d5122c87-bead-4ebe-9c75-58d03f72b1de" width="700">
+<img src="Fig4.jpg" width="700">
 
 ### Visualization of a valid transformation without any self-intersections
-![Fig5](https://github.com/MohsenTaheriShalmani/Elliptical_Tubes/assets/19237855/5fd1b731-ea15-4cf3-9884-635b6989e735)
+![Fig5](Fig5.jpg)
 
 
 
