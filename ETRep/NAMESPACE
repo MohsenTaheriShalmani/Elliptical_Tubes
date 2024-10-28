@@ -17,13 +17,8 @@ import(dplyr)
 importFrom("grDevices", colorRampPalette)
 importFrom("stats", cov, integrate, lm, pchisq, pf, predict, rnorm, runif, t.test, var)
 importFrom("utils", setTxtProgressBar, txtProgressBar)
-importFrom("shapes", rotMat)
+importFrom("shapes", rotMat, procGPA, procOPA)
 importFrom("dplyr", order_by, select)
 importFrom("Matrix", Matrix)
 importFrom("matlib", vectors3d)
 importFrom("ptinpoly", pip2d)
-
-
-
-
-

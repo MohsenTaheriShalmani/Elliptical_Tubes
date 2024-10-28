@@ -1,5 +1,6 @@
 # Calculating the size of an ETRep based on L1 norm
-ETRepSize <- function(tube) {
+#' @keywords internal
+.ETRepSize <- function(tube) {
   vec<-c(tube$connectionsLengths,tube$ellipseRadii_a,tube$ellipseRadii_b)
   vec_clean <- vec[!is.na(vec)]
 
@@ -16,10 +17,11 @@ ETRepSize <- function(tube) {
 }
 
 # Normalization of an elliptical tube by uniform scaling
-scaleETRepToHaveTheSizeAsOne <- function(tube,
-                                         plotting=FALSE) {
+#' @keywords internal
+.scaleETRepToHaveTheSizeAsOne <- function(tube,
+                                          plotting=FALSE) {
 
-  size<-ETRepSize(tube = tube)
+  size<-.ETRepSize(tube = tube)
 
   tubeScaled<-create_Elliptical_Tube(numberOfFrames = nrow(tube$spinalPoints3D),
                                      method = "basedOnMaterialFrames",
@@ -33,20 +35,22 @@ scaleETRepToHaveTheSizeAsOne <- function(tube,
 
 
 # Extract the tangent vector as the second element of the material frame
-convert_v_to_TangentVector<- function(v) {
+#' @keywords internal
+.convert_v_to_TangentVector<- function(v) {
 
   if(length(v)!=2){stop("v is not a 2-dimensional vector!")}
 
   x<-v[1]
   y<-v[2]
   z<-abs(sqrt(abs(1-x^2-y^2)))
-  unitTangent<-convertVec2unitVec2(c(z,x,y))
+  unitTangent<-.convertVec2unitVec2(c(z,x,y))
   return(unitTangent)
 
 }
 
 # Calculate the r_project
-calculate_r_project_Length <- function(a, b, theta) {
+#' @keywords internal
+.calculate_r_project_Length <- function(a, b, theta) {
 
   t_max<-atan(-b/a*tan(theta))
   r_project_length<-abs(a*cos(t_max)*cos(theta)-b*sin(t_max)*sin(theta))
@@ -55,8 +59,9 @@ calculate_r_project_Length <- function(a, b, theta) {
 }
 
 # calcualting the twisting angle theta based on the given frames
-calculate_theta <- function(materialFrameBasedOnParent,
-                            tolerance=1e-7) {
+#' @keywords internal
+.calculate_theta <- function(materialFrameBasedOnParent,
+                             tolerance=1e-7) {
 
   #reference frame is I
   t_vec<-materialFrameBasedOnParent[1,]
@@ -65,15 +70,15 @@ calculate_theta <- function(materialFrameBasedOnParent,
 
   u2<-t_vec
   u1<-c(-1,0,0)
-  psiTemp<-geodesicDistance(u1,u2)
+  psiTemp<-.geodesicDistance(u1,u2)
   if(abs(psiTemp-pi)>tolerance){
-    #formula from function geodesicPathOnUnitSphere()
+    #formula from function .geodesicPathOnUnitSphere()
     n_vec<-1/sin(psiTemp)*(sin(pi/2)*u1+sin(psiTemp-pi/2)*u2)
   }else{
     n_vec<-c(0,1,0)
   }
 
-  theta<-geodesicDistance(n_vec,a_vec)
+  theta<-.geodesicDistance(n_vec,a_vec)
 
   return(theta)
 }
@@ -167,7 +172,7 @@ create_Elliptical_Tube <- function(numberOfFrames,
     child_Index<-framesCenters[k]
     updatedParent<-materialFramesGlobalCoordinate[,,parent_Index]
     materialFramesGlobalCoordinate[,,child_Index]<-
-      rotateFrameToMainAxesAndRotateBack_standard(myFrame = updatedParent,
+      .rotateFrameToMainAxesAndRotateBack_standard(myFrame = updatedParent,
                                                   vectors_In_I_Axes = materialFramesBasedOnParents[,,child_Index])
   }
 
@@ -185,15 +190,15 @@ create_Elliptical_Tube <- function(numberOfFrames,
   frenetFramesGlobalCoordinate<-array(NA,dim = c(3,3,numberOfFrames))
   frenetFramesGlobalCoordinate[,,1]<-materialFramesGlobalCoordinate[,,1]
   for (i in 2:(numberOfFrames-1)) {
-    t_vec<-convertVec2unitVec2(spinalPoints3D[i+1,]-spinalPoints3D[i,])
-    u1<-convertVec2unitVec2(spinalPoints3D[i-1,]-spinalPoints3D[i,])
+    t_vec<-.convertVec2unitVec2(spinalPoints3D[i+1,]-spinalPoints3D[i,])
+    u1<-.convertVec2unitVec2(spinalPoints3D[i-1,]-spinalPoints3D[i,])
     # u1<-c(-1,0,0)
     u2<-t_vec
-    psiTemp<-geodesicDistance(u1,u2)
+    psiTemp<-.geodesicDistance(u1,u2)
     if(abs(psiTemp-pi)>10^-5){
-      #formula from geodesicPathOnUnitSphere()
+      #formula from .geodesicPathOnUnitSphere()
       n_vec<-1/sin(psiTemp)*(sin(pi/2)*u1+sin(psiTemp-pi/2)*u2)
-      b_perb_vec<-convertVec2unitVec2(myCrossProduct(t_vec,n_vec))
+      b_perb_vec<-.convertVec2unitVec2(.myCrossProduct(t_vec,n_vec))
 
       # frenetFramesGlobalCoordinate[,,i]<-as.SO3(rbind(t_vec,n_vec,b_perb_vec))
       frenetFramesGlobalCoordinate[,,i]<-rbind(t_vec,n_vec,b_perb_vec)
@@ -208,16 +213,16 @@ create_Elliptical_Tube <- function(numberOfFrames,
   #parent is the local twisting frame
   frenetFramesBasedOnLocalmaterialFrame<-array(NA,dim = c(3,3,numberOfFrames))
   for (i in 1:numberOfFrames) {
-    frenetFramesBasedOnLocalmaterialFrame[,,i]<-rotateFrameToMainAxes_standard(myFrame = materialFramesGlobalCoordinate[,,i],
-                                                                               vectors2rotate = frenetFramesGlobalCoordinate[,,i])
+    frenetFramesBasedOnLocalmaterialFrame[,,i]<-.rotateFrameToMainAxes_standard(myFrame = materialFramesGlobalCoordinate[,,i],
+                                                                                vectors2rotate = frenetFramesGlobalCoordinate[,,i])
   }
 
   #parent is the previous twisting frame
   frenetFramesBasedOnParents<-array(NA,dim = c(3,3,numberOfFrames))
   frenetFramesBasedOnParents[,,1]<-materialFramesGlobalCoordinate[,,1]
   for (i in 2:numberOfFrames) {
-    frenetFramesBasedOnParents[,,i]<-rotateFrameToMainAxes_standard(myFrame = materialFramesGlobalCoordinate[,,i-1],
-                                                                    vectors2rotate = frenetFramesGlobalCoordinate[,,i])
+    frenetFramesBasedOnParents[,,i]<-.rotateFrameToMainAxes_standard(myFrame = materialFramesGlobalCoordinate[,,i-1],
+                                                                     vectors2rotate = frenetFramesGlobalCoordinate[,,i])
   }
 
   #normal vectors
@@ -226,14 +231,14 @@ create_Elliptical_Tube <- function(numberOfFrames,
   # theta is positive and equal to d_g(a_i,n_i)
   theta_angles<-rep(NA,numberOfFrames)
   for (i in 1:numberOfFrames) {
-    theta_angles[i]<-calculate_theta(materialFrameBasedOnParent = materialFramesBasedOnParents[,,i])
+    theta_angles[i]<-.calculate_theta(materialFrameBasedOnParent = materialFramesBasedOnParents[,,i])
   }
 
   phi_angles_bend<-rep(NA,numberOfFrames)
   for (i in 1:numberOfFrames) {
     u1<-materialFramesBasedOnParents[1,,i]
     u2<-c(1,0,0)
-    phi_angles_bend[i]<-geodesicDistance(u1,u2)
+    phi_angles_bend[i]<-.geodesicDistance(u1,u2)
   }
 
   psi_angles_roll<-rep(NA,numberOfFrames)
@@ -245,9 +250,9 @@ create_Elliptical_Tube <- function(numberOfFrames,
   #r_project is the projection of the CS on the normal
   r_project_lengths<-rep(NA,numberOfFrames)
   for (i in 1:numberOfFrames) {
-    r_project_lengths[i]<-calculate_r_project_Length(a = ellipseRadii_a[i],
-                                                     b = ellipseRadii_b[i],
-                                                     theta = theta_angles[i])
+    r_project_lengths[i]<-.calculate_r_project_Length(a = ellipseRadii_a[i],
+                                                      b = ellipseRadii_b[i],
+                                                      theta = theta_angles[i])
   }
 
   #r_max is the extension of r_project to the intersection with the previous slicing plane
@@ -267,19 +272,19 @@ create_Elliptical_Tube <- function(numberOfFrames,
   ##################################################################
   # cross-sections
 
-  ellipseTemplate_2D<-ellipsoidGenerator_2D_2(center = c(0,0),
-                                              a = ellipseRadii_a[1],
-                                              b = ellipseRadii_b[1],
-                                              n = ellipseResolution,
-                                              n2 = 1)
+  ellipseTemplate_2D<-.ellipsoidGenerator_2D_2(center = c(0,0),
+                                               a = ellipseRadii_a[1],
+                                               b = ellipseRadii_b[1],
+                                               n = ellipseResolution,
+                                               n2 = 1)
 
   ellipses_2D<-array(NA,c(dim(ellipseTemplate_2D),numberOfFrames))
   for (i in 1:numberOfFrames) {
-    ellipses_2D[,,i]<-ellipsoidGenerator_2D_2(center = c(0,0),
-                                              a = ellipseRadii_a[i],
-                                              b = ellipseRadii_b[i],
-                                              n = ellipseResolution,
-                                              n2 = 1)
+    ellipses_2D[,,i]<-.ellipsoidGenerator_2D_2(center = c(0,0),
+                                               a = ellipseRadii_a[i],
+                                               b = ellipseRadii_b[i],
+                                               n = ellipseResolution,
+                                               n2 = 1)
   }
 
   slicingEllipsoids<-array(NA,dim = c(nrow(ellipseTemplate_2D),3,nrow(spinalPoints3D)))
@@ -302,9 +307,9 @@ create_Elliptical_Tube <- function(numberOfFrames,
   numberOfLayers<-20
   skeletalSheetPoints<-array(NA,dim = c(numberOfLayers*2+1,3,dim(slicingEllipsoids)[3]))
   for (i in 1:dim(slicingEllipsoids)[3]) {
-    skeletalSheetPoints[,,i]<-generatePointsBetween2Points(slicingEllipsoids[1,,i],
-                                                           slicingEllipsoids[ellipseResolution*2+1,,i],
-                                                           numberOfPoints = numberOfLayers*2+1)
+    skeletalSheetPoints[,,i]<-.generatePointsBetween2Points(slicingEllipsoids[1,,i],
+                                                            slicingEllipsoids[ellipseResolution*2+1,,i],
+                                                            numberOfPoints = numberOfLayers*2+1)
   }
 
   #plot
@@ -496,7 +501,8 @@ plot_Elliptical_Tube <- function(tube,
 }
 
 # Converting a tube to a vector in the high-dimensional space with hyperbolic boundary
-tube2vectorsIn6DHyperbola <- function(tube) {
+#' @keywords internal
+.tube2vectorsIn6DHyperbola <- function(tube) {
 
   materialFramesBasedOnParents<-tube$materialFramesBasedOnParents
 
@@ -518,19 +524,21 @@ tube2vectorsIn6DHyperbola <- function(tube) {
 }
 
 # Converting a tube to a vector in the high-dimensional convex-space
-tube2vectorsIn6DCylinder <- function(tube) {
+#' @keywords internal
+.tube2vectorsIn6DCylinder <- function(tube) {
 
-  vectorsIn6DHyperbola_tubes<-tube2vectorsIn6DHyperbola(tube = tube)
+  vectorsIn6DHyperbola_tubes<-.tube2vectorsIn6DHyperbola(tube = tube)
 
   vectorsIn6DCylinder_tubes<-t(apply(vectorsIn6DHyperbola_tubes,
                                      MARGIN = 1,
-                                     FUN = map6DhyperbolaTo6Dcylinder))
+                                     FUN = .map6DhyperbolaTo6Dcylinder))
 
   return(vectorsIn6DCylinder_tubes)
 }
 
 # Converting the 6D hyperbola (i.e., space of a cross-section) to a convex 6D cylinder based on the swept skeletal coordinate system
-map6DhyperbolaTo6Dcylinder <- function(v_gamma_x_a_b) {
+#' @keywords internal
+.map6DhyperbolaTo6Dcylinder <- function(v_gamma_x_a_b) {
 
   #gamma is the role angle
 
@@ -541,20 +549,20 @@ map6DhyperbolaTo6Dcylinder <- function(v_gamma_x_a_b) {
   b<-v_gamma_x_a_b[6]
 
   # calculate tangent vector
-  t_vec<-convert_v_to_TangentVector(v = v_In6DHyperbola)
+  t_vec<-.convert_v_to_TangentVector(v = v_In6DHyperbola)
 
   # calculate yaw and pitch angles as alpha and beta
-  c2s<-cartesian_to_spherical(v = t_vec)
+  c2s<-.cartesian_to_spherical(v = t_vec)
   alpha<-c2s$phi
   beta<-c2s$theta
   materialFrame<-RSpincalc::EA2DCM(EA = c(alpha, beta, gamma),
                                    EulerOrder = 'zyx')
 
   #calculate theta
-  theta<-calculate_theta(materialFrameBasedOnParent=materialFrame)
+  theta<-.calculate_theta(materialFrameBasedOnParent=materialFrame)
 
   # calculate r_project length
-  r_project<-calculate_r_project_Length(a = a, b = b, theta = theta)
+  r_project<-.calculate_r_project_Length(a = a, b = b, theta = theta)
 
   # maximum possible value of r inside the unit circle
   v_vec_length<-norm(v_In6DHyperbola,type = '2')
@@ -571,7 +579,7 @@ map6DhyperbolaTo6Dcylinder <- function(v_gamma_x_a_b) {
   if(v_vec_length==0){
     v_In6DCylinder<-c(0,0)
   }else{
-    v_In6DCylinder<-ratio_v_vec_length*convertVec2unitVec(v_In6DHyperbola)
+    v_In6DCylinder<-ratio_v_vec_length*.convertVec2unitVec(v_In6DHyperbola)
   }
 
   sweptSkeletalCoordinate<-c(v_In6DCylinder,gamma,x,a,b)
@@ -581,7 +589,8 @@ map6DhyperbolaTo6Dcylinder <- function(v_gamma_x_a_b) {
 }
 
 # Converting the convex 6D cylinder to 6D hyperbola (i.e., space of a cross-section) based on the swept skeletal coordinate system
-map6DcylinderTo6Dhyperbola <-function(v_gamma_x_a_b_In6DCylinder) {
+#' @keywords internal
+.map6DcylinderTo6Dhyperbola <-function(v_gamma_x_a_b_In6DCylinder) {
 
   v_In6DCylinder<-v_gamma_x_a_b_In6DCylinder[c(1,2)]
   gamma<-v_gamma_x_a_b_In6DCylinder[3]
@@ -594,20 +603,20 @@ map6DcylinderTo6Dhyperbola <-function(v_gamma_x_a_b_In6DCylinder) {
   # }
 
   # tangent vector
-  t_vec<-convert_v_to_TangentVector(v = v_In6DCylinder)
+  t_vec<-.convert_v_to_TangentVector(v = v_In6DCylinder)
 
   # calculate yaw and pitch angles as alpha and beta
-  c2s<-cartesian_to_spherical(v = t_vec)
+  c2s<-.cartesian_to_spherical(v = t_vec)
   alpha<-c2s$phi
   beta<-c2s$theta
   materialFrame<-RSpincalc::EA2DCM(EA = c(alpha, beta, gamma),
                                    EulerOrder = 'zyx')
 
   #calculate theta
-  theta<-calculate_theta(materialFrameBasedOnParent=materialFrame)
+  theta<-.calculate_theta(materialFrameBasedOnParent=materialFrame)
 
   #length of the critical vector
-  r_project<-calculate_r_project_Length(a = a,b = b,theta = theta)
+  r_project<-.calculate_r_project_Length(a = a,b = b,theta = theta)
 
   # maximum possible value of r
   # i.e., if r_project<x then we can bend the frame up to pi/2 degree
@@ -629,14 +638,15 @@ map6DcylinderTo6Dhyperbola <-function(v_gamma_x_a_b_In6DCylinder) {
 }
 
 # Convert an elemnt of the high-dimensional non-convex space to an ETRep
-convertMatrixIn6DHyperbola2Tube <- function(matrixIn6DHyperbola) {
+#' @keywords internal
+.convertMatrixIn6DHyperbola2Tube <- function(matrixIn6DHyperbola) {
 
   numberOfFrames<-dim(matrixIn6DHyperbola)[1]
 
   # unit tangents
   unitTangentBasedOnParents<-t(apply(matrixIn6DHyperbola[,c(1,2)],
                                      MARGIN = 1,
-                                     FUN = convert_v_to_TangentVector))
+                                     FUN = .convert_v_to_TangentVector))
 
   gammas<-matrixIn6DHyperbola[,3]
 
@@ -644,7 +654,7 @@ convertMatrixIn6DHyperbola2Tube <- function(matrixIn6DHyperbola) {
   for (i in 1:numberOfFrames) {
     # calculate material frames by calculate yaw and pitch angles as alpha and beta
     t_vec<-unitTangentBasedOnParents[i,]
-    c2s<-cartesian_to_spherical(v = t_vec)
+    c2s<-.cartesian_to_spherical(v = t_vec)
     alphaTemp<-c2s$phi
     betaTemp<-c2s$theta
     gammaTemp<-gammas[i]
@@ -672,10 +682,11 @@ convertMatrixIn6DHyperbola2Tube <- function(matrixIn6DHyperbola) {
 }
 
 # convert p-values to color based on spectrum=rev(c("white","lightcyan","cyan","lightblue","darkblue"))
-pvalue_to_color <- function(p_value,
-                            range=100,
-                            spectrum=rev(c("white","lightcyan","cyan","lightblue","darkblue")),
-                            plotSpectrum=FALSE) {
+#' @keywords internal
+.pvalue_to_color <- function(p_value,
+                             range=100,
+                             spectrum=rev(c("white","lightcyan","cyan","lightblue","darkblue")),
+                             plotSpectrum=FALSE) {
 
   colfunc <- colorRampPalette(spectrum)
   colors <- colfunc(range)
@@ -739,9 +750,9 @@ intrinsic_mean_tube <- function(tubes,
   if(type=="sizeAndShapeAnalysis"){
 
     # sort in a tensor
-    vectorsIn6DCylinder_tubes<-array(NA,dim = c(dim(tube2vectorsIn6DCylinder(tubes[[1]])),numberOftubes))
+    vectorsIn6DCylinder_tubes<-array(NA,dim = c(dim(.tube2vectorsIn6DCylinder(tubes[[1]])),numberOftubes))
     for (i in 1:numberOftubes) {
-      vectorsIn6DCylinder_tubes[,,i]<-tube2vectorsIn6DCylinder(tube = tubes[[i]])
+      vectorsIn6DCylinder_tubes[,,i]<-.tube2vectorsIn6DCylinder(tube = tubes[[i]])
     }
 
     #mean along the third dimension of the array
@@ -749,23 +760,23 @@ intrinsic_mean_tube <- function(tubes,
 
     meanMatrixIn6DHyperbola<-t(apply(meanMatrix_In_6DCylinder,
                                      MARGIN = 1,
-                                     FUN = map6DcylinderTo6Dhyperbola))
+                                     FUN = .map6DcylinderTo6Dhyperbola))
 
     #convert mean matrix to a tube
-    meantube<-convertMatrixIn6DHyperbola2Tube(matrixIn6DHyperbola=meanMatrixIn6DHyperbola)
+    meantube<-.convertMatrixIn6DHyperbola2Tube(matrixIn6DHyperbola=meanMatrixIn6DHyperbola)
 
 
   }else if(type=="shapeAnalysis"){
 
     scaledTubes<-list()
     for (i in 1:numberOftubes) {
-      scaledTubes[[i]]<-scaleETRepToHaveTheSizeAsOne(tube = tubes[[i]])
+      scaledTubes[[i]]<-.scaleETRepToHaveTheSizeAsOne(tube = tubes[[i]])
     }
 
     # sort in a tensor
-    vectorsIn6DCylinder_tubes<-array(NA,dim = c(dim(tube2vectorsIn6DCylinder(scaledTubes[[1]])),numberOftubes))
+    vectorsIn6DCylinder_tubes<-array(NA,dim = c(dim(.tube2vectorsIn6DCylinder(scaledTubes[[1]])),numberOftubes))
     for (i in 1:numberOftubes) {
-      vectorsIn6DCylinder_tubes[,,i]<-tube2vectorsIn6DCylinder(tube = scaledTubes[[i]])
+      vectorsIn6DCylinder_tubes[,,i]<-.tube2vectorsIn6DCylinder(tube = scaledTubes[[i]])
     }
 
     #mean along the third dimension of the array
@@ -773,10 +784,10 @@ intrinsic_mean_tube <- function(tubes,
 
     meanMatrixIn6DHyperbola<-t(apply(meanMatrix_In_6DCylinder,
                                      MARGIN = 1,
-                                     FUN = map6DcylinderTo6Dhyperbola))
+                                     FUN = .map6DcylinderTo6Dhyperbola))
 
     #convert mean matrix to a tube
-    meantube<-convertMatrixIn6DHyperbola2Tube(matrixIn6DHyperbola=meanMatrixIn6DHyperbola)
+    meantube<-.convertMatrixIn6DHyperbola2Tube(matrixIn6DHyperbola=meanMatrixIn6DHyperbola)
 
   }else{
     stop("Please choose type as sizeAndShapeAnalysis or shapeAnalysis !")
@@ -791,15 +802,24 @@ intrinsic_mean_tube <- function(tubes,
 
 }
 
-# Calculating the intrinsic distance between two ETReps
-intrinsic_Distance_Between2tubes <- function(tube1,tube2) {
+#' Calculating the intrinsic distance between two ETReps
+#' @param tube1 List containing ETRep details.
+#' @param tube2 List containing ETRep details.
+#' @return Numeric
+#' @examples
+#' # Load tubes
+#' data("tube_A")
+#' data("tube_B")
+#' intrinsic_Distance_Between2tubes(tube1 = tube_A,tube2 = tube_B)
+#' @export
+intrinsic_Distance_Between2tubes <- function(tube1, tube2) {
 
   if(dim(tube1$frenetFramesBasedOnParents)[3]!=dim(tube2$frenetFramesBasedOnParents)[3]){
     stop('Number of cross-sections are not the same!')
   }
 
-  vectorsIn6DCylinder_tube1<-tube2vectorsIn6DCylinder(tube = tube1)
-  vectorsIn6DCylinder_tube2<-tube2vectorsIn6DCylinder(tube = tube2)
+  vectorsIn6DCylinder_tube1<-.tube2vectorsIn6DCylinder(tube = tube1)
+  vectorsIn6DCylinder_tube2<-.tube2vectorsIn6DCylinder(tube = tube2)
 
   euclideanDistance<-sum(sqrt(rowSums(vectorsIn6DCylinder_tube1-
                                         vectorsIn6DCylinder_tube2)^2))
@@ -808,7 +828,16 @@ intrinsic_Distance_Between2tubes <- function(tube1,tube2) {
 
 }
 
-# Calculating the non-intrinsic distance between two ETReps
+#' Calculating the non-intrinsic distance between two ETReps
+#' @param tube1 List containing ETRep details.
+#' @param tube2 List containing ETRep details.
+#' @return Numeric
+#' @examples
+#' # Load tubes
+#' data("tube_A")
+#' data("tube_B")
+#' intrinsic_Distance_Between2tubes(tube1 = tube_A,tube2 = tube_B)
+#' @export
 nonIntrinsic_Distance_Between2tubes<- function(tube1,tube2) {
 
   if(dim(tube1$materialFramesBasedOnParents)[3]!=dim(tube2$materialFramesBasedOnParents)[3]){
@@ -822,7 +851,7 @@ nonIntrinsic_Distance_Between2tubes<- function(tube1,tube2) {
   for (i in 1:numberOfFrames) {
     # q1_twist<-as.vector(as.Q4(as.SO3(tube1$materialFramesBasedOnParents[,,i])))
     # q2_twist<-as.vector(as.Q4(as.SO3(tube2$materialFramesBasedOnParents[,,i])))
-    # distancesMaterialFrames[i]<-geodesicDistance(q1_twist,q2_twist)
+    # distancesMaterialFrames[i]<-.geodesicDistance(q1_twist,q2_twist)
     distancesMaterialFrames[i]<-rot.dist(as.SO3(tube1$materialFramesBasedOnParents[,,i]),
                                          as.SO3(tube2$materialFramesBasedOnParents[,,i]),
                                          method="intrinsic")
@@ -844,21 +873,22 @@ nonIntrinsic_Distance_Between2tubes<- function(tube1,tube2) {
 }
 
 # Calculating an intrinsic discrete path between two elements of the 6D non-convex space
-discretePathBetween2PointsIn_6D_Hyperbola <- function(point1,
-                                                      point2,
-                                                      numberOfpoints=10) {
+#' @keywords internal
+.discretePathBetween2PointsIn_6D_Hyperbola <- function(point1,
+                                                       point2,
+                                                       numberOfpoints=10) {
 
-  point1_SweptCoordinate<-map6DhyperbolaTo6Dcylinder(v_gamma_x_a_b = point1)
-  point2_SweptCoordinate<-map6DhyperbolaTo6Dcylinder(v_gamma_x_a_b = point2)
+  point1_SweptCoordinate<-.map6DhyperbolaTo6Dcylinder(v_gamma_x_a_b = point1)
+  point2_SweptCoordinate<-.map6DhyperbolaTo6Dcylinder(v_gamma_x_a_b = point2)
 
-  pathPointsIn6DCylinder<-generatePointsBetween2Points(point1 = point1_SweptCoordinate,
-                                                       point2 = point2_SweptCoordinate,
-                                                       numberOfPoints = numberOfpoints)
+  pathPointsIn6DCylinder<-.generatePointsBetween2Points(point1 = point1_SweptCoordinate,
+                                                        point2 = point2_SweptCoordinate,
+                                                        numberOfPoints = numberOfpoints)
 
   pathPointsIn_6D_Hyperbola<-array(NA,dim = dim(pathPointsIn6DCylinder))
   for (i in 1:nrow(pathPointsIn6DCylinder)) {
-    pathPointsIn_6D_Hyperbola[i,]<-map6DcylinderTo6Dhyperbola(v_gamma_x_a_b_In6DCylinder =
-                                                                pathPointsIn6DCylinder[i,])
+    pathPointsIn_6D_Hyperbola[i,]<-.map6DcylinderTo6Dhyperbola(v_gamma_x_a_b_In6DCylinder =
+                                                                 pathPointsIn6DCylinder[i,])
   }
 
   return(pathPointsIn_6D_Hyperbola)
@@ -910,8 +940,8 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 
     numberOfFrames<-dim(tube1$materialFramesBasedOnParents)[3]
 
-    vectorsIn6DHyperbola_tube1<-tube2vectorsIn6DHyperbola(tube = tube1)
-    vectorsIn6DHyperbola_tube2<-tube2vectorsIn6DHyperbola(tube = tube2)
+    vectorsIn6DHyperbola_tube1<-.tube2vectorsIn6DHyperbola(tube = tube1)
+    vectorsIn6DHyperbola_tube2<-.tube2vectorsIn6DHyperbola(tube = tube2)
 
     pathsBetween2vectorsIn6DHyperbola<-array(NA,dim = c(numberOfSteps,6,numberOfFrames))
     for (i in 1:numberOfFrames) {
@@ -920,7 +950,7 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
       if(norm(p1-p2,type = '2')==0){
         pathsBetween2vectorsIn6DHyperbola[,,i]<-matrix(rep(p1,numberOfSteps),ncol = length(p1),byrow = TRUE)
       }else{
-        pathsBetween2vectorsIn6DHyperbola[,,i]<-discretePathBetween2PointsIn_6D_Hyperbola(
+        pathsBetween2vectorsIn6DHyperbola[,,i]<-.discretePathBetween2PointsIn_6D_Hyperbola(
           point1=p1,
           point2=p2,
           numberOfpoints=numberOfSteps)
@@ -931,7 +961,7 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
     for (j in 1:numberOfSteps) {
       for (i in 1:numberOfFrames) {
         unitTangentBasedOnParents4AllSamples[i,,j]<-
-          convert_v_to_TangentVector(v =pathsBetween2vectorsIn6DHyperbola[j,c(1,2),i])
+          .convert_v_to_TangentVector(v =pathsBetween2vectorsIn6DHyperbola[j,c(1,2),i])
       }
     }
 
@@ -944,7 +974,7 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
         gammaTemp<-gammaAll[k,i]
 
         # calculate material frames by calculate yaw and pitch angles as alpha and beta
-        c2s<-cartesian_to_spherical(v = t_vec_temp)
+        c2s<-.cartesian_to_spherical(v = t_vec_temp)
         alphaTemp<-c2s$phi
         betaTemp<-c2s$theta
         materialFramesBasedOnParents_Steps[,,i,k]<-RSpincalc::EA2DCM(EA = c(alphaTemp, betaTemp, gammaTemp),
@@ -979,12 +1009,12 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
     numberOfFrames<-dim(tube1$materialFramesBasedOnParents)[3]
 
     # NB! scaling does not effect the frames (i.e., the v vectors and roll angles of the scaled tube is the same as in the original tube)
-    scaled_tube1<-scaleETRepToHaveTheSizeAsOne(tube = tube1)
-    scaled_tube2<-scaleETRepToHaveTheSizeAsOne(tube = tube2)
+    scaled_tube1<-.scaleETRepToHaveTheSizeAsOne(tube = tube1)
+    scaled_tube2<-.scaleETRepToHaveTheSizeAsOne(tube = tube2)
 
     # insert samples in 6D cylinder
-    vectorsIn6DCylinder_tube1<-tube2vectorsIn6DCylinder(tube = scaled_tube1)
-    vectorsIn6DCylinder_tube2<-tube2vectorsIn6DCylinder(tube = scaled_tube2)
+    vectorsIn6DCylinder_tube1<-.tube2vectorsIn6DCylinder(tube = scaled_tube1)
+    vectorsIn6DCylinder_tube2<-.tube2vectorsIn6DCylinder(tube = scaled_tube2)
 
     # path on small cylinder
     v_psiAngleRoll_tube1<-vectorsIn6DCylinder_tube1[,1:3]
@@ -992,16 +1022,16 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 
     v_psiAngleRoll_steps<-array(NA,dim = c(numberOfSteps,3,numberOfFrames))
     for (i in 1:numberOfFrames) {
-      v_psiAngleRoll_steps[,,i]<-generatePointsBetween2Points(point1 = v_psiAngleRoll_tube1[i,],
-                                                              point2 = v_psiAngleRoll_tube2[i,],
-                                                              numberOfPoints = numberOfSteps)
+      v_psiAngleRoll_steps[,,i]<-.generatePointsBetween2Points(point1 = v_psiAngleRoll_tube1[i,],
+                                                               point2 = v_psiAngleRoll_tube2[i,],
+                                                               numberOfPoints = numberOfSteps)
     }
 
     # path on the hyper-plane n.w=d where d is the space's dimension
     w1<-c(scaled_tube1$connectionsLengths,scaled_tube1$ellipseRadii_a,scaled_tube1$ellipseRadii_b)
     w2<-c(scaled_tube2$connectionsLengths,scaled_tube2$ellipseRadii_a,scaled_tube2$ellipseRadii_b)
 
-    pathBetween_w1_w2<-generatePointsBetween2Points(w1,w2,numberOfPoints = numberOfSteps)
+    pathBetween_w1_w2<-.generatePointsBetween2Points(w1,w2,numberOfPoints = numberOfSteps)
 
     connectionsLengths_steps<-t(pathBetween_w1_w2)[1:numberOfFrames,]
     ellipseRadii_a_steps<-t(pathBetween_w1_w2)[(numberOfFrames+1):(2*numberOfFrames),]
@@ -1018,14 +1048,14 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
       }
       matricesIn6DHyperbola[,,j]<-t(apply(tempMatrix_In_6DCylinder,
                                           MARGIN = 1,
-                                          FUN = map6DcylinderTo6Dhyperbola))
+                                          FUN = .map6DcylinderTo6Dhyperbola))
     }
 
     tubes<-list()
     for (j in 1:numberOfSteps) {
 
-      tubes[[j]]<-convertMatrixIn6DHyperbola2Tube(matrixIn6DHyperbola=
-                                                    matricesIn6DHyperbola[,,j])
+      tubes[[j]]<-.convertMatrixIn6DHyperbola2Tube(matrixIn6DHyperbola=
+                                                     matricesIn6DHyperbola[,,j])
     }
 
 
@@ -1048,6 +1078,7 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 
   return(tubes)
 }
+
 
 # Transformation between two ETReps based on the non-intrinsic approach
 #' Non-intrinsic Transformation Between Two ETReps
@@ -1104,9 +1135,9 @@ nonIntrinsic_Transformation_Elliptical_Tubes <- function(tube1,
         materialFramesBasedOnParents_Steps[,,i,j]<-rotations::as.SO3(q2_twist)
       }
     }else{
-      q4pointsOnAGeodesic_twist<-geodesicPathOnUnitSphere(as.vector(q1_twist),
-                                                          as.vector(q2_twist),
-                                                          numberOfneededPoints = numberOfSteps)
+      q4pointsOnAGeodesic_twist<-.geodesicPathOnUnitSphere(as.vector(q1_twist),
+                                                           as.vector(q2_twist),
+                                                           numberOfneededPoints = numberOfSteps)
       for (j in 1:numberOfSteps) {
         materialFramesBasedOnParents_Steps[,,i,j]<-rotations::as.SO3(as.Q4(q4pointsOnAGeodesic_twist[j,]))
       }
@@ -1132,15 +1163,15 @@ nonIntrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 
   }else if(type=="shapeAnalysis"){
 
-    scaled_tube1<-scaleETRepToHaveTheSizeAsOne(tube = tube1)
-    scaled_tube2<-scaleETRepToHaveTheSizeAsOne(tube = tube2)
+    scaled_tube1<-.scaleETRepToHaveTheSizeAsOne(tube = tube1)
+    scaled_tube2<-.scaleETRepToHaveTheSizeAsOne(tube = tube2)
 
     u_1<-c(scaled_tube1$ellipseRadii_a,scaled_tube1$ellipseRadii_b,scaled_tube1$connectionsLengths)
     u_2<-c(scaled_tube2$ellipseRadii_a,scaled_tube2$ellipseRadii_b,scaled_tube2$connectionsLengths)
 
-    geodesicPathBetween_u1_u2<-geodesicPathOnUnitSphere(point1 = u_1,
-                                                        point2 = u_2,
-                                                        numberOfneededPoints = numberOfSteps)
+    geodesicPathBetween_u1_u2<-.geodesicPathOnUnitSphere(point1 = u_1,
+                                                         point2 = u_2,
+                                                         numberOfneededPoints = numberOfSteps)
 
     ellipseRadii_a_steps<-t(geodesicPathBetween_u1_u2)[1:numberOfFrames,]
     ellipseRadii_b_steps<-t(geodesicPathBetween_u1_u2)[(numberOfFrames+1):(2*numberOfFrames),]
@@ -1226,7 +1257,7 @@ nonIntrinsic_mean_tube <- function(tubes,
   if(type == "shapeAnalysis"){
     cat("\n shapeAnalysis \n")
     for (i in 1:length(tubes)) {
-      tubes[[i]]<-scaleETRepToHaveTheSizeAsOne(tube =tubes[[i]] ,plotting = FALSE)
+      tubes[[i]]<-.scaleETRepToHaveTheSizeAsOne(tube =tubes[[i]] ,plotting = FALSE)
     }
   }else if(type == "sizeAndShapeAnalysis"){
     cat("\n sizeAndShapeAnalysis \n")
@@ -1341,9 +1372,9 @@ simulate_etube <- function(referenceTube,
                            plotting=TRUE) {
 
 
-  referenceTube_scaled<-scaleETRepToHaveTheSizeAsOne(referenceTube)
+  referenceTube_scaled<-.scaleETRepToHaveTheSizeAsOne(referenceTube)
 
-  tubeIn6DCylinder<-tube2vectorsIn6DCylinder(referenceTube_scaled)
+  tubeIn6DCylinder<-.tube2vectorsIn6DCylinder(referenceTube_scaled)
   tubeIn6DCylinder[is.infinite(tubeIn6DCylinder)]<-0
 
   numberOfFrames<-nrow(tubeIn6DCylinder)
@@ -1362,7 +1393,7 @@ simulate_etube <- function(referenceTube,
 
       #ensure validity
       if(norm(c(w1,w2),type = "2")>1){
-        temp<-convertVec2unitVec(c(w1,w2))*0.9999
+        temp<-.convertVec2unitVec(c(w1,w2))*0.9999
         w1<-temp[1]
         w1<-temp[2]
       }
@@ -1373,14 +1404,14 @@ simulate_etube <- function(referenceTube,
 
     matrixIn6DHyperbola<-t(apply(tubeSimulatedTempIn6DCylinder,
                                  MARGIN = 1,
-                                 FUN = map6DcylinderTo6Dhyperbola))
+                                 FUN = .map6DcylinderTo6Dhyperbola))
 
     kappa_total_scale<-runif(n = 1,min = rangeSdScale[1],max = rangeSdScale[2])
 
     matrixIn6DHyperbola[,3:6]<-matrixIn6DHyperbola[,3:6]*kappa_total_scale
 
     #convert mean matrix to a tube
-    simulatedTubes[[j]]<-convertMatrixIn6DHyperbola2Tube(matrixIn6DHyperbola=matrixIn6DHyperbola)
+    simulatedTubes[[j]]<-.convertMatrixIn6DHyperbola2Tube(matrixIn6DHyperbola=matrixIn6DHyperbola)
   }
 
   if(plotting==TRUE){
@@ -1402,10 +1433,11 @@ simulate_etube <- function(referenceTube,
 
 
 # Plot the boundary points of an ETRep (For Procrustes analysis)
-plotProcTube <- function(boundaryPoints,
-                         numberOfEllispePoints,
-                         colorBoundary="blue",
-                         colorSpine="black") {
+#' @keywords internal
+.plotProcTube <- function(boundaryPoints,
+                          numberOfEllispePoints,
+                          colorBoundary="blue",
+                          colorSpine="black") {
 
   m<-nrow(boundaryPoints)
   d<-numberOfEllispePoints
@@ -1437,7 +1469,8 @@ plotProcTube <- function(boundaryPoints,
 
 
 # Identifying cross-sections of an e-tube with non-local intersection
-tubeCrossSetionsIndicesWith_NonLocal_SelfIntersections <- function(tube) {
+#' @keywords internal
+.tubeCrossSetionsIndicesWith_NonLocal_SelfIntersections <- function(tube) {
 
   criticalElipses_index<-c()
   intersectionPoints<-c()
@@ -1451,7 +1484,7 @@ tubeCrossSetionsIndicesWith_NonLocal_SelfIntersections <- function(tube) {
       ellipse1<-tube$slicingEllipsoids[,,i]
       ellipse2<-tube$slicingEllipsoids[,,j]
 
-      intersectionPointsTemp<-intersectionPointsBetween2Ellipses_In3D(ellipse1 = ellipse1,ellipse2 = ellipse2,plotting = FALSE)
+      intersectionPointsTemp<-.intersectionPointsBetween2Ellipses_In3D(ellipse1 = ellipse1,ellipse2 = ellipse2,plotting = FALSE)
 
       if(!anyNA(intersectionPointsTemp) & !is.null(intersectionPointsTemp)){
         intersectionPoints<-rbind(intersectionPoints,intersectionPointsTemp)
@@ -1466,12 +1499,13 @@ tubeCrossSetionsIndicesWith_NonLocal_SelfIntersections <- function(tube) {
 }
 
 # Non-intrinsic transformation between two ETReps by cross-sectional adjustment
-nonIntrinsic_Transformation_Elliptical_Tubes_Without_SelfIntersection <- function(tube1,
-                                                                                  tube2,
-                                                                                  numberOfSteps=8,
-                                                                                  scalingFactor=0.9,
-                                                                                  removeNonLocalSingularity=TRUE,
-                                                                                  plotting=TRUE) {
+#' @keywords internal
+.nonIntrinsic_Transformation_Elliptical_Tubes_Without_SelfIntersection <- function(tube1,
+                                                                                   tube2,
+                                                                                   numberOfSteps=8,
+                                                                                   scalingFactor=0.9,
+                                                                                   removeNonLocalSingularity=TRUE,
+                                                                                   plotting=TRUE) {
 
   tubes<-nonIntrinsic_Transformation_Elliptical_Tubes(tube1 = tube1,
                                                       tube2 = tube2,
@@ -1499,7 +1533,7 @@ nonIntrinsic_Transformation_Elliptical_Tubes_Without_SelfIntersection <- functio
 
     if(removeNonLocalSingularity==TRUE){
       #remove non-local intersections
-      indicesOfCriticalNonLocalIntersections<-tubeCrossSetionsIndicesWith_NonLocal_SelfIntersections(tube = tubeTemp)$criticalElipses_index
+      indicesOfCriticalNonLocalIntersections<-.tubeCrossSetionsIndicesWith_NonLocal_SelfIntersections(tube = tubeTemp)$criticalElipses_index
       while(length(indicesOfCriticalNonLocalIntersections)>=1){
         cat("Number of nonlocal intersection",length(indicesOfCriticalNonLocalIntersections),"\n")
         tubeTemp$ellipseRadii_a[indicesOfCriticalNonLocalIntersections]<-scalingFactor*tubeTemp$ellipseRadii_a[indicesOfCriticalNonLocalIntersections]
@@ -1512,7 +1546,7 @@ nonIntrinsic_Transformation_Elliptical_Tubes_Without_SelfIntersection <- functio
                                          ellipseRadii_b = tubeTemp$ellipseRadii_b,
                                          connectionsLengths = tubeTemp$connectionsLengths,
                                          plotting = FALSE)
-        indicesOfCriticalNonLocalIntersections<-tubeCrossSetionsIndicesWith_NonLocal_SelfIntersections(tube = tubeTemp)$criticalElipses_index
+        indicesOfCriticalNonLocalIntersections<-.tubeCrossSetionsIndicesWith_NonLocal_SelfIntersections(tube = tubeTemp)$criticalElipses_index
       }
     }
     plot_Elliptical_Tube(tube = tubeTemp,
@@ -1573,12 +1607,13 @@ check_Tube_Legality <- function(tube) {
 
 
 # Fitting radial spokes based on parallel slicing regarding radial distance analysis of Supplementary Materials
-fitRadialVectorsModelBasedOnParallelSlicing <- function(PDM,
-                                                        polyMatrix,
-                                                        nunmberOfSlices,
-                                                        numberOFRadialSpokes,
-                                                        plotting=TRUE,
-                                                        colorRadialVectors="blue") {
+#' @keywords internal
+.fitRadialVectorsModelBasedOnParallelSlicing <- function(PDM,
+                                                         polyMatrix,
+                                                         nunmberOfSlices,
+                                                         numberOFRadialSpokes,
+                                                         plotting=TRUE,
+                                                         colorRadialVectors="blue") {
 
   verts <- rbind(t(base::as.matrix(PDM)),1)
   trgls <- base::as.matrix(t(polyMatrix))
@@ -1596,8 +1631,8 @@ fitRadialVectorsModelBasedOnParallelSlicing <- function(PDM,
   slicesAlongXaxis<-seq(min(pointsTest[,2]),max(pointsTest[,2]),length.out=nunmberOfSlices)
 
   # we use asymmetric circles to avoid antipodal vectors
-  tempCircle<-sphereGenerator_2D(center = c(0,0),r = 1,
-                                 n = numberOFRadialSpokes+1,asymmetric = FALSE)
+  tempCircle<-.sphereGenerator_2D(center = c(0,0),r = 1,
+                                  n = numberOFRadialSpokes+1,asymmetric = FALSE)
 
   slicesCentroids<-c()
   radialSpokesTails<-c()
@@ -1615,7 +1650,7 @@ fitRadialVectorsModelBasedOnParallelSlicing <- function(PDM,
 
     normalsTemp<-circleIn3D-tempRadialSpokesTails
 
-    circleMesh3D$normals<-rbind(apply(normalsTemp,FUN = convertVec2unitVec,MARGIN = 1),
+    circleMesh3D$normals<-rbind(apply(normalsTemp,FUN = .convertVec2unitVec,MARGIN = 1),
                                 rep(1,nrow(circleIn3D)))
 
 
@@ -1642,7 +1677,7 @@ fitRadialVectorsModelBasedOnParallelSlicing <- function(PDM,
     }
 
     matlib::vectors3d(radialSpokesTips,
-              origin = radialSpokesTails,headlength = 0.1,radius = 1/10, col=colorRadialVectors, lwd=2)
+                      origin = radialSpokesTails,headlength = 0.1,radius = 1/10, col=colorRadialVectors, lwd=2)
 
     decorate3d()
   }
