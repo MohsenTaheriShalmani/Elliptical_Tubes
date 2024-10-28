@@ -9,10 +9,10 @@ The repository is linked to the publication mentioned below.
 
 ---
 
-## The Paper
+## Article "The Mean Shape under the Relative Curvature Condition"
 [ETRep_arxiv.pdf](ETRep_arxiv.pdf)
 
-## PhD Thesis
+## PhD Thesis "Shape Statistics via Skeletal Structures"
 [PhD Thesis](https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161)
 
 ## Cite
