@@ -53,7 +53,9 @@ if (!requireNamespace("devtools", quietly = TRUE)) {
 }
 
 # Install the ETRep package from GitHub
-devtools::install_github("MohsenTaheriShalmani/ETRep", build = TRUE)
+library("devtools")   
+install_github("MohsenTaheriShalmani/Elliptical_Tubes/ETRep")   
+library(ETRep)
 ```
 
 ## Images from the article
