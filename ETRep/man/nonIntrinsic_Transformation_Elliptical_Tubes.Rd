@@ -36,21 +36,24 @@ List containing intermediate ETReps.
 Performs the non-intrinsic transformation from one ETRep to another.
 }
 \examples{
+\dontrun{
+# This example takes more than 5 seconds to run
 # Load tubes
 data("tube_A")
 data("tube_B")
-numberOfSteps <- 5
+numberOfSteps <- 10
 transformation_Tubes<-
   nonIntrinsic_Transformation_Elliptical_Tubes(
-    tube1 = tube_A, tube2 = tube_B,
-    numberOfSteps = numberOfSteps , plotting = FALSE)
+    tube1 = tube_A,tube2 = tube_B,
+    numberOfSteps = numberOfSteps,
+    plotting = FALSE)
 # Plotting
 for (i in 1:length(transformation_Tubes)) {
   plot_Elliptical_Tube(tube = transformation_Tubes[[i]],
-                       plot_frames = FALSE,
-                       plot_skeletal_sheet = FALSE,
-                       plot_r_project = FALSE,
-                       plot_r_max = FALSE,
-                       add = FALSE)
+  plot_frames = FALSE,plot_skeletal_sheet = FALSE
+  ,plot_r_project = FALSE,
+  plot_r_max = FALSE,
+  add = FALSE)
+}
 }
 }

@@ -33,10 +33,12 @@ List containing intermediate ETReps.
 Performs the intrinsic transformation from one ETRep to another.
 }
 \examples{
+\dontrun{
+# This example takes more than 5 seconds to run
 # Load tubes
 data("tube_A")
 data("tube_B")
-numberOfSteps <- 5
+numberOfSteps <- 10
 transformation_Tubes<-
   intrinsic_Transformation_Elliptical_Tubes(
     tube1 = tube_A,tube2 = tube_B,
@@ -49,5 +51,6 @@ for (i in 1:length(transformation_Tubes)) {
   ,plot_r_project = FALSE,
   plot_r_max = FALSE,
   add = FALSE)
+}
 }
 }

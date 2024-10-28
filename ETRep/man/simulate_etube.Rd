@@ -47,7 +47,7 @@ data("colon3D")
 #Set Parameters
 sd_v<-sd_psi<-1e-03
 sd_x<-sd_a<-sd_b<-1e-04
-numberOfSimulation<-5
+numberOfSimulation<-3
 random_Tubes<-
   simulate_etube(referenceTube = colon3D,
                  numberOfSimulation = numberOfSimulation,

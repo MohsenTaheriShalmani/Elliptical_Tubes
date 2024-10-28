@@ -907,10 +907,12 @@ nonIntrinsic_Distance_Between2tubes<- function(tube1,tube2) {
 #' @param type  String defining the type of analysis as sizeAndShapeAnalysis or shapeAnalysis
 #' @return List containing intermediate ETReps.
 #' @examples
+#' \dontrun{
+#' # This example takes more than 5 seconds to run
 #' # Load tubes
 #' data("tube_A")
 #' data("tube_B")
-#' numberOfSteps <- 5
+#' numberOfSteps <- 10
 #' transformation_Tubes<-
 #'   intrinsic_Transformation_Elliptical_Tubes(
 #'     tube1 = tube_A,tube2 = tube_B,
@@ -923,6 +925,7 @@ nonIntrinsic_Distance_Between2tubes<- function(tube1,tube2) {
 #'   ,plot_r_project = FALSE,
 #'   plot_r_max = FALSE,
 #'   add = FALSE)
+#' }
 #' }
 #' @export
 intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
@@ -1093,22 +1096,25 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 #' @param add Logical, enables overlay plotting
 #' @return List containing intermediate ETReps.
 #' @examples
+#' \dontrun{
+#' # This example takes more than 5 seconds to run
 #' # Load tubes
 #' data("tube_A")
 #' data("tube_B")
-#' numberOfSteps <- 5
+#' numberOfSteps <- 10
 #' transformation_Tubes<-
 #'   nonIntrinsic_Transformation_Elliptical_Tubes(
-#'     tube1 = tube_A, tube2 = tube_B,
-#'     numberOfSteps = numberOfSteps , plotting = FALSE)
+#'     tube1 = tube_A,tube2 = tube_B,
+#'     numberOfSteps = numberOfSteps,
+#'     plotting = FALSE)
 #' # Plotting
 #' for (i in 1:length(transformation_Tubes)) {
 #'   plot_Elliptical_Tube(tube = transformation_Tubes[[i]],
-#'                        plot_frames = FALSE,
-#'                        plot_skeletal_sheet = FALSE,
-#'                        plot_r_project = FALSE,
-#'                        plot_r_max = FALSE,
-#'                        add = FALSE)
+#'   plot_frames = FALSE,plot_skeletal_sheet = FALSE
+#'   ,plot_r_project = FALSE,
+#'   plot_r_max = FALSE,
+#'   add = FALSE)
+#' }
 #' }
 #' @export
 nonIntrinsic_Transformation_Elliptical_Tubes <- function(tube1,
@@ -1339,7 +1345,7 @@ nonIntrinsic_mean_tube <- function(tubes,
 #' #Set Parameters
 #' sd_v<-sd_psi<-1e-03
 #' sd_x<-sd_a<-sd_b<-1e-04
-#' numberOfSimulation<-5
+#' numberOfSimulation<-3
 #' random_Tubes<-
 #'   simulate_etube(referenceTube = colon3D,
 #'                  numberOfSimulation = numberOfSimulation,
