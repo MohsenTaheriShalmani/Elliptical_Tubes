@@ -3,6 +3,7 @@ The repository is linked to the publication mentioned below.
 ## Article
 ### "The Mean Shape under the Relative Curvature Condition"
 ### Taheri, Mohsen, Stephen M. Pizer, and Jörn Schulz. Submitted to the Journal of Computational and Graphical Statistics.
+### The article is part of the PhD thesis "Shape Statistics via Skeletal Structures"
 
 ## The manuscript provides shape statistics for elliptical tubes, utilizing a relative curvature condition to ensure avoidance of self-intersections.
 
@@ -10,6 +11,9 @@ The repository is linked to the publication mentioned below.
 
 ## The Paper
 [ETRep_arxiv.pdf](ETRep_arxiv.pdf)
+
+## PhD Thesis
+[PhD Thesis](https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161)
 
 ## Cite
 ```
