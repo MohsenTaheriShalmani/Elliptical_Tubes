@@ -907,8 +907,7 @@ nonIntrinsic_Distance_Between2tubes<- function(tube1,tube2) {
 #' @param type  String defining the type of analysis as sizeAndShapeAnalysis or shapeAnalysis
 #' @return List containing intermediate ETReps.
 #' @examples
-#' \dontrun{
-#' # This example takes more than 5 seconds to run
+#' \donttest{
 #' # Load tubes
 #' data("tube_A")
 #' data("tube_B")
@@ -1096,8 +1095,7 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 #' @param add Logical, enables overlay plotting
 #' @return List containing intermediate ETReps.
 #' @examples
-#' \dontrun{
-#' # This example takes more than 5 seconds to run
+#' \donttest{
 #' # Load tubes
 #' data("tube_A")
 #' data("tube_B")
@@ -1261,12 +1259,12 @@ nonIntrinsic_mean_tube <- function(tubes,
                                    plotting=TRUE) {
 
   if(type == "shapeAnalysis"){
-    cat("\n shapeAnalysis \n")
+    message("\n Shape analysis \n")
     for (i in 1:length(tubes)) {
       tubes[[i]]<-.scaleETRepToHaveTheSizeAsOne(tube =tubes[[i]] ,plotting = FALSE)
     }
   }else if(type == "sizeAndShapeAnalysis"){
-    cat("\n sizeAndShapeAnalysis \n")
+    message("\n Size-and-shape analysis \n")
   }else{
     stop("Please choose type as sizeAndShapeAnalysis or shapeAnalysis !")
   }
@@ -1541,7 +1539,7 @@ simulate_etube <- function(referenceTube,
       #remove non-local intersections
       indicesOfCriticalNonLocalIntersections<-.tubeCrossSetionsIndicesWith_NonLocal_SelfIntersections(tube = tubeTemp)$criticalElipses_index
       while(length(indicesOfCriticalNonLocalIntersections)>=1){
-        cat("Number of nonlocal intersection",length(indicesOfCriticalNonLocalIntersections),"\n")
+        message("Number of nonlocal intersection is: ",length(indicesOfCriticalNonLocalIntersections),"\n")
         tubeTemp$ellipseRadii_a[indicesOfCriticalNonLocalIntersections]<-scalingFactor*tubeTemp$ellipseRadii_a[indicesOfCriticalNonLocalIntersections]
         tubeTemp$ellipseRadii_b[indicesOfCriticalNonLocalIntersections]<-scalingFactor*tubeTemp$ellipseRadii_b[indicesOfCriticalNonLocalIntersections]
 
@@ -1598,15 +1596,13 @@ check_Tube_Legality <- function(tube) {
   criticalIndices_RCC<-which(tube$r_project_lengths>tube$r_max_lengths)
   criticalIndices_Radii<-which(tube$ellipseRadii_a<tube$ellipseRadii_b)
   if(length(criticalIndices_Radii)>0){
-    cat("The tube is not valid as it is not elliptical! \n")
-    cat("Critical cross-sections that a<b are:",criticalIndices_Radii,"\n")
+    message("The tube is not valid as it is not elliptical!\n Critical cross-sections that a<b are: ",paste(criticalIndices_Radii,collapse = " , "))
     return(FALSE)
   }else if(length(criticalIndices_RCC)>0){
-    cat("The tube is not valid as it violates the RCC! \n")
-    cat("Critical cross-sections are:",criticalIndices_RCC,"\n")
+    message("The tube is not valid as it violates the RCC! \n Critical cross-sections are:",paste(criticalIndices_RCC,collapse = " , "))
     return(FALSE)
   }else{
-    cat("The tube is a valid elliptical tube and it satisfies the RCC! \n")
+    message("The tube is a valid elliptical tube and it satisfies the RCC! \n")
     return(TRUE)
   }
 }
@@ -1629,8 +1625,6 @@ check_Tube_Legality <- function(tube) {
 
   #remeshing to increase the number of triangles by reducing the voxelSize
   remeshedMesh<-Rvcg::vcgUniformRemesh(tmesh,voxelSize = 0.5)
-  # print(dim(tmesh$vb))
-  # print(dim(remeshedMesh$vb))
   tmeshSmooth<-Rvcg::vcgUpdateNormals(remeshedMesh)
 
   pointsTest<-Morpho::vert2points(tmeshSmooth)

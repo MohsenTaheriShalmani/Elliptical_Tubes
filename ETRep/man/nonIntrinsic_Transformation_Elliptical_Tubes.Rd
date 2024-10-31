@@ -36,8 +36,7 @@ List containing intermediate ETReps.
 Performs the non-intrinsic transformation from one ETRep to another.
 }
 \examples{
-\dontrun{
-# This example takes more than 5 seconds to run
+\donttest{
 # Load tubes
 data("tube_A")
 data("tube_B")
