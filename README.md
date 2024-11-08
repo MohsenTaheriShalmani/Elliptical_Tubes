@@ -28,39 +28,30 @@ The repository is linked to the publication mentioned below.
 }
 ```
 
-## Code_Description
+# ETRep: Analysis of Elliptical Tubes Under the Relative Curvature Condition
 
-[Code_Description.pdf](Code_Description.pdf)
+**ETRep** is an R package designed for the analysis of elliptical tubes, applying the Relative Curvature Condition (RCC) for enhanced shape analysis. This package provides tools for computational and graphical methods relevant to studies involving tubular structures and shape simulation, making it valuable for research in fields such as biological shape analysis and geometry.
 
----
-## Data and R scripts
----
+## Citation
 
-The primary script file is `main.R`, supported by two additional scripts in the `Functions` folder: `ETRep_Functions.R`, which contains functions specific to ETRep analysis, and `ETRep_MathFunctions.R`, which includes general mathematical functions. An ETRep captures the characteristics of *elliptical tubes* (e-tubes), including the size and orientation of its elliptical cross-sections, positioned according to the material frames along the spine.
+If you use **ETRep** in your research, please cite it as follows:
 
----
+**APA Style:**  
+Taheri, M. (2024). *ETRep: Analysis of Elliptical Tubes Under the Relative Curvature Condition* (Version 0.1.0) \[R package\]. The Comprehensive R Archive Network (CRAN). [https://doi.org/10.32614/CRAN.package.ETRep](https://doi.org/10.32614/CRAN.package.ETRep)
 
-The `main.R` script is divided into two main sections: **1. Transformation** and **2. Simulation**.
+## Installation
 
-- **Transformation**: This section provides examples for calculating both intrinsic and non-intrinsic means, using intrinsic and non-intrinsic transformations between two e-tubes represented by their corresponding *elliptical tube representations* (ETReps), as discussed in the main manuscript.
-
-- **Simulation**: This section provides an example of ETRep simulation, as discussed in the article's Supplementary Materials. 
-
----
-
-## Install ETRep R Package 
-
-```r
-# Install devtools if necessary
-if (!requireNamespace("devtools", quietly = TRUE)) {
-    install.packages("devtools")
-}
-
-# Install the ETRep package from GitHub
-library("devtools")   
-install_github("MohsenTaheriShalmani/Elliptical_Tubes/ETRep")   
-library(ETRep)
+To install **ETRep** from CRAN, use:
+```R
+install.packages("ETRep")
 ```
+
+## Overview
+
+**ETRep** offers a range of functions and documentation to aid in analyzing and visualizing elliptical tubes. The package supports complex shape simulations and includes supplementary materials to help users navigate its functionality effectively.
+
+---
+
 
 ## Images from the article
 ![Fig1](Fig1.jpg)
