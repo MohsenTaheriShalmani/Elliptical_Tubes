@@ -32,6 +32,13 @@ The repository is linked to the publication mentioned below.
 
 **ETRep** R package is designed for the analysis of elliptical tubes, applying the Relative Curvature Condition (RCC) for enhanced shape analysis. This package provides tools for computational and graphical methods relevant to studies involving tubular structures and shape simulation, making it a handy framework for research in fields such as biological shape analysis, robotic arm transformations, and geometry.
 
+## Documentations
+
+[ETRep_R_Package.pdf](ETRep_R_Package.pdf)
+
+[Code_Description.pdf](Code_Description.pdf)
+
+
 ## Citation
 
 If you use **ETRep** in your research, please cite it as follows:
