@@ -20,6 +20,5 @@ Convert an ETRep to a Matrix in the Convex Transformed Space.
 # Load tube
 data("tube_A")
 Euclideanized_Tube<- elliptical_Tube_Euclideanization(tube = tube_A)
-Euclideanized_Tube
 
 }
