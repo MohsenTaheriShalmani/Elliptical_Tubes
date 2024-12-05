@@ -17,7 +17,7 @@ intrinsic_mean_tube(tubes, type = "sizeAndShapeAnalysis", plotting = TRUE)
 List representing the mean ETRep.
 }
 \description{
-Computes the intrinsic mean of a set of ETReps.
+Computes the intrinsic mean of a set of ETReps. The computation involves transforming the non-convex hypertrumpet space into a convex space, calculating the mean in this transformed space, and mapping the result back to the original hypertrumpet space.
 }
 \examples{
 #Example 1
@@ -47,4 +47,11 @@ plot_Elliptical_Tube(tube = intrinsic_mean,
                      plot_r_project = FALSE,
                      plot_r_max = FALSE,
                      add = FALSE)
+}
+\references{
+Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.
+\url{https://doi.org/10.48550/arXiv.2404.01043}
+
+Taheri Shalmani, M. (2024). "Shape Statistics via Skeletal Structures." University of Stavanger.
+\url{https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161}
 }

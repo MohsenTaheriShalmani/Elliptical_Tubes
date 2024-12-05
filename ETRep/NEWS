@@ -1,0 +1,18 @@
+
+ETRep Version 1.1.0
+
+* Updates
+- The package description and function documentation have been updated for improved clarity and precision.
+- The function **elliptical_Tube_Euclideanization()** added:
+  - Enables the Euclideanization of elliptical tubes for downstream analysis and computations.
+
+===================================================================
+===================================================================
+
+ETRep Version 0.1.0
+
+* First CRAN release
+-Date of publication: 2024-11-04
+
+===================================================================
+===================================================================

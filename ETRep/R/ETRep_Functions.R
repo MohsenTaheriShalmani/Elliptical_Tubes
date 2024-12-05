@@ -101,6 +101,13 @@
 #' @param plotting Logical, enables plotting of the ETRep (default is TRUE).
 #' @param add Logical, enables overlay plotting
 #' @return List containing tube details (orientation, radii, connection lengths, boundary points, etc.).
+#' @references
+#' Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.
+#' \url{https://doi.org/10.48550/arXiv.2404.01043}
+#'
+#' Taheri Shalmani, M. (2024). "Shape Statistics via Skeletal Structures." University of Stavanger.
+#' \url{https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161}
+#'
 #' @examples
 #' numberOfFrames<-15
 #' EulerAngles_alpha<-c(rep(0,numberOfFrames))
@@ -706,12 +713,19 @@ plot_Elliptical_Tube <- function(tube,
 # Calculating the intrinsic mean ETRep
 #' Calculate Intrinsic Mean of ETReps
 #'
-#' Computes the intrinsic mean of a set of ETReps.
+#' Computes the intrinsic mean of a set of ETReps. The computation involves transforming the non-convex hypertrumpet space into a convex space, calculating the mean in this transformed space, and mapping the result back to the original hypertrumpet space.
 #'
 #' @param tubes List of ETReps.
 #' @param type String, "ShapeAnalysis" or "sizeAndShapeAnalysis" (default is "sizeAndShapeAnalysis").
 #' @param plotting Logical, enables visualization of the mean (default is TRUE).
 #' @return List representing the mean ETRep.
+#' @references
+#' Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.
+#' \url{https://doi.org/10.48550/arXiv.2404.01043}
+#'
+#' Taheri Shalmani, M. (2024). "Shape Statistics via Skeletal Structures." University of Stavanger.
+#' \url{https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161}
+#'
 #' @examples
 #' #Example 1
 #' # Load tubes
@@ -802,10 +816,38 @@ intrinsic_mean_tube <- function(tubes,
 
 }
 
+# ETRep Euclideanization
+#' Convert an ETRep to a Matrix in the Convex Transformed Space.
+#'
+#' @param tube A list containing the details of the ETRep.
+#' @return An n*6 matrix, where n is the number of spinal points, representing the ETRep in the transformed Euclidean convex space.
+#' @examples
+#' #Example
+#' # Load tube
+#' data("tube_A")
+#' Euclideanized_Tube<- elliptical_Tube_Euclideanization(tube = tube_A)
+#'
+#' @export
+elliptical_Tube_Euclideanization <- function(tube) {
+
+  Euclideanized_Tube<-.tube2vectorsIn6DCylinder(tube = tube)
+  colnames(Euclideanized_Tube) <- c("v_1", "v_2", "psi","x","a","b")
+
+  return(Euclideanized_Tube)
+}
+
+
 #' Calculating the intrinsic distance between two ETReps
 #' @param tube1 List containing ETRep details.
 #' @param tube2 List containing ETRep details.
 #' @return Numeric
+#' @references
+#' Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.
+#' \url{https://doi.org/10.48550/arXiv.2404.01043}
+#'
+#' Taheri Shalmani, M. (2024). "Shape Statistics via Skeletal Structures." University of Stavanger.
+#' \url{https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161}
+#'
 #' @examples
 #' # Load tubes
 #' data("tube_A")
@@ -832,6 +874,13 @@ intrinsic_Distance_Between2tubes <- function(tube1, tube2) {
 #' @param tube1 List containing ETRep details.
 #' @param tube2 List containing ETRep details.
 #' @return Numeric
+#' @references
+#' Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.
+#' \url{https://doi.org/10.48550/arXiv.2404.01043}
+#'
+#' Taheri Shalmani, M. (2024). "Shape Statistics via Skeletal Structures." University of Stavanger.
+#' \url{https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161}
+#'
 #' @examples
 #' # Load tubes
 #' data("tube_A")
@@ -894,10 +943,10 @@ nonIntrinsic_Distance_Between2tubes<- function(tube1,tube2) {
   return(pathPointsIn_6D_Hyperbola)
 }
 
-# Transformation between two ETReps based on the intrinsic approach
+# Transformation between two ETReps using the intrinsic approach
 #' Intrinsic Transformation Between Two ETReps
 #'
-#' Performs the intrinsic transformation from one ETRep to another.
+#' Performs an intrinsic transformation from one ETRep to another, preserving essential e-tube properties such as the Relative Curvature Condition (RCC) while avoiding local self-intersections.
 #'
 #' @param tube1 List containing details of the first ETRep.
 #' @param tube2 List containing details of the second ETRep.
@@ -906,6 +955,13 @@ nonIntrinsic_Distance_Between2tubes<- function(tube1,tube2) {
 #' @param colorBoundary String defining the color of the e-tube
 #' @param type  String defining the type of analysis as sizeAndShapeAnalysis or shapeAnalysis
 #' @return List containing intermediate ETReps.
+#' @references
+#' Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.
+#' \url{https://doi.org/10.48550/arXiv.2404.01043}
+#'
+#' Taheri Shalmani, M. (2024). "Shape Statistics via Skeletal Structures." University of Stavanger.
+#' \url{https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161}
+#'
 #' @examples
 #' \donttest{
 #' # Load tubes
@@ -1082,10 +1138,11 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 }
 
 
-# Transformation between two ETReps based on the non-intrinsic approach
-#' Non-intrinsic Transformation Between Two ETReps
+# Transformation between two ETReps using the non-intrinsic approach
+#' Non-Intrinsic Transformation Between Two ETReps
 #'
-#' Performs the non-intrinsic transformation from one ETRep to another.
+#' Performs a non-intrinsic transformation from one ETRep to another. This approach is inspired by robotic arm transformations and does not account for the Relative Curvature Condition (RCC).
+#'
 #' @param tube1 List containing details of the first ETRep.
 #' @param tube2 List containing details of the second ETRep.
 #' @param numberOfSteps Integer, number of transformation steps.
@@ -1094,6 +1151,13 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 #' @param type  String defining the type of analysis as sizeAndShapeAnalysis or shapeAnalysis
 #' @param add Logical, enables overlay plotting
 #' @return List containing intermediate ETReps.
+#' @references
+#' Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.
+#' \url{https://doi.org/10.48550/arXiv.2404.01043}
+#'
+#' Taheri Shalmani, M. (2024). "Shape Statistics via Skeletal Structures." University of Stavanger.
+#' \url{https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161}
+#'
 #' @examples
 #' \donttest{
 #' # Load tubes
@@ -1216,10 +1280,10 @@ nonIntrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 }
 
 
-# Calculating the mean ETRep based on the non-intrinsic approach
-#' Calculate Non-Intrinsic Mean of ETReps
+# Calculating the mean ETRep using the non-intrinsic approach
+#' Compute Non-Intrinsic Mean of ETReps
 #'
-#' Computes the non-intrinsic mean of a set of ETReps.
+#' Calculates the non-intrinsic mean of a set of ETReps. This method utilizes a non-intrinsic distance metric based on robotic arm non-intrinsic transformations.
 #'
 #' @param tubes List of ETReps.
 #' @param type String, "ShapeAnalysis" or "sizeAndShapeAnalysis" (default is "sizeAndShapeAnalysis").
@@ -1337,6 +1401,13 @@ nonIntrinsic_mean_tube <- function(tubes,
 #' @param rangeSdScale Numeric range for random scaling.
 #' @param plotting Logical, enables visualization of samples (default is FALSE).
 #' @return List of random ETReps.
+#' @references
+#' Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.
+#' \url{https://doi.org/10.48550/arXiv.2404.01043}
+#'
+#' Taheri Shalmani, M. (2024). "Shape Statistics via Skeletal Structures." University of Stavanger.
+#' \url{https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161}
+#'
 #' @examples
 #' # Load tube
 #' data("colon3D")
@@ -1586,6 +1657,13 @@ simulate_etube <- function(referenceTube,
 #'
 #' @param tube List containing ETRep details.
 #' @return Logical value: TRUE if valid, FALSE otherwise.
+#' @references
+#' Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.
+#' \url{https://doi.org/10.48550/arXiv.2404.01043}
+#'
+#' Taheri Shalmani, M. (2024). "Shape Statistics via Skeletal Structures." University of Stavanger.
+#' \url{https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161}
+#'
 #' @examples
 #' # Load tube
 #' data("colon3D")

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ETRep_Functions.R
 \name{nonIntrinsic_mean_tube}
 \alias{nonIntrinsic_mean_tube}
-\title{Calculate Non-Intrinsic Mean of ETReps}
+\title{Compute Non-Intrinsic Mean of ETReps}
 \usage{
 nonIntrinsic_mean_tube(tubes, type = "sizeAndShapeAnalysis", plotting = TRUE)
 }
@@ -17,7 +17,7 @@ nonIntrinsic_mean_tube(tubes, type = "sizeAndShapeAnalysis", plotting = TRUE)
 List representing the mean ETRep.
 }
 \description{
-Computes the non-intrinsic mean of a set of ETReps.
+Calculates the non-intrinsic mean of a set of ETReps. This method utilizes a non-intrinsic distance metric based on robotic arm non-intrinsic transformations.
 }
 \examples{
 #Example 1

@@ -69,3 +69,10 @@ for (i in 1:numberOfSimulation) {
                        add = TRUE)
 }
 }
+\references{
+Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.
+\url{https://doi.org/10.48550/arXiv.2404.01043}
+
+Taheri Shalmani, M. (2024). "Shape Statistics via Skeletal Structures." University of Stavanger.
+\url{https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161}
+}

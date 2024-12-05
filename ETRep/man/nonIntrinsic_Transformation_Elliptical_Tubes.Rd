@@ -2,7 +2,7 @@
 % Please edit documentation in R/ETRep_Functions.R
 \name{nonIntrinsic_Transformation_Elliptical_Tubes}
 \alias{nonIntrinsic_Transformation_Elliptical_Tubes}
-\title{Non-intrinsic Transformation Between Two ETReps}
+\title{Non-Intrinsic Transformation Between Two ETReps}
 \usage{
 nonIntrinsic_Transformation_Elliptical_Tubes(
   tube1,
@@ -33,7 +33,7 @@ nonIntrinsic_Transformation_Elliptical_Tubes(
 List containing intermediate ETReps.
 }
 \description{
-Performs the non-intrinsic transformation from one ETRep to another.
+Performs a non-intrinsic transformation from one ETRep to another. This approach is inspired by robotic arm transformations and does not account for the Relative Curvature Condition (RCC).
 }
 \examples{
 \donttest{
@@ -55,4 +55,11 @@ for (i in 1:length(transformation_Tubes)) {
   add = FALSE)
 }
 }
+}
+\references{
+Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.
+\url{https://doi.org/10.48550/arXiv.2404.01043}
+
+Taheri Shalmani, M. (2024). "Shape Statistics via Skeletal Structures." University of Stavanger.
+\url{https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161}
 }
