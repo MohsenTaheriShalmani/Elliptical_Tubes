@@ -42,9 +42,16 @@ The repository is linked to the publication mentioned below.
 ## Citation
 
 If you use **ETRep** in your research, please cite it as follows:
-
-**APA Style:**  
-Taheri, M. (2024). *ETRep: Analysis of Elliptical Tubes Under the Relative Curvature Condition* (Version 0.1.0) \[R package\]. The Comprehensive R Archive Network (CRAN). [https://doi.org/10.32614/CRAN.package.ETRep](https://doi.org/10.32614/CRAN.package.ETRep)
+## Cite
+```
+@Manual{ETRep2024,
+  title = {R package ETRep: Analysis of Elliptical Tubes Under the Relative Curvature Condition},
+  author = {Taheri, Mohsen and Schulz, J{\"o}rn and Pizer, Stephen M},
+  year = {2024},
+  url = {https://CRAN.R-project.org/package=ETRep},
+}
+```
+[https://doi.org/10.32614/CRAN.package.ETRep](https://doi.org/10.32614/CRAN.package.ETRep)
 
 ## Installation
 
