@@ -74,7 +74,7 @@ install.packages("ETRep")
 
 
 ### A depiction of the simulated ETReps and their mean shape.
-<img src="Fig4.jpg" width="700">
+![Fig4](Fig4.jpg)
 
 ### Visualization of a valid transformation without any self-intersections
 ![Fig5](Fig5.jpg)
