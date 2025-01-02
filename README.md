@@ -68,6 +68,7 @@ install.packages("ETRep")
 
 
 ## Images from the article
+![Fig0](Fig0.jpg)
 ![Fig1](Fig1.jpg)
 ![Fig2](Fig2.jpg)
 ![Fig3](Fig3.jpg)
