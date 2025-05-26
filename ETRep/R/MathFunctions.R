@@ -326,7 +326,7 @@
   }
 
   if(plotting==TRUE){
-    plot3d(rbind(intersectionPoints,intersectionPoints),type = 'p',col='blue',expand = 10,box=FALSE,add = TRUE)
+    rgl::plot3d(rbind(intersectionPoints,intersectionPoints),type = 'p',col='blue',expand = 10,box=FALSE,add = TRUE)
   }
 
   return(intersectionPoints)
@@ -336,7 +336,7 @@
 #' @keywords internal
 .rotateFrameToMainAxes_standard <- function(myFrame, vectors2rotate) {
 
-  if(!is.SO3(myFrame)){
+  if(!rotations::is.SO3(myFrame)){
     stop('The frame does not belong to SO(3)!')
   }
 
@@ -353,7 +353,7 @@
 #' @keywords internal
 .rotateFrameToMainAxesAndRotateBack_standard <- function(myFrame, vectors_In_I_Axes) {
 
-  if(!is.SO3(myFrame)){
+  if(!rotations::is.SO3(myFrame)){
     stop('The frame does not belong to SO(3)!')
   }
 

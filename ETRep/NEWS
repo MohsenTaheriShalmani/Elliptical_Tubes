@@ -1,4 +1,13 @@
 
+ETRep Version 1.2.0
+
+* Updates
+- The function **tube_Surface_Mesh()** added:
+  - Produce quadrilateral or triangular surface mesh of a tube as an rgl mesh3d object.
+
+===================================================================
+===================================================================
+
 ETRep Version 1.1.0
 
 * Updates

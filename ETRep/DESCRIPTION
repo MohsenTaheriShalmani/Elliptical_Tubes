@@ -1,7 +1,7 @@
 Package: ETRep
 Type: Package
 Title: Analysis of Elliptical Tubes Under the Relative Curvature Condition
-Version: 1.1.0
+Version: 1.2.0
 Authors@R: 
     c(person(given = "Mohsen",
              family = "Taheri Shalmani",
@@ -19,12 +19,16 @@ Description: Analysis of elliptical tubes with applications in biological modeli
 License: MIT + file LICENSE
 URL: https://github.com/MohsenTaheriShalmani/Elliptical_Tubes
 Depends: R (>= 4.0.0)
-Author: Mohsen Taheri Shalmani [aut, cre] (<https://orcid.org/0000-0003-4044-8507>),
-	Jörn Schulz [aut],
-	Stephen M. Pizer [aut]
+Author: Mohsen Taheri Shalmani [aut, cre]
+    (<https://orcid.org/0000-0003-4044-8507>),
+  Jörn Schulz [aut],
+  Stephen M. Pizer [aut]
 Encoding: UTF-8
 LazyData: true
-Imports: rgl, shapes, Morpho, matlib, RiemBase, RSpincalc, rotations,
-        SphericalCubature, Rvcg, fields, Matrix, pracma, truncnorm,
-        ggplot2, reshape2, dplyr, ptinpoly
+Imports: rgl, shapes, Morpho, matlib, RSpincalc, rotations,
+         Rvcg, fields, truncnorm
 RoxygenNote: 7.3.2
+NeedsCompilation: no
+Packaged: 2024-12-05 11:47:55 UTC; mohsentaheri
+Repository: CRAN
+Date/Publication: 2024-12-05 12:40:06 UTC

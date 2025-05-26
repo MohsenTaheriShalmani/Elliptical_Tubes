@@ -1,3 +1,12 @@
+#' @importFrom rgl plot3d shade3d decorate3d open3d qmesh3d tmesh3d
+#' @importFrom grDevices colorRampPalette
+#' @importFrom stats cov pf runif var
+#' @importFrom utils setTxtProgressBar txtProgressBar
+#' @importFrom fields image.plot
+#' @importFrom truncnorm rtruncnorm
+#' @importFrom rotations is.SO3 as.SO3 as.Q4 rot.dist
+
+
 # Calculating the size of an ETRep based on L1 norm
 #' @keywords internal
 .ETRepSize <- function(tube) {
@@ -142,19 +151,19 @@ create_Elliptical_Tube <- function(numberOfFrames,
                                    connectionsLengths,
                                    plotting=TRUE,
                                    add=FALSE) {
-
+  
   if(length(connectionsLengths)==(numberOfFrames-1)){
     connectionsLengths<-c(0,connectionsLengths)
   }
-
+  
   #I<-diag(3)
-
+  
   if(method=="basedOnEulerAngles"){
-
+    
     EulerAngles_alpha<-EulerAngles_Matrix[,1]
     EulerAngles_beta<-EulerAngles_Matrix[,2]
     EulerAngles_gamma<-EulerAngles_Matrix[,3]
-
+    
     materialFramesBasedOnParents<-array(NA,dim = c(3,3,numberOfFrames))
     materialFramesBasedOnParents[,,1]<-initialFrame
     for (i in 2:numberOfFrames) {
@@ -168,10 +177,10 @@ create_Elliptical_Tube <- function(numberOfFrames,
   }else{
     stop("Please specify the method as basedOnEulerAngles or basedOnMaterialFrames !")
   }
-
+  
   framesCenters<-1:numberOfFrames
   framesParents<-c(1,1:(numberOfFrames-1))
-
+  
   materialFramesGlobalCoordinate<-array(NA,dim = dim(materialFramesBasedOnParents))
   materialFramesGlobalCoordinate[,,1]<-initialFrame
   for (k in 2:numberOfFrames) {
@@ -180,9 +189,9 @@ create_Elliptical_Tube <- function(numberOfFrames,
     updatedParent<-materialFramesGlobalCoordinate[,,parent_Index]
     materialFramesGlobalCoordinate[,,child_Index]<-
       .rotateFrameToMainAxesAndRotateBack_standard(myFrame = updatedParent,
-                                                  vectors_In_I_Axes = materialFramesBasedOnParents[,,child_Index])
+                                                   vectors_In_I_Axes = materialFramesBasedOnParents[,,child_Index])
   }
-
+  
   # spinal points
   spinalPoints3D<-array(NA,dim = c(numberOfFrames,3))
   spinalPoints3D[1,]<-initialPoint
@@ -190,10 +199,10 @@ create_Elliptical_Tube <- function(numberOfFrames,
     spinalPoints3D[i+1,]<-spinalPoints3D[i,]+
       connectionsLengths[i+1]*materialFramesGlobalCoordinate[1,,i]
   }
-
+  
   ##################################################################
   #Frenet frames
-
+  
   frenetFramesGlobalCoordinate<-array(NA,dim = c(3,3,numberOfFrames))
   frenetFramesGlobalCoordinate[,,1]<-materialFramesGlobalCoordinate[,,1]
   for (i in 2:(numberOfFrames-1)) {
@@ -206,24 +215,24 @@ create_Elliptical_Tube <- function(numberOfFrames,
       #formula from .geodesicPathOnUnitSphere()
       n_vec<-1/sin(psiTemp)*(sin(pi/2)*u1+sin(psiTemp-pi/2)*u2)
       b_perb_vec<-.convertVec2unitVec2(.myCrossProduct(t_vec,n_vec))
-
+      
       # frenetFramesGlobalCoordinate[,,i]<-as.SO3(rbind(t_vec,n_vec,b_perb_vec))
       frenetFramesGlobalCoordinate[,,i]<-rbind(t_vec,n_vec,b_perb_vec)
-
+      
     }else{
-
+      
       frenetFramesGlobalCoordinate[,,i]<-materialFramesGlobalCoordinate[,,i-1]
     }
   }
   frenetFramesGlobalCoordinate[,,numberOfFrames]<-materialFramesGlobalCoordinate[,,numberOfFrames]
-
+  
   #parent is the local twisting frame
   frenetFramesBasedOnLocalmaterialFrame<-array(NA,dim = c(3,3,numberOfFrames))
   for (i in 1:numberOfFrames) {
     frenetFramesBasedOnLocalmaterialFrame[,,i]<-.rotateFrameToMainAxes_standard(myFrame = materialFramesGlobalCoordinate[,,i],
                                                                                 vectors2rotate = frenetFramesGlobalCoordinate[,,i])
   }
-
+  
   #parent is the previous twisting frame
   frenetFramesBasedOnParents<-array(NA,dim = c(3,3,numberOfFrames))
   frenetFramesBasedOnParents[,,1]<-materialFramesGlobalCoordinate[,,1]
@@ -231,29 +240,29 @@ create_Elliptical_Tube <- function(numberOfFrames,
     frenetFramesBasedOnParents[,,i]<-.rotateFrameToMainAxes_standard(myFrame = materialFramesGlobalCoordinate[,,i-1],
                                                                      vectors2rotate = frenetFramesGlobalCoordinate[,,i])
   }
-
+  
   #normal vectors
   normalVectorsGlobalCoordinate<-t(frenetFramesGlobalCoordinate[2,,])
-
+  
   # theta is positive and equal to d_g(a_i,n_i)
   theta_angles<-rep(NA,numberOfFrames)
   for (i in 1:numberOfFrames) {
     theta_angles[i]<-.calculate_theta(materialFrameBasedOnParent = materialFramesBasedOnParents[,,i])
   }
-
+  
   phi_angles_bend<-rep(NA,numberOfFrames)
   for (i in 1:numberOfFrames) {
     u1<-materialFramesBasedOnParents[1,,i]
     u2<-c(1,0,0)
     phi_angles_bend[i]<-.geodesicDistance(u1,u2)
   }
-
+  
   psi_angles_roll<-rep(NA,numberOfFrames)
   for (i in 1:numberOfFrames) {
     psi_angles_roll[i]<-RSpincalc::DCM2EA(materialFramesBasedOnParents[,,i],
                                           EulerOrder = 'zyx')[3]
   }
-
+  
   #r_project is the projection of the CS on the normal
   r_project_lengths<-rep(NA,numberOfFrames)
   for (i in 1:numberOfFrames) {
@@ -261,13 +270,13 @@ create_Elliptical_Tube <- function(numberOfFrames,
                                                       b = ellipseRadii_b[i],
                                                       theta = theta_angles[i])
   }
-
+  
   #r_max is the extension of r_project to the intersection with the previous slicing plane
   r_max_lengths<-abs(connectionsLengths/sin(phi_angles_bend))
   r_max_lengths[is.infinite(r_max_lengths) | is.na(r_max_lengths)]<-max(r_project_lengths)+1
   r_max_lengths[1]<-max(r_project_lengths)+1
   r_max_lengths[length(r_max_lengths)]<-max(r_project_lengths)+1
-
+  
   tip_r_ProjectVectors<-array(NA,dim = dim(normalVectorsGlobalCoordinate))
   tip_r_MaxVectors<-array(NA,dim = dim(normalVectorsGlobalCoordinate))
   for (i in 1:numberOfFrames) {
@@ -275,16 +284,16 @@ create_Elliptical_Tube <- function(numberOfFrames,
     tip_r_ProjectVectors[i,]<-r_project_lengths[i]*u+spinalPoints3D[i,]
     tip_r_MaxVectors[i,]<-r_max_lengths[i]*u+spinalPoints3D[i,]
   }
-
+  
   ##################################################################
   # cross-sections
-
+  
   ellipseTemplate_2D<-.ellipsoidGenerator_2D_2(center = c(0,0),
                                                a = ellipseRadii_a[1],
                                                b = ellipseRadii_b[1],
                                                n = ellipseResolution,
                                                n2 = 1)
-
+  
   ellipses_2D<-array(NA,c(dim(ellipseTemplate_2D),numberOfFrames))
   for (i in 1:numberOfFrames) {
     ellipses_2D[,,i]<-.ellipsoidGenerator_2D_2(center = c(0,0),
@@ -293,23 +302,23 @@ create_Elliptical_Tube <- function(numberOfFrames,
                                                n = ellipseResolution,
                                                n2 = 1)
   }
-
+  
   slicingEllipsoids<-array(NA,dim = c(nrow(ellipseTemplate_2D),3,nrow(spinalPoints3D)))
   for (i in 1:numberOfFrames) {
-
+    
     ellipseIn3DTemp<-cbind(rep(0,nrow(ellipses_2D[,,i])),ellipses_2D[,,i])
-
+    
     #rotate ellipses with rotation matrices materialFramesGlobalCoordinate
     elipseIn3D<-ellipseIn3DTemp%*%materialFramesGlobalCoordinate[,,i]
     # translate
     elipseIn3D<-elipseIn3D+matrix(rep(spinalPoints3D[i,],nrow(elipseIn3D)),ncol = 3,byrow = TRUE)
-
+    
     slicingEllipsoids[,,i]<-elipseIn3D
   }
-
+  
   boundaryPoints<-matrix(base::aperm(slicingEllipsoids, c(1, 3, 2)), ncol = 3)
-
-
+  
+  
   #plot
   numberOfLayers<-20
   skeletalSheetPoints<-array(NA,dim = c(numberOfLayers*2+1,3,dim(slicingEllipsoids)[3]))
@@ -318,47 +327,47 @@ create_Elliptical_Tube <- function(numberOfFrames,
                                                             slicingEllipsoids[ellipseResolution*2+1,,i],
                                                             numberOfPoints = numberOfLayers*2+1)
   }
-
+  
   #plot
   if(plotting==TRUE){
     if(add==FALSE){
       rgl::open3d()
     }
     for (i in 1:dim(slicingEllipsoids)[3]) {
-      plot3d(rbind(slicingEllipsoids[,,i],slicingEllipsoids[1,,i]),type = 'l',col='black',expand = 10,box=FALSE,add = TRUE)
+      rgl::plot3d(rbind(slicingEllipsoids[,,i],slicingEllipsoids[1,,i]),type = 'l',col='black',expand = 10,box=FALSE,add = TRUE)
     }
     for (i in 1:dim(slicingEllipsoids)[1]) {
-      plot3d(t(slicingEllipsoids[i,,]),type = 'l',col='blue',expand = 10,box=FALSE,add = TRUE)
+      rgl::plot3d(t(slicingEllipsoids[i,,]),type = 'l',col='blue',expand = 10,box=FALSE,add = TRUE)
     }
     #skeletal sheet
     for (i in 1:dim(skeletalSheetPoints)[1]) {
-      plot3d(t(skeletalSheetPoints[i,,]),type = 'l',lwd=1,col='blue',expand = 10,box=FALSE,add = TRUE)
+      rgl::plot3d(t(skeletalSheetPoints[i,,]),type = 'l',lwd=1,col='blue',expand = 10,box=FALSE,add = TRUE)
     }
     for (i in 1:dim(skeletalSheetPoints)[3]) {
-      plot3d(skeletalSheetPoints[,,i],type = 'l',lwd=1,col='blue',expand = 10,box=FALSE,add = TRUE)
+      rgl::plot3d(skeletalSheetPoints[,,i],type = 'l',lwd=1,col='blue',expand = 10,box=FALSE,add = TRUE)
     }
     # # critical vectors
     # for (i in 1:dim(slicingEllipsoids)[3]) {
-    #   plot3d(rbind(spinalPoints3D[i,],normalsTips_at_CS_boundaries[i,]),type = 'l',lwd=4,col='orange',expand = 10,box=FALSE,add = TRUE)
-    #   # plot3d(rbind(colMeans(slicingEllipsoids[,,i]),normalsTips_at_CS_boundaries[i,]),type = 'l',lwd=4,col='red',expand = 10,box=FALSE,add = TRUE)
+    #   rgl::plot3d(rbind(spinalPoints3D[i,],normalsTips_at_CS_boundaries[i,]),type = 'l',lwd=4,col='orange',expand = 10,box=FALSE,add = TRUE)
+    #   # rgl::plot3d(rbind(colMeans(slicingEllipsoids[,,i]),normalsTips_at_CS_boundaries[i,]),type = 'l',lwd=4,col='red',expand = 10,box=FALSE,add = TRUE)
     # }
     for (i in 1:dim(slicingEllipsoids)[3]) {
-      plot3d(rbind(spinalPoints3D[i,],tip_r_ProjectVectors[i,]),type = 'l',lwd=3.2,col='red',expand = 10,box=FALSE,add = TRUE)
-      # plot3d(rbind(spinalPoints3D[i,],tip_r_MaxVectors[i,]),type = 'l',lwd=2,col='orange',expand = 10,box=FALSE,add = TRUE)
+      rgl::plot3d(rbind(spinalPoints3D[i,],tip_r_ProjectVectors[i,]),type = 'l',lwd=3.2,col='red',expand = 10,box=FALSE,add = TRUE)
+      # rgl::plot3d(rbind(spinalPoints3D[i,],tip_r_MaxVectors[i,]),type = 'l',lwd=2,col='orange',expand = 10,box=FALSE,add = TRUE)
     }
     #frames
     matlib::vectors3d(spinalPoints3D+t(materialFramesGlobalCoordinate[1,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="blue", lwd=2)
     matlib::vectors3d(spinalPoints3D+t(materialFramesGlobalCoordinate[2,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="red", lwd=2)
     matlib::vectors3d(spinalPoints3D+t(materialFramesGlobalCoordinate[3,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="green", lwd=2)
-
+    
     #matlib::vectors3d(spinalPoints3D+t(frenetFramesGlobalCoordinate[1,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="black", lwd=2)
     matlib::vectors3d(spinalPoints3D+t(frenetFramesGlobalCoordinate[2,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="black", lwd=2)
     #matlib::vectors3d(spinalPoints3D+t(frenetFramesGlobalCoordinate[3,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="black", lwd=2)
-
+    
     decorate3d()
   }
-
-
+  
+  
   out<-list("spinalPoints3D"=spinalPoints3D,
             "materialFramesBasedOnParents"=materialFramesBasedOnParents,
             "materialFramesGlobalCoordinate"=materialFramesGlobalCoordinate,
@@ -377,6 +386,111 @@ create_Elliptical_Tube <- function(numberOfFrames,
             "slicingEllipsoids"=slicingEllipsoids,
             "boundaryPoints"=boundaryPoints,
             "skeletalSheetPoints"=skeletalSheetPoints)
+}
+
+#' Create surface mesh of a tube
+#' @param tube List containing ETRep details.
+#' @param meshType String, either "quadrilateral" or "triangular" definig the type of mesh.
+#' @param plotMesh Logical, enables plotting of the mesh (default is TRUE).
+#' @param color String, defining the color of the mesh (default is 'blue').
+#' @param decorate Logical, enables decorating the plot (default is TRUE).
+#' @return An object from rgl::mesh3d class
+#' @examples
+#' quad_mesh<-tube_Surface_Mesh(tube = ETRep::tube_B, 
+#'                              meshType = "quadrilateral", 
+#'                              plotMesh = TRUE, 
+#'                              decorate = TRUE, 
+#'                              color = "orange")
+#' tri_mesh<-tube_Surface_Mesh(tube = ETRep::tube_B, 
+#'                             meshType = "triangular", 
+#'                             plotMesh = TRUE, 
+#'                             decorate = TRUE, 
+#'                             color = "green")
+#' @export
+tube_Surface_Mesh <- function(tube,
+                              meshType="quadrilateral",
+                              plotMesh=TRUE,
+                              color='blue',
+                              decorate=TRUE) {
+  
+  slicingEllipsoids<-tube$slicingEllipsoids
+  spinePoints<-tube$spinalPoints3D
+  
+  N <- dim(slicingEllipsoids)[3]  # Number of ellipses
+  M <- dim(slicingEllipsoids)[1]  # Number of points per ellipse
+  
+  # Compute vertices (M * N rows)
+  vertices_list <- lapply(1:N, function(j) slicingEllipsoids[, , j])
+  vertices <- do.call(rbind, vertices_list)
+  vertices <- t(cbind(vertices, rep(1, nrow(vertices)))) 
+  
+  # Build quad faces
+  quads <- matrix(0, nrow = 4, ncol = M * (N - 1))
+  face_idx <- 1
+  for (j in 1:(N - 1)) {
+    for (i in 1:M) {
+      i_next <- if (i < M) i + 1 else 1
+      v1 <- (j - 1) * M + i
+      v2 <- (j - 1) * M + i_next
+      v3 <- j * M + i_next
+      v4 <- j * M + i
+      quads[, face_idx] <- c(v1, v2, v3, v4)
+      face_idx <- face_idx + 1
+    }
+  }
+  
+  quad_mesh <- rgl::qmesh3d(vertices = vertices,
+                            indices = quads)
+  
+  if(meshType=="quadrilateral"){
+    if(plotMesh==TRUE){
+      rgl::open3d()
+      rgl::shade3d(quad_mesh,color=color)
+      if(decorate==TRUE){
+        rgl::decorate3d()
+      }
+    }
+    return(quad_mesh)
+    
+  }else if(meshType=="triangular"){
+    
+    # Extract quad faces and vertex buffer
+    quads <- quad_mesh$ib
+    vb <- quad_mesh$vb
+    
+    n_quads <- ncol(quads)
+    triangles <- matrix(0, nrow = 3, ncol = 2 * n_quads)
+    
+    for (i in 1:n_quads) {
+      v1 <- quads[1, i]
+      v2 <- quads[2, i]
+      v3 <- quads[3, i]
+      v4 <- quads[4, i]
+      
+      # Triangle 1: v1, v2, v3
+      triangles[, 2 * i - 1] <- c(v1, v2, v3)
+      
+      # Triangle 2: v1, v3, v4
+      triangles[, 2 * i] <- c(v1, v3, v4)
+    }
+    
+    # Create a triangle mesh
+    tri_mesh<-rgl::tmesh3d(vertices = vb, indices = triangles, homogeneous = TRUE)
+    
+    if(plotMesh==TRUE){
+      rgl::open3d()
+      rgl::shade3d(tri_mesh,color=color)
+      if(decorate==TRUE){
+        rgl::decorate3d()
+      }
+    }
+    
+    return(tri_mesh)
+    
+  }else{
+    stop("Please choose quadrilateral or triangular for meshType!")
+  }
+  
 }
 
 
@@ -452,47 +566,47 @@ plot_Elliptical_Tube <- function(tube,
   }
   #spine
   if(plot_spine==TRUE){
-    plot3d(spinalPoints3D,type = 'l',expand = 10,box=FALSE,add = TRUE)
+    rgl::plot3d(spinalPoints3D,type = 'l',expand = 10,box=FALSE,add = TRUE)
   }
   #boundary
   if(plot_boundary==TRUE){
     for (i in 1:dim(slicingEllipsoids)[3]) {
-      plot3d(rbind(slicingEllipsoids[,,i],slicingEllipsoids[1,,i]),type = 'l',col=colorBoundary,expand = 10,box=FALSE,add = TRUE)
+      rgl::plot3d(rbind(slicingEllipsoids[,,i],slicingEllipsoids[1,,i]),type = 'l',col=colorBoundary,expand = 10,box=FALSE,add = TRUE)
     }
     for (i in 1:dim(slicingEllipsoids)[1]) {
-      plot3d(t(slicingEllipsoids[i,,]),type = 'l',col=colorBoundary,expand = 10,box=FALSE,add = TRUE)
+      rgl::plot3d(t(slicingEllipsoids[i,,]),type = 'l',col=colorBoundary,expand = 10,box=FALSE,add = TRUE)
     }
   }
   #skeletal sheet
   if(plot_skeletal_sheet==TRUE){
     for (i in 1:dim(skeletalSheetPoints)[1]) {
-      plot3d(t(skeletalSheetPoints[i,,]),type = 'l',lwd=1,col=colSkeletalSheet,expand = 10,box=FALSE,add = TRUE)
+      rgl::plot3d(t(skeletalSheetPoints[i,,]),type = 'l',lwd=1,col=colSkeletalSheet,expand = 10,box=FALSE,add = TRUE)
     }
     for (i in 1:dim(skeletalSheetPoints)[3]) {
-      plot3d(skeletalSheetPoints[,,i],type = 'l',lwd=1,col=colSkeletalSheet,expand = 10,box=FALSE,add = TRUE)
+      rgl::plot3d(skeletalSheetPoints[,,i],type = 'l',lwd=1,col=colSkeletalSheet,expand = 10,box=FALSE,add = TRUE)
     }
   }
   # # critical vectors
   # for (i in 1:dim(slicingEllipsoids)[3]) {
-  #   plot3d(rbind(spinalPoints3D[i,],criticalVectorsTip[i,]),type = 'l',lwd=4,col='orange',expand = 10,box=FALSE,add = TRUE)
-  #   # plot3d(rbind(colMeans(slicingEllipsoids[,,i]),criticalVectorsTip[i,]),type = 'l',lwd=4,col='red',expand = 10,box=FALSE,add = TRUE)
+  #   rgl::plot3d(rbind(spinalPoints3D[i,],criticalVectorsTip[i,]),type = 'l',lwd=4,col='orange',expand = 10,box=FALSE,add = TRUE)
+  #   # rgl::plot3d(rbind(colMeans(slicingEllipsoids[,,i]),criticalVectorsTip[i,]),type = 'l',lwd=4,col='red',expand = 10,box=FALSE,add = TRUE)
   # }
 
   if(plot_r_project==TRUE){
     for (i in 1:dim(slicingEllipsoids)[3]) {
-      plot3d(rbind(spinalPoints3D[i,],tip_r_ProjectVectors[i,]),type = 'l',lty = 3,lwd=3.2,col='red',expand = 10,box=FALSE,add = TRUE)
-      # plot3d(rbind(spinalPoints3D[i,],tip_r_MaxVectors[i,]),type = 'l',lwd=2,col='orange',expand = 10,box=FALSE,add = TRUE)
+      rgl::plot3d(rbind(spinalPoints3D[i,],tip_r_ProjectVectors[i,]),type = 'l',lty = 3,lwd=3.2,col='red',expand = 10,box=FALSE,add = TRUE)
+      # rgl::plot3d(rbind(spinalPoints3D[i,],tip_r_MaxVectors[i,]),type = 'l',lwd=2,col='orange',expand = 10,box=FALSE,add = TRUE)
     }
   }
 
   if(plot_r_max==TRUE){
     for (i in 1:dim(slicingEllipsoids)[3]) {
-      plot3d(rbind(spinalPoints3D[i,],tip_r_MaxVectors[i,]),type = 'l',lwd=2,col='orange',expand = 10,box=FALSE,add = TRUE)
+      rgl::plot3d(rbind(spinalPoints3D[i,],tip_r_MaxVectors[i,]),type = 'l',lwd=2,col='orange',expand = 10,box=FALSE,add = TRUE)
     }
   }
 
   if(plot_frames==TRUE){
-    plot3d(spinalPoints3D,type = 'l',lwd=4,col='darkblue',expand = 10,box=FALSE,add = TRUE)
+    rgl::plot3d(spinalPoints3D,type = 'l',lwd=4,col='darkblue',expand = 10,box=FALSE,add = TRUE)
     #frames
     matlib::vectors3d(spinalPoints3D+frameScaling*t(materialFramesGlobalCoordinate[1,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="blue", lwd=frameScaling)
     matlib::vectors3d(spinalPoints3D+frameScaling*t(materialFramesGlobalCoordinate[2,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="red", lwd=frameScaling)
@@ -898,11 +1012,11 @@ nonIntrinsic_Distance_Between2tubes<- function(tube1,tube2) {
 
   distancesMaterialFrames<-rep(NA,numberOfFrames)
   for (i in 1:numberOfFrames) {
-    # q1_twist<-as.vector(as.Q4(as.SO3(tube1$materialFramesBasedOnParents[,,i])))
-    # q2_twist<-as.vector(as.Q4(as.SO3(tube2$materialFramesBasedOnParents[,,i])))
+    # q1_twist<-as.vector(rotations::as.Q4(rotations::as.SO3(tube1$materialFramesBasedOnParents[,,i])))
+    # q2_twist<-as.vector(rotations::as.Q4(rotations::as.SO3(tube2$materialFramesBasedOnParents[,,i])))
     # distancesMaterialFrames[i]<-.geodesicDistance(q1_twist,q2_twist)
-    distancesMaterialFrames[i]<-rot.dist(as.SO3(tube1$materialFramesBasedOnParents[,,i]),
-                                         as.SO3(tube2$materialFramesBasedOnParents[,,i]),
+    distancesMaterialFrames[i]<-rot.dist(rotations::as.SO3(tube1$materialFramesBasedOnParents[,,i]),
+                                         rotations::as.SO3(tube2$materialFramesBasedOnParents[,,i]),
                                          method="intrinsic")
   }
 
@@ -1207,7 +1321,7 @@ nonIntrinsic_Transformation_Elliptical_Tubes <- function(tube1,
                                                            as.vector(q2_twist),
                                                            numberOfneededPoints = numberOfSteps)
       for (j in 1:numberOfSteps) {
-        materialFramesBasedOnParents_Steps[,,i,j]<-rotations::as.SO3(as.Q4(q4pointsOnAGeodesic_twist[j,]))
+        materialFramesBasedOnParents_Steps[,,i,j]<-rotations::as.SO3(rotations::as.Q4(q4pointsOnAGeodesic_twist[j,]))
       }
     }
   }
@@ -1532,13 +1646,13 @@ simulate_etube <- function(referenceTube,
 
   #rgl::open3d()
   for (i in 1:length(list_of_rows)) {
-    plot3d(ellipses[[i]],type = 'l',col=colorBoundary,expand = 10,box=FALSE,add = TRUE)
+    rgl::plot3d(ellipses[[i]],type = 'l',col=colorBoundary,expand = 10,box=FALSE,add = TRUE)
   }
   for (i in 1:d) {
     ith_Points <- do.call(rbind, lapply(ellipses, function(x) x[i, ]))
-    plot3d(ith_Points ,type = 'l',col=colorBoundary,expand = 10,box=FALSE,add = TRUE)
+    rgl::plot3d(ith_Points ,type = 'l',col=colorBoundary,expand = 10,box=FALSE,add = TRUE)
   }
-  plot3d(centroids,type = 'l',col=colorSpine,lwd=3,expand = 10,box=FALSE,add = TRUE)
+  rgl::plot3d(centroids,type = 'l',col=colorSpine,lwd=3,expand = 10,box=FALSE,add = TRUE)
   #decorate3d()
 }
 
@@ -1743,15 +1857,15 @@ check_Tube_Legality <- function(tube) {
   if(plotting==TRUE){
     rgl::open3d()
     shade3d(tmesh,col="white",alpha=0.2)
-    plot3d(slicesCentroids,type="s",radius = 0.2,col = colorRadialVectors,expand = 10,box=FALSE,add = TRUE)
-    plot3d(slicesCentroids,type="l",lwd=4,col = colorRadialVectors,expand = 10,box=FALSE,add = TRUE)
+    rgl::plot3d(slicesCentroids,type="s",radius = 0.2,col = colorRadialVectors,expand = 10,box=FALSE,add = TRUE)
+    rgl::plot3d(slicesCentroids,type="l",lwd=4,col = colorRadialVectors,expand = 10,box=FALSE,add = TRUE)
 
     #plot slicing-planes
     rangeSquare<-10
     square<-rbind(c(-rangeSquare,0,-rangeSquare),c(-rangeSquare,0,rangeSquare),c(rangeSquare,0,rangeSquare),c(rangeSquare,0,-rangeSquare))
     for (i in 1:nrow(slicesCentroids)) {
       slicingPlaneTemp<-square+matrix(rep(slicesCentroids[i,],4),ncol = 3,byrow = TRUE)
-      plot3d(rbind(slicingPlaneTemp,slicingPlaneTemp[1,]),type="l",lwd=2,col = "grey",expand = 10,box=FALSE,add = TRUE)
+      rgl::plot3d(rbind(slicingPlaneTemp,slicingPlaneTemp[1,]),type="l",lwd=2,col = "grey",expand = 10,box=FALSE,add = TRUE)
     }
 
     matlib::vectors3d(radialSpokesTips,
