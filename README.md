@@ -72,16 +72,12 @@ The previous versions are available at:
 ---
 
 ## Images from the article
-![Fig0](Fig0.jpg)
-![Fig1](Fig1.jpg)
-![Fig2](Fig2.jpg)
-![Fig3](Fig3.jpg)
 
 <p align="center">
-  <img src="Fig0.jpg" alt="Fig0" width="50%"/>
+  <img src="Fig0.jpg" alt="Fig0" width="100%"/>
   <img src="Fig1.jpg" alt="Fig1" width="50%"/>
   <img src="Fig2.jpg" alt="Fig2" width="50%"/>
-  <img src="Fig3.jpg" alt="Fig3" width="50%"/>
+  <img src="Fig3.jpg" alt="Fig3" width="100%"/>
 </p>
 
 ### Visualization of the surface mesh of two elliptical tubes
