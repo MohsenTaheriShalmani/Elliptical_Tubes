@@ -78,6 +78,8 @@ The previous versions are available at:
 ![Fig2](Fig2.jpg)
 ![Fig3](Fig3.jpg)
 
+### Visualization surface mesh of two tubes
+![Fig6](Fig6.png)
 
 ### A depiction of the simulated ETReps and their mean shape.
 ![Fig4](Fig4.jpg)
