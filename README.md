@@ -64,6 +64,11 @@ install.packages("ETRep")
 
 **ETRep** offers a range of functions and documentation to aid in analyzing and visualizing elliptical tubes. The package supports complex shape simulations and includes supplementary materials to help users navigate its functionality effectively.
 
+## CRAN Archive
+The previous versions are available at:
+
+[https://cran.r-project.org/src/contrib/Archive/ETRep/](https://cran.r-project.org/src/contrib/Archive/ETRep/)
+
 ---
 
 
