@@ -74,22 +74,22 @@ The previous versions are available at:
 ## Images from the article
 
 <p align="center">
-  <img src="Fig0.jpg" alt="Fig0" width="100%"/>
-  <img src="Fig1.jpg" alt="Fig1" width="80%"/>
-  <img src="Fig2.jpg" alt="Fig2" width="80%"/>
-  <img src="Fig3.jpg" alt="Fig3" width="100%"/>
+  <img src="Figures/Fig0.jpg" alt="Fig0" width="100%"/>
+  <img src="Figures/Fig1.jpg" alt="Fig1" width="80%"/>
+  <img src="Figures/Fig2.jpg" alt="Fig2" width="80%"/>
+  <img src="Figures/Fig3.jpg" alt="Fig3" width="100%"/>
 </p>
 
 ### Visualization of the surface mesh of two elliptical tubes
 <p align="center">
-  <img src="Fig6.png" alt="Fig6" width="80%"/>
+  <img src="Figures/Fig6.png" alt="Fig6" width="80%"/>
 </p>
 
 ### A depiction of the simulated ETReps and their mean shape.
-![Fig4](Fig4.jpg)
+![Fig4](Figures/Fig4.jpg)
 
 ### Visualization of a valid transformation without any self-intersections
-![Fig5](Fig5.jpg)
+![Fig5](Figures/Fig5.jpg)
 
 
 
