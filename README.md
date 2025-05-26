@@ -71,14 +71,13 @@ The previous versions are available at:
 
 ---
 
-
 ## Images from the article
 ![Fig0](Fig0.jpg)
 ![Fig1](Fig1.jpg)
 ![Fig2](Fig2.jpg)
 ![Fig3](Fig3.jpg)
 
-### Visualization surface mesh of two tubes
+### Visualization of the surface mesh of two elliptical tubes
 ![Fig6](Fig6.png)
 
 ### A depiction of the simulated ETReps and their mean shape.
