@@ -69,6 +69,10 @@ The previous versions are available at:
 
 [https://cran.r-project.org/src/contrib/Archive/ETRep/](https://cran.r-project.org/src/contrib/Archive/ETRep/)
 
+## Link to Author's Google Site
+Elliptical Tube Analysis
+[https://sites.google.com/view/mohsen-taheri/elliptical-tube](https://sites.google.com/view/mohsen-taheri/elliptical-tube)
+
 ---
 
 ## Images from the article
