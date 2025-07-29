@@ -10,21 +10,21 @@ The repository is linked to the publication mentioned below.
 ---
 
 ## Article "The Mean Shape under the Relative Curvature Condition"
-[https://doi.org/10.48550/arXiv.2404.01043](https://doi.org/10.48550/arXiv.2404.01043)
+[https://doi.org/10.1080/10618600.2025.2535600](https://doi.org/10.1080/10618600.2025.2535600)
 
 ## PhD Thesis "Shape Statistics via Skeletal Structures"
 [PhD Thesis](https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161)
 
 ## Cite
 ```
-@misc{taheri2024mean,
-      title={The Mean Shape under the Relative Curvature Condition}, 
-      author={Mohsen Taheri and Stephen M. Pizer and Jörn Schulz},
-      year={2024},
-      eprint={2404.01043},
-      archivePrefix={arXiv},
-      url={https://doi.org/10.48550/arXiv.2404.01043},
-      primaryClass={stat.ME}
+@article{taheri2025mean,
+  title={The Mean Shape under the Relative Curvature Condition},
+  author={Taheri Shalmani, Mohsen and Pizer, Stephen M and Schulz, J{\"o}rn},
+  journal={Journal of Computational and Graphical Statistics},
+  pages={1--21},
+  year={2025},
+  publisher={Taylor \& Francis},
+  url={https://doi.org/10.1080/10618600.2025.2535600}
 }
 ```
 
@@ -46,9 +46,11 @@ If you use **ETRep** in your research, please cite it as follows:
 ```
 @Manual{ETRep2024,
   title = {R package ETRep: Analysis of Elliptical Tubes Under the Relative Curvature Condition},
-  author = {Taheri, Mohsen and Schulz, J{\"o}rn and Pizer, Stephen M},
+  author = {Taheri Shalmani, Mohsen and Schulz, J{\"o}rn and Pizer, Stephen M},
   year = {2024},
-  url = {https://CRAN.R-project.org/package=ETRep},
+  note = {R package},
+  doi  = {10.32614/CRAN.package.ETRep},
+  url = {https://CRAN.R-project.org/package=ETRep}
 }
 ```
 [https://doi.org/10.32614/CRAN.package.ETRep](https://doi.org/10.32614/CRAN.package.ETRep)
