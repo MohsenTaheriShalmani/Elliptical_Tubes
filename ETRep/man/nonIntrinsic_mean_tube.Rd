@@ -28,12 +28,14 @@ nonIntrinsic_mean<-
   nonIntrinsic_mean_tube(tubes = list(tube_A,tube_B),
                          plotting = FALSE)
 # Plotting
+\dontrun{
 plot_Elliptical_Tube(tube = nonIntrinsic_mean,
                      plot_frames = FALSE,
                      plot_skeletal_sheet = FALSE,
                      plot_r_project = FALSE,
                      plot_r_max = FALSE,
                      add = FALSE)
+ }
 
 #Example 2
 data("simulatedColons")
@@ -41,10 +43,12 @@ nonIntrinsic_mean<-
   nonIntrinsic_mean_tube(tubes = simulatedColons,
                          plotting = FALSE)
 # Plotting
+\dontrun{
 plot_Elliptical_Tube(tube = nonIntrinsic_mean,
                      plot_frames = FALSE,
                      plot_skeletal_sheet = FALSE,
                      plot_r_project = FALSE,
                      plot_r_max = FALSE,
                      add = FALSE)
+ }
 }

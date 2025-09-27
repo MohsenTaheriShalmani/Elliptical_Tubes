@@ -15,8 +15,7 @@ create_Elliptical_Tube(
   ellipseRadii_a,
   ellipseRadii_b,
   connectionsLengths,
-  plotting = TRUE,
-  add = FALSE
+  plotting = TRUE
 )
 }
 \arguments{
@@ -41,8 +40,6 @@ create_Elliptical_Tube(
 \item{connectionsLengths}{Numeric vector for lengths of spinal connection vectors.}
 
 \item{plotting}{Logical, enables plotting of the ETRep (default is TRUE).}
-
-\item{add}{Logical, enables overlay plotting}
 }
 \value{
 List containing tube details (orientation, radii, connection lengths, boundary points, etc.).
@@ -66,11 +63,13 @@ tube <- create_Elliptical_Tube(numberOfFrames = numberOfFrames,
                                ellipseRadii_b = rep(2, numberOfFrames),
                                connectionsLengths = rep(4, numberOfFrames),
                                plotting = FALSE)
- # Plotting
+# Plotting
+\dontrun{
  plot_Elliptical_Tube(tube = tube,plot_frames = FALSE,
                       plot_skeletal_sheet = TRUE,
                       plot_r_project = FALSE,
                       plot_r_max = FALSE,add = FALSE)
+ }
 }
 \references{
 Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.

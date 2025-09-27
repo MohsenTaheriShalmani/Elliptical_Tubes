@@ -42,12 +42,13 @@ List of random ETReps.
 Generates random samples of ETReps based on a reference tube with added variation.
 }
 \examples{
+\donttest{
 # Load tube
 data("colon3D")
 #Set Parameters
 sd_v<-sd_psi<-1e-03
 sd_x<-sd_a<-sd_b<-1e-04
-numberOfSimulation<-3
+numberOfSimulation<-4
 random_Tubes<-
   simulate_etube(referenceTube = colon3D,
                  numberOfSimulation = numberOfSimulation,
@@ -59,14 +60,12 @@ random_Tubes<-
                  rangeSdScale = c(1, 2),
                  plotting = FALSE)
 # Plotting
-rgl::open3d()
-for (i in 1:numberOfSimulation) {
-  plot_Elliptical_Tube(tube = random_Tubes[[i]],
-                       plot_frames = FALSE,
-                       plot_skeletal_sheet = FALSE,
-                       plot_r_project = FALSE,
-                       plot_r_max = FALSE,
-                       add = TRUE)
+\dontrun{
+plot_Elliptical_Tube(random_Tubes[[1]], add = FALSE)
+plot_Elliptical_Tube(random_Tubes[[2]], add = TRUE)
+plot_Elliptical_Tube(random_Tubes[[3]], add = TRUE)
+plot_Elliptical_Tube(random_Tubes[[4]], add = TRUE)
+ }
 }
 }
 \references{

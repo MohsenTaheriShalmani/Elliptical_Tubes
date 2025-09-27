@@ -56,7 +56,8 @@ Plots a given ETRep with options for boundary, material frames, and projection v
 \examples{
 # Load tube
 data("colon3D")
+\dontrun{
 plot_Elliptical_Tube(tube = colon3D,
-                     plot_frames = FALSE,
-                     add=FALSE)
+                     plot_frames = FALSE)
+ }
 }

@@ -28,12 +28,14 @@ intrinsic_mean<-
   intrinsic_mean_tube(tubes = list(tube_A,tube_B),
                       plotting = FALSE)
 # Plotting
+\dontrun{
 plot_Elliptical_Tube(tube = intrinsic_mean,
                      plot_frames = FALSE,
                      plot_skeletal_sheet = FALSE,
                      plot_r_project = FALSE,
                      plot_r_max = FALSE,
                      add = FALSE)
+ }
 
 #Example 2
 data("simulatedColons")
@@ -41,12 +43,14 @@ intrinsic_mean<-
   intrinsic_mean_tube(tubes = simulatedColons,
                       plotting = FALSE)
 # Plotting
+\dontrun{
 plot_Elliptical_Tube(tube = intrinsic_mean,
                      plot_frames = FALSE,
                      plot_skeletal_sheet = FALSE,
                      plot_r_project = FALSE,
                      plot_r_max = FALSE,
                      add = FALSE)
+ }
 }
 \references{
 Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.

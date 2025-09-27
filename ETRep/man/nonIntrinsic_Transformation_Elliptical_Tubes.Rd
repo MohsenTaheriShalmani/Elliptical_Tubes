@@ -47,6 +47,7 @@ transformation_Tubes<-
     numberOfSteps = numberOfSteps,
     plotting = FALSE)
 # Plotting
+\dontrun{
 for (i in 1:length(transformation_Tubes)) {
   plot_Elliptical_Tube(tube = transformation_Tubes[[i]],
   plot_frames = FALSE,plot_skeletal_sheet = FALSE
@@ -54,6 +55,7 @@ for (i in 1:length(transformation_Tubes)) {
   plot_r_max = FALSE,
   add = FALSE)
 }
+ }
 }
 }
 \references{

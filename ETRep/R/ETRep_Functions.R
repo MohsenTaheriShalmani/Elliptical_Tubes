@@ -6,7 +6,6 @@
 #' @importFrom truncnorm rtruncnorm
 #' @importFrom rotations is.SO3 as.SO3 as.Q4 rot.dist
 
-
 # Calculating the size of an ETRep based on L1 norm
 #' @keywords internal
 .ETRepSize <- function(tube) {
@@ -108,7 +107,6 @@
 #' @param initialFrame Matrix 3 x 3 as the initial frame
 #' @param initialPoint Real vector with three elemets as the initial point
 #' @param plotting Logical, enables plotting of the ETRep (default is TRUE).
-#' @param add Logical, enables overlay plotting
 #' @return List containing tube details (orientation, radii, connection lengths, boundary points, etc.).
 #' @references
 #' Taheri, M., Pizer, S. M., & Schulz, J. (2024). "The Mean Shape under the Relative Curvature Condition." arXiv.
@@ -133,11 +131,13 @@
 #'                                ellipseRadii_b = rep(2, numberOfFrames),
 #'                                connectionsLengths = rep(4, numberOfFrames),
 #'                                plotting = FALSE)
-#'  # Plotting
+#' # Plotting
+#' \dontrun{
 #'  plot_Elliptical_Tube(tube = tube,plot_frames = FALSE,
 #'                       plot_skeletal_sheet = TRUE,
 #'                       plot_r_project = FALSE,
 #'                       plot_r_max = FALSE,add = FALSE)
+#'  }
 #' @export
 create_Elliptical_Tube <- function(numberOfFrames,
                                    method,
@@ -149,8 +149,7 @@ create_Elliptical_Tube <- function(numberOfFrames,
                                    ellipseRadii_a,
                                    ellipseRadii_b,
                                    connectionsLengths,
-                                   plotting=TRUE,
-                                   add=FALSE) {
+                                   plotting=TRUE) {
   
   if(length(connectionsLengths)==(numberOfFrames-1)){
     connectionsLengths<-c(0,connectionsLengths)
@@ -330,9 +329,9 @@ create_Elliptical_Tube <- function(numberOfFrames,
   
   #plot
   if(plotting==TRUE){
-    if(add==FALSE){
-      rgl::open3d()
-    }
+    
+    .etrep_open3d(show_widget = TRUE)   
+    
     for (i in 1:dim(slicingEllipsoids)[3]) {
       rgl::plot3d(rbind(slicingEllipsoids[,,i],slicingEllipsoids[1,,i]),type = 'l',col='black',expand = 10,box=FALSE,add = TRUE)
     }
@@ -365,8 +364,12 @@ create_Elliptical_Tube <- function(numberOfFrames,
     #matlib::vectors3d(spinalPoints3D+t(frenetFramesGlobalCoordinate[3,,]),origin = spinalPoints3D,headlength = 0.1,radius = 1/10, col="black", lwd=2)
     
     decorate3d()
+    
+    ## if we are using NULL device (macOS), open browser
+    if (getOption("rgl.useNULL", FALSE)) {
+      .etrep_show3d()                       # <-- opens the plot in browser
+    }
   }
-  
   
   out<-list("spinalPoints3D"=spinalPoints3D,
             "materialFramesBasedOnParents"=materialFramesBasedOnParents,
@@ -396,16 +399,27 @@ create_Elliptical_Tube <- function(numberOfFrames,
 #' @param decorate Logical, enables decorating the plot (default is TRUE).
 #' @return An object from rgl::mesh3d class
 #' @examples
+#' \dontrun{
 #' quad_mesh<-tube_Surface_Mesh(tube = ETRep::tube_B, 
 #'                              meshType = "quadrilateral", 
 #'                              plotMesh = TRUE, 
 #'                              decorate = TRUE, 
 #'                              color = "orange")
+#' # draw wireframe of the mesh
+#' rgl::wire3d(quad_mesh, color = "black", lwd = 1)   # add wireframe
+#' # Display in browser
+#' ETRep:::.etrep_show3d(width = 800, height = 600)
+#' 
 #' tri_mesh<-tube_Surface_Mesh(tube = ETRep::tube_B, 
 #'                             meshType = "triangular", 
 #'                             plotMesh = TRUE, 
 #'                             decorate = TRUE, 
 #'                             color = "green")
+#' # draw wireframe of the mesh
+#' rgl::wire3d(tri_mesh, color = "black", lwd = 1)   # add wireframe
+#' # Display in browser
+#' ETRep:::.etrep_show3d(width = 800, height = 600)
+#'  }
 #' @export
 tube_Surface_Mesh <- function(tube,
                               meshType="quadrilateral",
@@ -444,10 +458,14 @@ tube_Surface_Mesh <- function(tube,
   
   if(meshType=="quadrilateral"){
     if(plotMesh==TRUE){
-      rgl::open3d()
+      .etrep_open3d(show_widget = TRUE) 
       rgl::shade3d(quad_mesh,color=color)
       if(decorate==TRUE){
         rgl::decorate3d()
+      }
+      ## if we are using NULL device (macOS), open browser
+      if (getOption("rgl.useNULL", FALSE)) {
+        .etrep_show3d()                       # <-- opens the plot in browser
       }
     }
     return(quad_mesh)
@@ -478,10 +496,14 @@ tube_Surface_Mesh <- function(tube,
     tri_mesh<-rgl::tmesh3d(vertices = vb, indices = triangles, homogeneous = TRUE)
     
     if(plotMesh==TRUE){
-      rgl::open3d()
+      .etrep_open3d(show_widget = TRUE) 
       rgl::shade3d(tri_mesh,color=color)
       if(decorate==TRUE){
         rgl::decorate3d()
+      }
+      ## if we are using NULL device (macOS), open browser
+      if (getOption("rgl.useNULL", FALSE)) {
+        .etrep_show3d()                       # <-- opens the plot in browser
       }
     }
     
@@ -516,9 +538,10 @@ tube_Surface_Mesh <- function(tube,
 #' @examples
 #' # Load tube
 #' data("colon3D")
+#' \dontrun{
 #' plot_Elliptical_Tube(tube = colon3D,
-#'                      plot_frames = FALSE,
-#'                      add=FALSE)
+#'                      plot_frames = FALSE)
+#'  }
 #' @export
 plot_Elliptical_Tube <- function(tube,
                                  plot_boundary=TRUE,
@@ -560,10 +583,16 @@ plot_Elliptical_Tube <- function(tube,
   }
 
 
-  #plot
-  if(add==FALSE){
-    rgl::open3d()
+  ## ---------------------------------------------------------
+  ## Open device
+  ## ---------------------------------------------------------
+  if(!add){
+    .etrep_open3d(show_widget = FALSE) 
   }
+  
+  ## ---------------------------------------------------------
+  ## Drawing code
+  ## ---------------------------------------------------------
   #spine
   if(plot_spine==TRUE){
     rgl::plot3d(spinalPoints3D,type = 'l',expand = 10,box=FALSE,add = TRUE)
@@ -617,6 +646,13 @@ plot_Elliptical_Tube <- function(tube,
     #matlib::vectors3d(spinalPoints3D+frameScaling*t(frenetFramesGlobalCoordinate[1,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="black", lwd=frameScaling)
     matlib::vectors3d(spinalPoints3D+frameScaling*t(frenetFramesGlobalCoordinate[2,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="black", lwd=frameScaling)
     #matlib::vectors3d(spinalPoints3D+frameScaling*t(frenetFramesGlobalCoordinate[3,,]),origin = spinalPoints3D,headlength = 0.1*frameScaling,radius = frameScaling/10, col="black", lwd=frameScaling)
+  }
+  
+  ## ---------------------------------------------------------
+  ## If we’re using the NULL device (i.e. macOS), open browser
+  ## ---------------------------------------------------------
+  if(getOption("rgl.useNULL", FALSE)){
+    .etrep_show3d()
   }
 
 }
@@ -796,8 +832,7 @@ plot_Elliptical_Tube <- function(tube,
                                ellipseRadii_a = ellipseRadii_a,
                                ellipseRadii_b = ellipseRadii_b,
                                connectionsLengths = connectionsLengths,
-                               plotting = FALSE,
-                               add = FALSE)
+                               plotting = FALSE)
   return(tube)
 
 }
@@ -849,12 +884,14 @@ plot_Elliptical_Tube <- function(tube,
 #'   intrinsic_mean_tube(tubes = list(tube_A,tube_B),
 #'                       plotting = FALSE)
 #' # Plotting
+#' \dontrun{
 #' plot_Elliptical_Tube(tube = intrinsic_mean,
 #'                      plot_frames = FALSE,
 #'                      plot_skeletal_sheet = FALSE,
 #'                      plot_r_project = FALSE,
 #'                      plot_r_max = FALSE,
 #'                      add = FALSE)
+#'  }
 #'
 #' #Example 2
 #' data("simulatedColons")
@@ -862,12 +899,14 @@ plot_Elliptical_Tube <- function(tube,
 #'   intrinsic_mean_tube(tubes = simulatedColons,
 #'                       plotting = FALSE)
 #' # Plotting
+#' \dontrun{
 #' plot_Elliptical_Tube(tube = intrinsic_mean,
 #'                      plot_frames = FALSE,
 #'                      plot_skeletal_sheet = FALSE,
 #'                      plot_r_project = FALSE,
 #'                      plot_r_max = FALSE,
 #'                      add = FALSE)
+#'  }
 #' @export
 intrinsic_mean_tube <- function(tubes,
                                 type="sizeAndShapeAnalysis",
@@ -1088,6 +1127,7 @@ nonIntrinsic_Distance_Between2tubes<- function(tube1,tube2) {
 #'     numberOfSteps = numberOfSteps,
 #'     plotting = FALSE)
 #' # Plotting
+#' \dontrun{
 #' for (i in 1:length(transformation_Tubes)) {
 #'   plot_Elliptical_Tube(tube = transformation_Tubes[[i]],
 #'   plot_frames = FALSE,plot_skeletal_sheet = FALSE
@@ -1095,6 +1135,7 @@ nonIntrinsic_Distance_Between2tubes<- function(tube1,tube2) {
 #'   plot_r_max = FALSE,
 #'   add = FALSE)
 #' }
+#' ##}
 #' }
 #' @export
 intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
@@ -1172,8 +1213,7 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
                                          ellipseRadii_a = ellipseRadii_a_steps[,j],
                                          ellipseRadii_b = ellipseRadii_b_steps[,j],
                                          connectionsLengths = connectionsLengths_steps[,j],
-                                         plotting = FALSE,
-                                         add = FALSE)
+                                         plotting = FALSE)
     }
 
   }else if(type=="shapeAnalysis"){
@@ -1284,6 +1324,7 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 #'     numberOfSteps = numberOfSteps,
 #'     plotting = FALSE)
 #' # Plotting
+#' \dontrun{
 #' for (i in 1:length(transformation_Tubes)) {
 #'   plot_Elliptical_Tube(tube = transformation_Tubes[[i]],
 #'   plot_frames = FALSE,plot_skeletal_sheet = FALSE
@@ -1291,6 +1332,7 @@ intrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 #'   plot_r_max = FALSE,
 #'   add = FALSE)
 #' }
+#'  }
 #' }
 #' @export
 nonIntrinsic_Transformation_Elliptical_Tubes <- function(tube1,
@@ -1372,8 +1414,7 @@ nonIntrinsic_Transformation_Elliptical_Tubes <- function(tube1,
                                        ellipseRadii_a = ellipseRadii_a_steps[,j],
                                        ellipseRadii_b = ellipseRadii_b_steps[,j],
                                        connectionsLengths = connectionsLengths_steps[,j],
-                                       plotting = FALSE,
-                                       add = TRUE)
+                                       plotting = FALSE)
   }
 
 
@@ -1412,12 +1453,14 @@ nonIntrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 #'   nonIntrinsic_mean_tube(tubes = list(tube_A,tube_B),
 #'                          plotting = FALSE)
 #' # Plotting
+#' \dontrun{
 #' plot_Elliptical_Tube(tube = nonIntrinsic_mean,
 #'                      plot_frames = FALSE,
 #'                      plot_skeletal_sheet = FALSE,
 #'                      plot_r_project = FALSE,
 #'                      plot_r_max = FALSE,
 #'                      add = FALSE)
+#'  }
 #'
 #' #Example 2
 #' data("simulatedColons")
@@ -1425,12 +1468,14 @@ nonIntrinsic_Transformation_Elliptical_Tubes <- function(tube1,
 #'   nonIntrinsic_mean_tube(tubes = simulatedColons,
 #'                          plotting = FALSE)
 #' # Plotting
+#' \dontrun{
 #' plot_Elliptical_Tube(tube = nonIntrinsic_mean,
 #'                      plot_frames = FALSE,
 #'                      plot_skeletal_sheet = FALSE,
 #'                      plot_r_project = FALSE,
 #'                      plot_r_max = FALSE,
 #'                      add = FALSE)
+#'  }
 #' @export
 nonIntrinsic_mean_tube <- function(tubes,
                                    type ="sizeAndShapeAnalysis",
@@ -1523,12 +1568,13 @@ nonIntrinsic_mean_tube <- function(tubes,
 #' \doi{10.13140/RG.2.2.34500.23685}
 #'
 #' @examples
+#' \donttest{
 #' # Load tube
 #' data("colon3D")
 #' #Set Parameters
 #' sd_v<-sd_psi<-1e-03
 #' sd_x<-sd_a<-sd_b<-1e-04
-#' numberOfSimulation<-3
+#' numberOfSimulation<-4
 #' random_Tubes<-
 #'   simulate_etube(referenceTube = colon3D,
 #'                  numberOfSimulation = numberOfSimulation,
@@ -1540,14 +1586,12 @@ nonIntrinsic_mean_tube <- function(tubes,
 #'                  rangeSdScale = c(1, 2),
 #'                  plotting = FALSE)
 #' # Plotting
-#' rgl::open3d()
-#' for (i in 1:numberOfSimulation) {
-#'   plot_Elliptical_Tube(tube = random_Tubes[[i]],
-#'                        plot_frames = FALSE,
-#'                        plot_skeletal_sheet = FALSE,
-#'                        plot_r_project = FALSE,
-#'                        plot_r_max = FALSE,
-#'                        add = TRUE)
+#' \dontrun{
+#' plot_Elliptical_Tube(random_Tubes[[1]], add = FALSE)
+#' plot_Elliptical_Tube(random_Tubes[[2]], add = TRUE)
+#' plot_Elliptical_Tube(random_Tubes[[3]], add = TRUE)
+#' plot_Elliptical_Tube(random_Tubes[[4]], add = TRUE)
+#'  }
 #' }
 #' @export
 simulate_etube <- function(referenceTube,
@@ -1606,7 +1650,7 @@ simulate_etube <- function(referenceTube,
   if(plotting==TRUE){
     color_spectrum <- colorRampPalette(c("lightblue","darkblue"))
     colors <- color_spectrum(numberOfSimulation)
-    rgl::open3d()
+    .etrep_open3d(show_widget = TRUE) 
     for (j in 1:numberOfSimulation) {
       plot_Elliptical_Tube(simulatedTubes[[j]],
                            colorBoundary = colors[j],
@@ -1644,7 +1688,7 @@ simulate_etube <- function(referenceTube,
     ellipses[[i]]<-boundaryPoints[c(list_of_rows[[i]],list_of_rows[[i]][1]),]
   }
 
-  #rgl::open3d()
+  .etrep_open3d(show_widget = TRUE)
   for (i in 1:length(list_of_rows)) {
     rgl::plot3d(ellipses[[i]],type = 'l',col=colorBoundary,expand = 10,box=FALSE,add = TRUE)
   }
@@ -1654,6 +1698,10 @@ simulate_etube <- function(referenceTube,
   }
   rgl::plot3d(centroids,type = 'l',col=colorSpine,lwd=3,expand = 10,box=FALSE,add = TRUE)
   #decorate3d()
+  ## if we are using NULL device (macOS), open browser
+  if (getOption("rgl.useNULL", FALSE)) {
+    .etrep_show3d()                       # <-- opens the plot in browser
+  }
 }
 
 
@@ -1855,7 +1903,7 @@ check_Tube_Legality <- function(tube) {
   }
 
   if(plotting==TRUE){
-    rgl::open3d()
+    .etrep_open3d(show_widget = TRUE)
     shade3d(tmesh,col="white",alpha=0.2)
     rgl::plot3d(slicesCentroids,type="s",radius = 0.2,col = colorRadialVectors,expand = 10,box=FALSE,add = TRUE)
     rgl::plot3d(slicesCentroids,type="l",lwd=4,col = colorRadialVectors,expand = 10,box=FALSE,add = TRUE)
@@ -1872,6 +1920,12 @@ check_Tube_Legality <- function(tube) {
                       origin = radialSpokesTails,headlength = 0.1,radius = 1/10, col=colorRadialVectors, lwd=2)
 
     decorate3d()
+    
+    ## if we are using NULL device (macOS), open browser
+    if (getOption("rgl.useNULL", FALSE)) {
+      .etrep_show3d()                       # <-- opens the plot in browser
+    }
+    
   }
 
   result<-list("tmesh"=tmesh,

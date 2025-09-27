@@ -30,14 +30,25 @@ An object from rgl::mesh3d class
 Create surface mesh of a tube
 }
 \examples{
+\dontrun{
 quad_mesh<-tube_Surface_Mesh(tube = ETRep::tube_B, 
                              meshType = "quadrilateral", 
                              plotMesh = TRUE, 
                              decorate = TRUE, 
                              color = "orange")
+# draw wireframe of the mesh
+rgl::wire3d(quad_mesh, color = "black", lwd = 1)   # add wireframe
+# Display in browser
+ETRep:::.etrep_show3d(width = 800, height = 600)
+
 tri_mesh<-tube_Surface_Mesh(tube = ETRep::tube_B, 
                             meshType = "triangular", 
                             plotMesh = TRUE, 
                             decorate = TRUE, 
                             color = "green")
+# draw wireframe of the mesh
+rgl::wire3d(tri_mesh, color = "black", lwd = 1)   # add wireframe
+# Display in browser
+ETRep:::.etrep_show3d(width = 800, height = 600)
+ }
 }
