@@ -30,6 +30,7 @@ Imports: rgl, shapes, Morpho, matlib, RSpincalc, rotations, Rvcg,
         fields, truncnorm, htmlwidgets
 RoxygenNote: 7.3.3
 NeedsCompilation: no
-Packaged: 2025-09-27 09:40:48 UTC; mohsentaheri
+Packaged: 2025-09-27 13:30:56 UTC; mohsentaheri
 Repository: CRAN
 Date/Publication: 2025-06-05 06:10:02 UTC
+Built: R 4.5.1; ; 2025-09-27 13:31:18 UTC; unix

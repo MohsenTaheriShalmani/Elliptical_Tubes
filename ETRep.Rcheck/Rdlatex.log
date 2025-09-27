@@ -1,0 +1,91 @@
+Hmm ... looks like a package
+Converting parsed Rd's to LaTeX .
+Creating pdf output from LaTeX ...
+Error in texi2dvi(file = file, pdf = TRUE, clean = clean, quiet = quiet,  : 
+  Running 'texi2dvi' on 'Rd2.tex' failed.
+Messages:
+/opt/R/arm64/bin/texi2dvi: makeindex failed
+Output:
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+LaTeX2e <2025-06-01> patch level 1
+L3 programming layer <2025-09-02>
+(./Rd2.tex
+(/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2025/01/22 v1.4n Standard LaTeX document class
+(/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/bk10.clo)) (/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/tools/bm.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/alltt.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/tools/verbatim.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/url/url.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty)) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty)) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/eucal.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/psnfss/times.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/inconsolata/zi4.sty `inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.tex (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils.tex (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/xkeyval/keyval.tex))))) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/graphics/color.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/graphics-def/pdftex.def) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/infwarerr/infwarerr.sty))) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty))) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/stringenc/stringenc.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty)))) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/makeidx.sty)
+Writing index file Rd2.idx
+(/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/psnfss/t1ptm.fd) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def) (/private/var/folders/x6/bsynr2_s6c989vpwkw_95r840000gn/T/RtmpeZzlh5/Rd2pdfa4832a2b8a51/Rd2.aux) (/private/var/folders/x6/bsynr2_s6c989vpwkw_95r840000gn/T/RtmpeZzlh5/Rd2pdfa4832a2b8a51/Rd2.out) (/private/var/folders/x6/bsynr2_s6c989vpwkw_95r840000gn/T/RtmpeZzlh5/Rd2pdfa4832a2b8a51/Rd2.out) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/inconsolata/t1zi4.fd) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
+Overfull \hbox (58.10092pt too wide) in paragraph at lines 23--24
+\T1/ptm/m/n/10 tics <[][]doi:10.1080/10618600.2025.2535600[][]> and arXiv <[][]doi:10.48550/arXiv.2404.01043[][]>. Mohsen Taheri Shal- 
+(/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd) (/private/var/folders/x6/bsynr2_s6c989vpwkw_95r840000gn/T/RtmpeZzlh5/Rd2pdfa4832a2b8a51/Rd2.toc
+[1{/Users/mohsentaheri/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}{/Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}])
+[2]
+[3]
+[4]
+[5]
+[6]
+[7]
+[8]
+[9]
+[10]
+[11]
+[12]
+[13]
+[14]
+[15]
+[16]
+[17]
+No file Rd2.ind.
+
+[18] (/private/var/folders/x6/bsynr2_s6c989vpwkw_95r840000gn/T/RtmpeZzlh5/Rd2pdfa4832a2b8a51/Rd2.aux) )
+(see the transcript file for additional information) </Users/mohsentaheri/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (18 pages, 110804 bytes).
+Transcript written on Rd2.log.
+/opt/R/arm64/bin/texi2dvi: line 366: makeindex: command not found
+
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex)
+ restricted \write18 enabled.
+entering extended mode
+LaTeX2e <2025-06-01> patch level 1
+L3 programming layer <2025-09-02>
+(./Rd2.tex
+(/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/book.cls
+Document Class: book 2025/01/22 v1.4n Standard LaTeX document class
+(/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/bk10.clo)) (/Library/Frameworks/R.framework/Resources/share/texmf/tex/latex/Rd.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/tools/longtable.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/tools/bm.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/alltt.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/tools/verbatim.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/url/url.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/textcomp.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
+For additional information on amsmath, use the `?' option.
+(/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty)) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty)) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/eucal.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/psnfss/times.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/inconsolata/zi4.sty `inconsolata-zi4' v1.12, 2019/05/17 Text macros for Inconsolata (msharpe) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.tex (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils.tex (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/xkeyval/keyval.tex))))) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/graphics/color.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/graphics-def/pdftex.def) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/infwarerr/infwarerr.sty))) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty))) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/stringenc/stringenc.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty))) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty)))) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/base/makeidx.sty)
+Writing index file Rd2.idx
+(/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/psnfss/t1ptm.fd) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def) (/private/var/folders/x6/bsynr2_s6c989vpwkw_95r840000gn/T/RtmpeZzlh5/Rd2pdfa4832a2b8a51/Rd2.aux) (/private/var/folders/x6/bsynr2_s6c989vpwkw_95r840000gn/T/RtmpeZzlh5/Rd2pdfa4832a2b8a51/Rd2.out) (/private/var/folders/x6/bsynr2_s6c989vpwkw_95r840000gn/T/RtmpeZzlh5/Rd2pdfa4832a2b8a51/Rd2.out) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/inconsolata/t1zi4.fd) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ptm.fd)
+Overfull \hbox (58.10092pt too wide) in paragraph at lines 23--24
+\T1/ptm/m/n/10 tics <[][]doi:10.1080/10618600.2025.2535600[][]> and arXiv <[][]doi:10.48550/arXiv.2404.01043[][]>. Mohsen Taheri Shal- 
+(/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd) (/Users/mohsentaheri/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd) (/private/var/folders/x6/bsynr2_s6c989vpwkw_95r840000gn/T/RtmpeZzlh5/Rd2pdfa4832a2b8a51/Rd2.toc
+[1{/Users/mohsentaheri/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}{/Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}])
+[2]
+[3]
+[4]
+[5]
+[6]
+[7]
+[8]
+[9]
+[10]
+[11]
+[12]
+[13]
+[14]
+[15]
+[16]
+[17]
+No file Rd2.ind.
+
+[18] (/private/var/folders/x6/bsynr2_s6c989vpwkw_95r840000gn/T/RtmpeZzlh5/Rd2pdfa4832a2b8a51/Rd2.aux) )
+(see the transcript file for additional information) </Users/mohsentaheri/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk></Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></Users/mohsentaheri/Library/TinyTeX/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on Rd2.pdf (18 pages, 110786 bytes).
+Transcript written on Rd2.log.
+Saving output to ‘ETRep-manual.pdf’ ...
+Done
+You may want to clean up by 'rm -Rf /var/folders/x6/bsynr2_s6c989vpwkw_95r840000gn/T//RtmpeZzlh5/Rd2pdfa4832a2b8a51'
