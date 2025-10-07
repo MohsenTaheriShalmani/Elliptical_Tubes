@@ -1,4 +1,4 @@
-<a href="https://sites.google.com/view/mohsen-taheri/elliptical-tube" target="_blank">
+<a href="https://sites.google.com/view/mohsen-taheri/elliptical-tube" target="_blank" rel="noopener noreferrer">
   <img src="Figures/logo.png" alt="ETRep Logo" width="250"/>
 </a>
 
