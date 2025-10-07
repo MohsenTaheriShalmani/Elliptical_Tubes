@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="logo.png" alt="ETRep Logo" width="200"/>
+</p>
+
 The repository is linked to the publication mentioned below.
 
 ## Article
