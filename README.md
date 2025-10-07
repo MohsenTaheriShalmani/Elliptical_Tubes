@@ -4,6 +4,16 @@
 
 **Elliptical Tube** offers a range of functions and documentation to aid in analyzing and visualizing elliptical tubes. The package supports complex shape simulations and includes supplementary materials to help users navigate its functionality effectively.
 
+
+---
+
+# **Interactive App**
+## ✨ Explore and visualize elliptical tubes in 3D!
+# 👉 **[Live App](https://cucsym-mohsen-taheri.shinyapps.io/etrep_shinyapp/)**
+
+---
+
+
 ###### The repository is linked to the publications mentioned below.
 
 ## Article: "The Mean Shape under the Relative Curvature Condition"
