@@ -1,16 +1,18 @@
-[<img src="Figures/logo.png" alt="ETRep Logo" width="250"/>](https://sites.google.com/view/mohsen-taheri/elliptical-tube)
+<a href="https://sites.google.com/view/mohsen-taheri/elliptical-tube" target="_blank">
+  <img src="Figures/logo.png" alt="ETRep Logo" width="250"/>
+</a>
 
 **Elliptical Tube** offers a range of functions and documentation to aid in analyzing and visualizing elliptical tubes. The package supports complex shape simulations and includes supplementary materials to help users navigate its functionality effectively.
 
 ###### The repository is linked to the publications mentioned below.
 
-#### Article: "The Mean Shape under the Relative Curvature Condition"
-###### Taheri, Mohsen, Stephen M. Pizer, and Jörn Schulz. Journal of Computational and Graphical Statistics.
-###### [https://doi.org/10.1080/10618600.2025.2535600](https://doi.org/10.1080/10618600.2025.2535600)
+## Article: "The Mean Shape under the Relative Curvature Condition"
+##### Taheri, Mohsen, Stephen M. Pizer, and Jörn Schulz. Journal of Computational and Graphical Statistics.
+##### [https://doi.org/10.1080/10618600.2025.2535600](https://doi.org/10.1080/10618600.2025.2535600)
 
-#### PhD thesis: "Shape Statistics via Skeletal Structures"
-###### Mohsen Taheri Shalmani, University of Stavanger, Norway.
-###### [https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161](https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161)
+## PhD thesis: "Shape Statistics via Skeletal Structures"
+##### Mohsen Taheri Shalmani, University of Stavanger, Norway.
+##### [https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161](https://uis.brage.unit.no/uis-xmlui/handle/11250/3133161)
 
 ## Cite
 ```
