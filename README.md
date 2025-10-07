@@ -82,7 +82,15 @@ Elliptical Tube Analysis
 
 ---
 
-## Images from the article
+## Images
+
+#### Image from the ETRep Interactive Webb App
+
+![ETRep_ShinyApp](Figures/ETRep_ShinyApp.png)
+
+---
+
+#### Images from the article
 
 <p align="center">
   <img src="Figures/elliptical_tube_0.jpg" alt="Fig0" width="100%"/>
@@ -101,7 +109,6 @@ Elliptical Tube Analysis
 
 ### Visualization of a valid transformation without any self-intersections
 ![Fig5](Figures/elliptical_tube_5.jpg)
-
 
 
 
