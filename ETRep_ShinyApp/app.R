@@ -23,14 +23,45 @@ ui <- fluidPage(
     ),
     
     mainPanel(
-      # Container with black border
+      # Container with black border for the plot
       tags$div(
         style = "border: 4px solid black; padding: 5px; display: inline-block;",
         rglwidgetOutput("tubePlot", width = "600px", height = "600px")
+      ),
+      
+      br(), br(),
+      
+      # Button-style link to GitHub
+      # Author note
+      tags$p(
+        style = "font-size:16px; color:gray; font-style:italic;",
+        "This Shiny application was developed by ",
+        tags$a(
+          href = "https://scholar.google.com/citations?user=PuWTeyIAAAAJ&hl=en",
+          target = "_blank",
+          style = "color:blue; text-decoration:underline;",
+          "Mohsen Taheri Shalmani"
+        ),
+        "."
+      ),
+      tags$a(
+        href = "https://github.com/MohsenTaheriShalmani/Elliptical_Tubes",
+        target = "_blank",
+        class = "btn btn-primary btn-lg",
+        "Visit the GitHub Repository Elliptical_Tubes"
+      ),
+      br(),
+      br(),
+      tags$a(
+        href = "https://doi.org/10.1080/10618600.2025.2535600",
+        target = "_blank",
+        class = "btn btn-primary btn-lg",
+        "Visit the Reference Article"
       )
     )
   )
 )
+
 
 server <- function(input, output, session) {
   
