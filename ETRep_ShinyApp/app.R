@@ -10,16 +10,40 @@ ui <- fluidPage(
   
   sidebarLayout(
     sidebarPanel(
-      numericInput("frames", "Number of cross-sections:", value = 10, min = 1),
-      numericInput("alpha", "Alpha (degrees in [-pi,pi]):", value = 0),
-      numericInput("beta",  "Beta (degrees in [-pi,pi]):",  value = 0),
-      numericInput("gamma", "Gamma (degrees in [-pi,pi]):", value = 0),
+      numericInput("frames", "Number of cross-sections (min = 2):", value = 15, min = 1),
+      numericInput("alpha", "Alpha (degrees in [-3.14, 3.14]):", value = 0.2),
+      numericInput("beta",  "Beta (degrees in [-3.14, 3.14]):",  value = 0.2),
+      numericInput("gamma", "Gamma (degrees in [-3.14, 3.14]):", value = 0.2),
       
-      colourInput("tubeColor", "Tube Color:", value = "orange"),  # color picker
+      numericInput("ellipseResolution", "Ellipse Resolution (min = 10):", value = 10, min = 3),
+      numericInput("ellipseRadii_a", "Ellipse Radius a (min = 0.1):", value = 3, min = 0.1),
+      numericInput("ellipseRadii_b", "Ellipse Radius b (min = 0.1):", value = 2, min = 0.1),
+      numericInput("connectionsLengths", "Cross-sectional distance (min = 0.1):", value = 4, min = 0.1),
+      
+      colourInput("tubeColor", "Tube Color:", value = "orange"),  
       sliderInput("tubeAlpha", "Transparency (0=transparent, 1=opaque):",
-                  min = 0, max = 1, value = 1, step = 0.05),
+                  min = 0, max = 1, value = 1, step = 0.1),
       
-      actionButton("generate", "Generate Tube")
+      actionButton(
+        "generate",
+        "Generate Tube",
+        style = "
+    background-color: #007BFF; 
+    color: white; 
+    font-weight: bold; 
+    font-size: 22px; 
+    padding: 12px 30px; 
+    border-radius: 8px; 
+    border: none; 
+    box-shadow: 1px 6px #0056b3; 
+    transition: all 0.2s;
+  ",
+        onclick = "
+    this.style.transform='translateY(4px)';
+    this.style.boxShadow='0 2px #0056b3';
+    setTimeout(()=>{this.style.transform='translateY(0px)'; this.style.boxShadow='0 6px #0056b3';}, 150);
+  "
+      )
     ),
     
     mainPanel(
@@ -31,7 +55,6 @@ ui <- fluidPage(
       
       br(), br(),
       
-      # Button-style link to GitHub
       # Author note
       tags$p(
         style = "font-size:16px; color:gray; font-style:italic;",
@@ -82,10 +105,10 @@ server <- function(input, output, session) {
       numberOfFrames      = input$frames,
       method              = "basedOnEulerAngles",
       EulerAngles_Matrix  = EulerAngles_Matrix,
-      ellipseResolution   = 10,
-      ellipseRadii_a      = rep(3, input$frames),
-      ellipseRadii_b      = rep(2, input$frames),
-      connectionsLengths  = rep(4, input$frames),
+      ellipseResolution   = input$ellipseResolution,
+      ellipseRadii_a      = rep(input$ellipseRadii_a, input$frames),
+      ellipseRadii_b      = rep(input$ellipseRadii_b, input$frames),
+      connectionsLengths  = rep(input$connectionsLengths, input$frames),
       plotting            = FALSE
     )
     
@@ -104,7 +127,7 @@ server <- function(input, output, session) {
     # Open new 3D device and draw mesh
     open3d()
     shade3d(quad_mesh, color = input$tubeColor, alpha = input$tubeAlpha)  # mesh with chosen color & alpha
-    wire3d(quad_mesh, color = "black", lwd = 2)                           # black wireframe
+    wire3d(quad_mesh, color = "black", lwd = 2)                         # black wireframe
     
     # Render widget
     output$tubePlot <- renderRglwidget({
