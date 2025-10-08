@@ -1,4 +1,3 @@
-# app.R
 library(shiny)
 library(rgl)
 library(ETRep)
@@ -47,7 +46,6 @@ ui <- fluidPage(
     ),
     
     mainPanel(
-      # Container with black border for the plot
       tags$div(
         style = "border: 4px solid black; padding: 5px; display: inline-block;",
         rglwidgetOutput("tubePlot", width = "600px", height = "600px")
@@ -55,7 +53,6 @@ ui <- fluidPage(
       
       br(), br(),
       
-      # Author note
       tags$p(
         style = "font-size:16px; color:gray; font-style:italic;",
         "This Shiny application was developed by ",
@@ -73,8 +70,7 @@ ui <- fluidPage(
         class = "btn btn-primary btn-lg",
         "Visit the GitHub Repository Elliptical_Tubes"
       ),
-      br(),
-      br(),
+      br(), br(),
       tags$a(
         href = "https://doi.org/10.1080/10618600.2025.2535600",
         target = "_blank",
@@ -85,53 +81,77 @@ ui <- fluidPage(
   )
 )
 
-
 server <- function(input, output, session) {
   
-  observeEvent(input$generate, {
-    # Create Euler angles
-    EulerAngles_alpha <- rep(input$alpha, input$frames)
-    EulerAngles_beta  <- rep(input$beta,  input$frames)
-    EulerAngles_gamma <- rep(input$gamma, input$frames)
+  renderTube <- function(frames, alpha, beta, gamma,
+                         res, a, b, conn,
+                         color, alpha_val) {
     
     EulerAngles_Matrix <- cbind(
-      EulerAngles_alpha,
-      EulerAngles_beta,
-      EulerAngles_gamma
+      rep(alpha, frames),
+      rep(beta,  frames),
+      rep(gamma, frames)
     )
     
-    # Create the tube
     tube <- create_Elliptical_Tube(
-      numberOfFrames      = input$frames,
+      numberOfFrames      = frames,
       method              = "basedOnEulerAngles",
       EulerAngles_Matrix  = EulerAngles_Matrix,
-      ellipseResolution   = input$ellipseResolution,
-      ellipseRadii_a      = rep(input$ellipseRadii_a, input$frames),
-      ellipseRadii_b      = rep(input$ellipseRadii_b, input$frames),
-      connectionsLengths  = rep(input$connectionsLengths, input$frames),
+      ellipseResolution   = res,
+      ellipseRadii_a      = rep(a, frames),
+      ellipseRadii_b      = rep(b, frames),
+      connectionsLengths  = rep(conn, frames),
       plotting            = FALSE
     )
     
-    # Clear previous scene
     rgl.clear()
+    open3d()
     
-    # Create quadrilateral mesh
     quad_mesh <- tube_Surface_Mesh(
       tube      = tube,
       meshType  = "quadrilateral",
       plotMesh  = FALSE,
       decorate  = TRUE,
-      color     = input$tubeColor
+      color     = color
     )
     
-    # Open new 3D device and draw mesh
-    open3d()
-    shade3d(quad_mesh, color = input$tubeColor, alpha = input$tubeAlpha)  # mesh with chosen color & alpha
-    wire3d(quad_mesh, color = "black", lwd = 2)                         # black wireframe
+    shade3d(quad_mesh, color = color, alpha = alpha_val)
+    wire3d(quad_mesh, color = "black", lwd = 2)
     
-    # Render widget
+    rglwidget()
+  }
+  
+  # Initial plot with defaults
+  output$tubePlot <- renderRglwidget({
+    renderTube(
+      frames = 15,
+      alpha = 0.2, 
+      beta = 0.2, 
+      gamma = 0.2,
+      res = 10,
+      a = 3,
+      b = 2,
+      conn = 4,
+      color = "orange",
+      alpha_val = 1
+    )
+  })
+  
+  # Update when clicking "Generate Tube"
+  observeEvent(input$generate, {
     output$tubePlot <- renderRglwidget({
-      rglwidget()
+      renderTube(
+        frames = input$frames,
+        alpha  = input$alpha,
+        beta   = input$beta,
+        gamma  = input$gamma,
+        res    = input$ellipseResolution,
+        a      = input$ellipseRadii_a,
+        b      = input$ellipseRadii_b,
+        conn   = input$connectionsLengths,
+        color  = input$tubeColor,
+        alpha_val = input$tubeAlpha
+      )
     })
   })
 }
