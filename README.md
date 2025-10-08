@@ -7,7 +7,7 @@
 
 ---
 
-# **Interactive App**
+# **Elliptical Tube Interactive App (ETIA)I**
 ## ✨ Explore and visualize elliptical tubes in 3D!
 # 👉 **[Live App](https://cucsym-mohsen-taheri.shinyapps.io/etrep_shinyapp/)**
 
