@@ -1,11 +1,15 @@
 app2_ui <- tabItem(
   tabName = "app2",
   fluidPage(
-    titlePanel("About Elliptical Tube Interactive App (ETIA)"),
+    ## ---- Add Image at Top ----
+    tags$div(
+      style = "text-align:center; margin-bottom:20px;",
+      tags$img(src = "ETIA_logo.png", height = "200px")
+    ),
+    titlePanel("About ETIA"),
     fluidRow(
       column(
         width = 10, offset = 1,
-        h3("Elliptical Tube Interactive App (ETIA)"),
         p("The Elliptical Tube Interactive App (ETIA) is built on the 
       Elliptical Tube Representation (ETRep) R package, which is designed 
       for modeling and analyzing 3D tube-like structures using skeletal 
