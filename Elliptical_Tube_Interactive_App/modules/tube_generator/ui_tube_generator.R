@@ -3,32 +3,97 @@ ui_tube_generator <- tabItem(
   tabName = "tube_generator",
   fluidPage(
     tags$head(
-      # Add responsive CSS for mobile scaling
+      # ---- Responsive CSS for mobile scaling ----
       tags$style(HTML("
-        /* Make plot responsive */
         #tubePlot {
           width: 100% !important;
           height: 70vh !important;
         }
 
-        /* Adjust height for tablets and phones */
         @media (max-width: 1024px) {
-          #tubePlot {
-            height: 60vh !important;
-          }
+          #tubePlot { height: 60vh !important; }
         }
 
         @media (max-width: 768px) {
-          #tubePlot {
-            height: 50vh !important;
-          }
+          #tubePlot { height: 50vh !important; }
         }
 
         @media (max-width: 480px) {
-          #tubePlot {
-            height: 45vh !important;
-          }
+          #tubePlot { height: 45vh !important; }
         }
+
+        /* Container for slider + arrows */
+        .slider-container {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .slider-stepper {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          background-color: #eee;
+          border: 1px solid #ccc;
+          border-radius: 4px;
+          width: 22px;
+          height: 36px;
+          font-weight: bold;
+          line-height: 12px;
+          user-select: none;
+        }
+
+        .slider-stepper:hover {
+          background-color: #ddd;
+        }
+
+        .slider-stepper span {
+          line-height: 10px;
+        }
+      ")),
+      
+      # ---- JS to handle arrow clicks ----
+      tags$script(HTML("
+        Shiny.addCustomMessageHandler('addSliderArrows', function(sliderIds) {
+          sliderIds.forEach(function(id) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (el.parentElement.classList.contains('slider-container')) return;
+
+            const container = document.createElement('div');
+            container.className = 'slider-container';
+            el.parentElement.insertBefore(container, el);
+            container.appendChild(el);
+
+            const arrows = document.createElement('div');
+            arrows.className = 'slider-stepper';
+            arrows.innerHTML = '<span>▲</span><span>▼</span>';
+            container.appendChild(arrows);
+
+            const up = arrows.children[0];
+            const down = arrows.children[1];
+
+            up.addEventListener('click', () => {
+              const current = parseFloat(el.value);
+              const step = parseFloat(el.step || 1);
+              const max = parseFloat(el.max);
+              const newValue = Math.min(current + step, max);
+              el.value = newValue;
+              el.dispatchEvent(new Event('input', { bubbles: true }));
+            });
+
+            down.addEventListener('click', () => {
+              const current = parseFloat(el.value);
+              const step = parseFloat(el.step || 1);
+              const min = parseFloat(el.min);
+              const newValue = Math.max(current - step, min);
+              el.value = newValue;
+              el.dispatchEvent(new Event('input', { bubbles: true }));
+            });
+          });
+        });
       "))
     ),
     
@@ -36,16 +101,24 @@ ui_tube_generator <- tabItem(
     
     sidebarLayout(
       sidebarPanel(
-        numericInput("frames", "Number of cross-sections (min = 2):", value = 15, min = 1),
-        numericInput("alpha", "Alpha (degrees in [-3.14, 3.14]):", value = 0.2),
-        numericInput("beta",  "Beta (degrees in [-3.14, 3.14]):",  value = 0.2),
-        numericInput("gamma", "Gamma (degrees in [-3.14, 3.14]):", value = 0.2),
+        sliderInput("frames", "Number of Frames:",
+                    min = 2, max = 100, value = 15, step = 1),
         
-        numericInput("ellipseResolution", "Ellipse Resolution (min = 10):", value = 10, min = 3),
-        numericInput("ellipseRadii_a", "Ellipse Radius a (min = 0.1):", value = 3, min = 0.1),
-        numericInput("ellipseRadii_b", "Ellipse Radius b (min = 0.1):", value = 2, min = 0.1),
-        numericInput("connectionsLengths", "Cross-sectional distance (min = 0.1):", value = 4, min = 0.1),
+        sliderInput("alpha", "Alpha:",
+                    min = -round(pi/2-0.01,2), max = round(pi/2-0.01,2), value = 0.2, step = 0.01),
+        sliderInput("beta", "Beta:",
+                    min = -round(pi/2-0.01,2), max = round(pi/2-0.01,2), value = 0.2, step = 0.01),
+        sliderInput("gamma", "Gamma:",
+                    min = -round(pi-0.01,2), max = round(pi-0.01,2), value = 0.2, step = 0.01),
         
+        sliderInput("ellipseResolution", "Ellipse Resolution:",
+                    min = 4, max = 20, value = 10, step = 1),
+        sliderInput("ellipseRadii_a", "Ellipse Radius a:",
+                    min = 0.0001, max = 100, value = 3, step = 1),
+        sliderInput("ellipseRadii_b", "Ellipse Radius b:",
+                    min = 0.0001, max = 100, value = 2, step = 1),
+        sliderInput("connectionsLengths", "Connection Length:",
+                    min = 0.0001, max = 100, value = 4, step = 1),
         colourInput("tubeColor", "Tube Color:", value = "orange"),  
         sliderInput("tubeAlpha", "Transparency (0=transparent, 1=opaque):",
                     min = 0, max = 1, value = 1, step = 0.1),

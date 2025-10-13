@@ -46,13 +46,9 @@ ui_transformation <- tabItem(
         box(
           title = "Global Settings",
           width = 12, solidHeader = TRUE, status = "warning",
-          div(class = "compact-input",
-              numericInput(
-                "frames_global",
-                "Number of Cross-Sections (applies to both tubes):",
-                value = 15, min = 2
-              )
-          ),
+          sliderInput("frames_global",
+                      "Number of Cross-Sections (applies to both tubes):",
+                      min = 2, max = 100, value = 15, step = 1),
           helpText("Both tubes share the same number of cross-sections.")
         )
       )
@@ -64,22 +60,26 @@ ui_transformation <- tabItem(
         width = 12,
         box(
           title = "Tube 1 Parameters", width = 12, solidHeader = TRUE, status = "primary",
-          div(class = "compact-input",
-              fluidRow(
-                column(6,
-                       numericInput("alpha_t1", "Alpha:", value = 0.2),
-                       numericInput("beta_t1", "Beta:", value = 0.2),
-                       numericInput("gamma_t1", "Gamma:", value = 0.2)
-                ),
-                column(6,
-                       numericInput("a_t1", "Ellipse Radius a:", value = 3),
-                       numericInput("b_t1", "Ellipse Radius b:", value = 2),
-                       numericInput("conn_t1", "Cross-sectional distance:", value = 4, min = 0.1)
-                )
-              ),
-              fluidRow(
-                column(6, colourInput("col_t1", "Tube 1 Color:", value = "orange"))
-              )
+          fluidRow(
+            column(6,
+                   sliderInput("alpha_t1", "Alpha:",
+                               min = -round(pi/2-0.01,2), max = round(pi/2-0.01,2), value = 0.2, step = 0.01),
+                   sliderInput("beta_t1", "Beta:",
+                               min = -round(pi/2-0.01,2), max = round(pi/2-0.01,2), value = 0.2, step = 0.01),
+                   sliderInput("gamma_t1", "Gamma:",
+                               min = -round(pi-0.01,2), max = round(pi-0.01,2), value = 0.2, step = 0.01)
+            ),
+            column(6,
+                   sliderInput("a_t1", "Ellipse Radius a:",
+                               min = 0.0001, max = 100, value = 3, step = 1),
+                   sliderInput("b_t1", "Ellipse Radius b:",
+                               min = 0.0001, max = 100, value = 2, step = 1),
+                   sliderInput("conn_t1", "Cross-sectional Distance:",
+                               min = 0.0001, max = 100, value = 4, step = 1)
+            )
+          ),
+          fluidRow(
+            column(6, colourInput("col_t1", "Tube 1 Color:", value = "orange"))
           )
         )
       )
@@ -91,22 +91,26 @@ ui_transformation <- tabItem(
         width = 12,
         box(
           title = "Tube 2 Parameters", width = 12, solidHeader = TRUE, status = "info",
-          div(class = "compact-input",
-              fluidRow(
-                column(6,
-                       numericInput("alpha_t2", "Alpha:", value = 0.1),
-                       numericInput("beta_t2", "Beta:", value = -0.6),
-                       numericInput("gamma_t2", "Gamma:", value = 0.4)
-                ),
-                column(6,
-                       numericInput("a_t2", "Ellipse Radius a:", value = 5),
-                       numericInput("b_t2", "Ellipse Radius b:", value = 4),
-                       numericInput("conn_t2", "Cross-sectional distance:", value = 4, min = 0.1)
-                )
-              ),
-              fluidRow(
-                column(6, colourInput("col_t2", "Tube 2 Color:", value = "blue"))
-              )
+          fluidRow(
+            column(6,
+                   sliderInput("alpha_t2", "Alpha:",
+                               min = -round(pi/2-0.01,2), max = round(pi/2-0.01,2), value = 0.1, step = 0.01),
+                   sliderInput("beta_t2", "Beta:",
+                               min = -round(pi/2-0.01,2), max = round(pi/2-0.01,2), value = -0.6, step = 0.01),
+                   sliderInput("gamma_t2", "Gamma:",
+                               min = -round(pi-0.01,2), max = round(pi-0.01,2), value = 0.4, step = 0.01)
+            ),
+            column(6,
+                   sliderInput("a_t2", "Ellipse Radius a:",
+                               min = 0.0001, max = 100, value = 5, step = 1),
+                   sliderInput("b_t2", "Ellipse Radius b:",
+                               min = 0.0001, max = 100, value = 4, step = 1),
+                   sliderInput("conn_t2", "Cross-sectional Distance:",
+                               min = 0.0001, max = 100, value = 4, step = 1)
+            )
+          ),
+          fluidRow(
+            column(6, colourInput("col_t2", "Tube 2 Color:", value = "blue"))
           )
         )
       )
