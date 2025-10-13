@@ -5,7 +5,7 @@ account: cucsym-mohsen-taheri
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 15682996
-bundleId: 11027607
+bundleId: 11027639
 url: https://cucsym-mohsen-taheri.shinyapps.io/etrep_shinyapp/
 version: 1
 asMultiple: FALSE
