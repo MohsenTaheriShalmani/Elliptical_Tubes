@@ -71,10 +71,25 @@ ui <- tagList(
   dashboardPage(
     dashboardHeader(
       title = tags$div(
-        tags$img(src = "favicon.ico", height = "20px", style = "margin-right:5px;"),
-        "Elliptical Tube Interactive App (ETIA)"
+        style = "
+      font-family: 'Times New Roman', Times, serif;
+      font-weight: normal;
+      font-size: 20px;
+      color: white;
+      display: flex;
+      align-items: center;
+    ",
+        tags$img(
+          src = 'favicon.ico',
+          height = '22px',
+          style = 'margin-right:8px;'
+        ),
+        'Elliptical Tube Interactive App (ETIA)'
       )
     ),
+    
+    
+    
     
     dashboardSidebar(
       sidebarMenu(
