@@ -124,7 +124,8 @@ ui_transformation <- tabItem(
         actionButton(
           "gen_both", "Generate Tubes",
           class = "btn-primary btn-lg",
-          style = "font-weight:bold; width:40%; color:white;"
+          style = " font-weight:bold; width:40%; color:white; 
+          white-space:normal; padding:10px 15px;"
         )
       )
     ),
@@ -174,7 +175,7 @@ ui_transformation <- tabItem(
                                 style = "width:100%; font-weight:bold;")),
             column(8, align = "center",
                    actionButton("computeTrans", "Compute Transformation", class = "btn-primary btn-block",
-                                style = "width:100%; font-weight:bold;")),
+                                style = "width:100%; border:2px solid black; font-weight:bold; color: white;")),
             column(2, align = "center",
                    actionButton("nextStep", "Next →", class = "btn-warning",
                                 style = "width:100%; font-weight:bold;"))
