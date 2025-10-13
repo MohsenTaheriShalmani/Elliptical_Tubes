@@ -1,5 +1,6 @@
-app2_ui <- tabItem(
-  tabName = "app2",
+# ---- ui_about_etrep.R ----
+ui_about_etrep <- tabItem(
+  tabName = "about_etrep",
   fluidPage(
     ## ---- Add Image at Top ----
     tags$div(

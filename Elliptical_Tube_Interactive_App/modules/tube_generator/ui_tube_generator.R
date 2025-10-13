@@ -1,6 +1,37 @@
-app1_ui <- tabItem(
-  tabName = "app1",
+# ---- ui_tube_generator.R ----
+ui_tube_generator <- tabItem(
+  tabName = "tube_generator",
   fluidPage(
+    tags$head(
+      # Add responsive CSS for mobile scaling
+      tags$style(HTML("
+        /* Make plot responsive */
+        #tubePlot {
+          width: 100% !important;
+          height: 70vh !important;
+        }
+
+        /* Adjust height for tablets and phones */
+        @media (max-width: 1024px) {
+          #tubePlot {
+            height: 60vh !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          #tubePlot {
+            height: 50vh !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          #tubePlot {
+            height: 45vh !important;
+          }
+        }
+      "))
+    ),
+    
     titlePanel("Elliptical Tube Generator"),
     
     sidebarLayout(
@@ -22,17 +53,40 @@ app1_ui <- tabItem(
         actionButton(
           "generate", "Generate Tube",
           style = "background-color: #007BFF; color: white; font-weight: bold; font-size: 22px;"
-        ),
-        br(), br(),
-        
-        downloadButton("downloadMesh", "Download Tube Mesh Object *.obj",
-                       style = "background-color: #007BFF; color: white; font-weight: bold;")
+        )
       ),
       
       mainPanel(
-        tags$div(
-          style = "border: 4px solid black; padding: 5px; display: inline-block;",
-          rglwidgetOutput("tubePlot", width = "600px", height = "600px")
+        fluidRow(
+          column(
+            width = 12,
+            align = "center",
+            tags$div(
+              style = "
+                border: 4px solid black;
+                padding: 5px;
+                width: 100%;
+                max-width: 900px;
+                margin: auto;
+              ",
+              rglwidgetOutput("tubePlot", width = "100%", height = "70vh")
+            )
+          )
+        ),
+        
+        br(),
+        
+        # Download button moved outside sidebar
+        fluidRow(
+          column(
+            width = 12,
+            align = "center",
+            downloadButton(
+              "downloadMesh",
+              "Download Tube Mesh Object *.obj",
+              style = "background-color: #007BFF; color: white; font-weight: bold;"
+            )
+          )
         ),
         
         br(), br(),
