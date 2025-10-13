@@ -71,11 +71,11 @@ ui_transformation <- tabItem(
             ),
             column(6,
                    sliderInput("a_t1", "Ellipse Radius a:",
-                               min = 0.0001, max = 100, value = 3, step = 1),
+                               min = 0.0001, max = 100, value = 3, step = 0.01),
                    sliderInput("b_t1", "Ellipse Radius b:",
-                               min = 0.0001, max = 100, value = 2, step = 1),
+                               min = 0.0001, max = 100, value = 2, step = 0.01),
                    sliderInput("conn_t1", "Cross-sectional Distance:",
-                               min = 0.0001, max = 100, value = 4, step = 1)
+                               min = 0.0001, max = 100, value = 4, step = 0.01)
             )
           ),
           fluidRow(
@@ -102,11 +102,11 @@ ui_transformation <- tabItem(
             ),
             column(6,
                    sliderInput("a_t2", "Ellipse Radius a:",
-                               min = 0.0001, max = 100, value = 5, step = 1),
+                               min = 0.0001, max = 100, value = 5, step = 0.01),
                    sliderInput("b_t2", "Ellipse Radius b:",
-                               min = 0.0001, max = 100, value = 4, step = 1),
+                               min = 0.0001, max = 100, value = 4, step = 0.01),
                    sliderInput("conn_t2", "Cross-sectional Distance:",
-                               min = 0.0001, max = 100, value = 4, step = 1)
+                               min = 0.0001, max = 100, value = 4, step = 0.01)
             )
           ),
           fluidRow(
