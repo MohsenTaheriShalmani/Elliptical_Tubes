@@ -124,7 +124,8 @@ ui_transformation <- tabItem(
         actionButton(
           "gen_both", "Generate Tubes",
           class = "btn-primary btn-lg",
-          style = "font-weight:bold; width:40%; color:white;"
+          style = " font-weight:bold; width:40%; color:white; 
+          white-space:normal; padding:10px 15px;"
         )
       )
     ),
@@ -174,7 +175,7 @@ ui_transformation <- tabItem(
                                 style = "width:100%; font-weight:bold;")),
             column(8, align = "center",
                    actionButton("computeTrans", "Compute Transformation", class = "btn-primary btn-block",
-                                style = "width:100%; font-weight:bold;")),
+                                style = "width:100%; border:2px solid black; font-weight:bold; color: white;")),
             column(2, align = "center",
                    actionButton("nextStep", "Next →", class = "btn-warning",
                                 style = "width:100%; font-weight:bold;"))
@@ -192,6 +193,41 @@ ui_transformation <- tabItem(
               "downloadCurrentStep",
               "Download Current Step Mesh (.obj)",
               style = "background-color:#007BFF; color:white; font-weight:bold;"
+            ),
+          )
+        ),
+        br(), br(),
+        
+        tags$div(
+          style = "font-size:16px; color:gray; font-style:italic; text-align:center;",
+          
+          tags$p(
+            "This Shiny application has been developed by ",
+            tags$a(
+              href = "https://scholar.google.com/citations?user=PuWTeyIAAAAJ&hl=en",
+              target = "_blank",
+              style = "color:blue; text-decoration:underline;",
+              "Mohsen Taheri Shalmani"
+            )
+          ),
+          
+          tags$p(
+            "Visit the ",
+            tags$a(
+              href = "https://github.com/MohsenTaheriShalmani/Elliptical_Tubes",
+              target = "_blank",
+              style = "color:blue; text-decoration:underline;",
+              "GitHub Repository Elliptical Tubes"
+            )
+          ),
+          
+          tags$p(
+            "Read the reference paper: ",
+            tags$a(
+              href = "https://www.tandfonline.com/doi/full/10.1080/10618600.2025.2535600?src=",
+              target = "_blank",
+              style = "color:blue; text-decoration:underline;",
+              "The Mean Shape Under the Relative Curvature Condition"
             )
           )
         )
