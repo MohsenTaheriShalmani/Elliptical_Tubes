@@ -24,7 +24,7 @@ server_tube_generator <- function(input, output, session) {
       plotting            = FALSE
     )
     
-    rgl.clear()
+    clear3d()
     open3d()
     
     quad_mesh <- tube_Surface_Mesh(

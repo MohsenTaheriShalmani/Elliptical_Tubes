@@ -29,7 +29,7 @@ server_transformation <- function(input, output, session) {
       plotting            = FALSE
     )
     
-    rgl.clear()
+    clear3d()
     open3d()
     
     quad_mesh <- tube_Surface_Mesh(
@@ -104,7 +104,7 @@ server_transformation <- function(input, output, session) {
     
     # Render first transformation step
     output$transPlot <- renderRglwidget({
-      rgl.clear()
+      clear3d()
       open3d()
       shade3d(mesh_list[[1]], color = "purple", alpha = 0.8)
       wire3d(mesh_list[[1]], color = "black", lwd = 1)
@@ -121,7 +121,7 @@ server_transformation <- function(input, output, session) {
       step <- step + 1
       current_step(step)
       output$transPlot <- renderRglwidget({
-        rgl.clear()
+        clear3d()
         open3d()
         mesh <- trans_meshes()[[step]]
         shade3d(mesh, color = "purple", alpha = 0.8)
@@ -139,7 +139,7 @@ server_transformation <- function(input, output, session) {
       step <- step - 1
       current_step(step)
       output$transPlot <- renderRglwidget({
-        rgl.clear()
+        clear3d()
         open3d()
         mesh <- trans_meshes()[[step]]
         shade3d(mesh, color = "purple", alpha = 0.8)
