@@ -164,28 +164,38 @@ ui_tube_generator <- tabItem(
         
         br(), br(),
         
-        tags$p(
-          style = "font-size:16px; color:gray; font-style:italic;",
-          "This Shiny application was developed by ",
-          tags$a(
-            href = "https://scholar.google.com/citations?user=PuWTeyIAAAAJ&hl=en",
-            target = "_blank",
-            style = "color:blue; text-decoration:underline;",
-            "Mohsen Taheri Shalmani"
-          ), "."
-        ),
-        tags$a(
-          href = "https://github.com/MohsenTaheriShalmani/Elliptical_Tubes",
-          target = "_blank",
-          class = "btn btn-primary btn-lg",
-          "Visit the GitHub Repository Elliptical Tubes"
-        ),
-        br(), br(),
-        tags$a(
-          href = "https://doi.org/10.1080/10618600.2025.2535600",
-          target = "_blank",
-          class = "btn btn-primary btn-lg",
-          "Visit the Reference Article"
+        tags$div(
+          style = "font-size:16px; color:gray; font-style:italic; text-align:center;",
+          
+          tags$p(
+            "This Shiny application has been developed by ",
+            tags$a(
+              href = "https://scholar.google.com/citations?user=PuWTeyIAAAAJ&hl=en",
+              target = "_blank",
+              style = "color:blue; text-decoration:underline;",
+              "Mohsen Taheri Shalmani"
+            )
+          ),
+          
+          tags$p(
+            "Visit the ",
+            tags$a(
+              href = "https://github.com/MohsenTaheriShalmani/Elliptical_Tubes",
+              target = "_blank",
+              style = "color:blue; text-decoration:underline;",
+              "GitHub Repository Elliptical Tubes"
+            )
+          ),
+          
+          tags$p(
+            "Read the reference paper: ",
+            tags$a(
+              href = "https://www.tandfonline.com/doi/full/10.1080/10618600.2025.2535600?src=",
+              target = "_blank",
+              style = "color:blue; text-decoration:underline;",
+              "The Mean Shape Under the Relative Curvature Condition"
+            )
+          )
         )
       )
     )

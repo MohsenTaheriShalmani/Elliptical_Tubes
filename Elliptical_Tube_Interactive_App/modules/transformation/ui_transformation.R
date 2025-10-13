@@ -192,6 +192,41 @@ ui_transformation <- tabItem(
               "downloadCurrentStep",
               "Download Current Step Mesh (.obj)",
               style = "background-color:#007BFF; color:white; font-weight:bold;"
+            ),
+          )
+        ),
+        br(), br(),
+        
+        tags$div(
+          style = "font-size:16px; color:gray; font-style:italic; text-align:center;",
+          
+          tags$p(
+            "This Shiny application has been developed by ",
+            tags$a(
+              href = "https://scholar.google.com/citations?user=PuWTeyIAAAAJ&hl=en",
+              target = "_blank",
+              style = "color:blue; text-decoration:underline;",
+              "Mohsen Taheri Shalmani"
+            )
+          ),
+          
+          tags$p(
+            "Visit the ",
+            tags$a(
+              href = "https://github.com/MohsenTaheriShalmani/Elliptical_Tubes",
+              target = "_blank",
+              style = "color:blue; text-decoration:underline;",
+              "GitHub Repository Elliptical Tubes"
+            )
+          ),
+          
+          tags$p(
+            "Read the reference paper: ",
+            tags$a(
+              href = "https://www.tandfonline.com/doi/full/10.1080/10618600.2025.2535600?src=",
+              target = "_blank",
+              style = "color:blue; text-decoration:underline;",
+              "The Mean Shape Under the Relative Curvature Condition"
             )
           )
         )
