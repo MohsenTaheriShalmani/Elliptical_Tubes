@@ -117,7 +117,7 @@ ui_tube_generator <- tabItem(
                     min = 0.0001, max = 100, value = 3, step = 0.01),
         sliderInput("ellipseRadii_b", "Ellipse Radius b:",
                     min = 0.0001, max = 100, value = 2, step = 0.01),
-        sliderInput("connectionsLengths", "Connection Length:",
+        sliderInput("connectionsLengths", "Cross-sectional Distance:",
                     min = 0.0001, max = 100, value = 4, step = 0.01),
         colourInput("tubeColor", "Tube Color:", value = "orange"),  
         sliderInput("tubeAlpha", "Transparency (0=transparent, 1=opaque):",
